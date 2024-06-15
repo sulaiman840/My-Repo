@@ -10,7 +10,7 @@ class AssetsManager{
 
 ///Images
 
-  static const splashImage = '$imagesPath/splash.png';
+  static const splashImage = '$imagesPath/unknown.png';
 
 
 
