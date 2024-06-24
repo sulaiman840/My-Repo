@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project2/core/utils/color_manager.dart';
 import '../../Bloc/profile/user_profile_cubit.dart';
 import '../../core/utils/app_routes.dart';
-import '../../screens/Manager_Screens/profile_screen.dart';
 
 class Search_Bar extends StatelessWidget {
   final String title;
@@ -29,39 +27,38 @@ class Search_Bar extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.black, // Adjust color to match your theme
+                color: Colors.black,
               ),
-              overflow: TextOverflow.ellipsis, // Ensures text does not overflow
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           Row(
             children: [
               Container(
-                width: MediaQuery.of(context).size.width * 0.3, // Responsive width for the search bar
+                width: MediaQuery.of(context).size.width * 0.3,
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: 'Search...',
                     prefixIcon: Icon(Icons.search, color: searchIconColor),
                     contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0), // Rounded corners for a modern look
+                      borderRadius: BorderRadius.circular(30.0),
                       borderSide: BorderSide.none,
                     ),
                     filled: true,
-                    fillColor: fillColor, // Slightly translucent white
+                    fillColor: fillColor,
                   ),
                 ),
               ),
               IconButton(
                 icon: Icon(Icons.notifications, color: Colors.black),
                 onPressed: () {
-                  // Handle notification icon press
+
                 },
               ),
               IconButton(
                 icon: Icon(Icons.person, color: Colors.black),
                 onPressed: () {
-                  // Navigate to ProfileScreen and fetch profile data
                   context.read<UserProfileCubit>().getUserProfile();
                   Navigator.pushNamed(context, AppRouter.profile);
                 },

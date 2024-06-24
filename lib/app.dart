@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => UserProfileCubit(MangerProfileService()),
         ),
-        // Add more BlocProviders here as needed
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -1,32 +1,74 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project2/core/utils/color_manager.dart';
 
 
 import '../../Bloc/profile/user_profile_cubit.dart';
-import '../../core/utils/color_manager.dart';
 import '../../models/user_profile.dart';
+import '../../widgets/manager_home_widgets/custom_app_bar.dart';
+import '../../widgets/manager_home_widgets/main_nav_bar.dart';
 
 class ProfileScreen extends StatelessWidget {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    bool isMobile = screenWidth < 600;
+    bool isShortScreen = screenHeight < 145;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Profile'),
-        backgroundColor: ColorManager.blue,
-      ),
-      body: BlocBuilder<UserProfileCubit, UserProfileState>(
-        builder: (context, state) {
-          if (state is UserProfileLoading) {
-            return Center(child: CircularProgressIndicator());
-          } else if (state is UserProfileLoaded) {
-            final profile = state.userProfile;
-            return ProfileDetails(profile: profile);
-          } else if (state is UserProfileError) {
-            return Center(child: Text(state.message));
-          } else {
-            return Center(child: Text('Press the profile icon to load the profile'));
-          }
-        },
+      key: _scaffoldKey,
+      appBar: isMobile ? CustomAppBar(scaffoldKey: _scaffoldKey) : null,
+      drawer: isMobile ? MainNavBar() : null,
+      body: Row(
+        children: [
+          if (!isMobile)
+            Container(
+              width: 200,
+              color: ColorManager.bc5,
+              child: MainNavBar(),
+            ),
+          Expanded(
+            child: Column(
+              children: [
+                if (!isMobile && !isShortScreen)
+                  Container(
+                    color: ColorManager.bc0,
+                    child: Text(
+                      'Profile',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: ColorManager.bluelight,
+                      ),
+                    ),
+                    padding: EdgeInsets.all(16),
+                  ),
+                Expanded(
+                  child: Container(
+                    color: ColorManager.bc1,
+                    child: BlocBuilder<UserProfileCubit, UserProfileState>(
+                      builder: (context, state) {
+                        if (state is UserProfileLoading) {
+                          return Center(child: CircularProgressIndicator());
+                        } else if (state is UserProfileLoaded) {
+                          final profile = state.userProfile;
+                          return ProfileDetails(profile: profile);
+                        } else if (state is UserProfileError) {
+                          return Center(child: Text(state.message));
+                        } else {
+                          return Center(child: Text('Press the profile icon to load the profile'));
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -115,10 +157,9 @@ class ProfileInfoCard extends StatelessWidget {
           children: [
             ProfileInfoRow(icon: Icons.email, label: 'Email', value: profile.email),
             Divider(),
-            ProfileInfoRow(icon: Icons.person, label: 'Type', value: profile.type),
+            ProfileInfoRow(icon: Icons.person, label: 'Role', value: profile.type),
             Divider(),
             ProfileInfoRow(icon: Icons.phone, label: 'Number', value: profile.number.toString()),
-
           ],
         ),
       ),
