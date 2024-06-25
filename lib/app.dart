@@ -5,6 +5,8 @@ import 'package:project2/services/manger_profile_service.dart';
 
 import 'Bloc/profile/user_profile_cubit.dart';
 import 'core/utils/app_routes.dart';
+import 'core/utils/theme_manager.dart';
+import 'screens/login/login_screen.dart';
 
 
 class MyApp extends StatelessWidget {
@@ -21,12 +23,10 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        initialRoute: AppRouter.home,
+        theme: ThemeManager.appTheme,
+        initialRoute: LoginScreen.id,
         routes: AppRouter.routes,
+        
       ),
     );
   }
