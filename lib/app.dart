@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project2/core/utils/dio_api_service.dart';
 import 'package:project2/core/utils/service_locator.dart';
+import 'package:project2/services/manger_profile_service.dart';
+import 'Bloc/profile/user_profile_cubit.dart';
+import 'core/utils/app_routes.dart';
+import 'core/utils/theme_manager.dart';
+import 'screens/login/login_screen.dart';
 import 'package:project2/screens/staff/data/repos/staff_repo_impl.dart';
 import 'package:project2/screens/staff/presentation/manger/featured_staff_cubit/featured_staff_cubit.dart';
 import 'screens/Home/ware_house_app.dart';
@@ -17,16 +22,16 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) {
-            return FeaturedStaffCubit(
-                getIt.get<StaffRepoImpl>(),
-            )..fetchFeaturedStaff();
-          },
-        )
+          create: (context) => UserProfileCubit(MangerProfileService()),
+        ),
+
       ],
-      child: const MaterialApp(
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home:StaffsView() ,
+        theme: ThemeManager.appTheme,
+        initialRoute: LoginScreen.id,
+        routes: AppRouter.routes,
+        
       ),
     );
   }

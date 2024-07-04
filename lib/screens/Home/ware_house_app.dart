@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class WareHouseMApp extends StatelessWidget {
@@ -5,13 +6,9 @@ class WareHouseMApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< Updated upstream
-    return const Scaffold(
-=======
-    return  Scaffold(
-      appBar: AppBar(title: Text("DDDDDd",style: TextStyle(color: Colors.blue),),),
-      body: Container(child: Text("sssss ",) , ),
->>>>>>> Stashed changes
+    return Scaffold(
+      body: Center(child: Text("sssss ",) ,
+      ),
 
     );
   }

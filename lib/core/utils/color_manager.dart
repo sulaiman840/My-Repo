@@ -11,12 +11,23 @@ class ColorManager
   static const bc5 = Color(0xFF1B262E); 
 
 //main colors
-  static const bluelight = Color(0xFF2CA1DA); 
+  static Color bluelight = Color(0xFF2CA1DA); 
   static const blue = Color(0xFF0A70B7);
+    static const blue2 = Color(0xFF086EB6);
+
+  static const primarySwatchColor = Colors.blue;
+
 //second colors
   static const orange = Color(0xFFF9B023); 
-  static const saffron = Color(0xFFFFC83A); 
- 
+  static const orangeLight = Color(0xFFFFC83A); 
   
+   static const navyBlue = Color(0xFF023047); 
+   
+
+//primary colors
+  static const primaryColor = Colors.white;
+  static const blackColor = Colors.black;
+
+  static Color scaffoldBackgroundColor = Colors.grey.shade200;
 }
 
