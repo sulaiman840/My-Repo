@@ -91,7 +91,7 @@ class CustomEditTextField extends StatelessWidget {
           color: Colors.black,
         ),
         controller: controller,
-        cursorColor: ColorManager.saffron,
+        cursorColor: ColorManager.orangeLight,
         validator: validator ??
                 (value) {
               if (value?.isEmpty ?? true) {

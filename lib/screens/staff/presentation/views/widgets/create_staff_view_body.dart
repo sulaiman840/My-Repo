@@ -238,7 +238,7 @@ class _CreateStaffViewBodyState extends State<CreateStaffViewBody> {
                           onPressed: state is CreateStaffLoading ? () {} : (){
                             Navigator.pop(context);
                           },
-                          child: Text('Cancel', style: StyleManage.h4Regular(color: ColorManager.bc0)),
+                          child: Text('Cancel', style: StyleManager.h4Regular(color: ColorManager.bc0)),
                         ),
                         Spacer(),
                         ElevatedButton(
@@ -246,7 +246,7 @@ class _CreateStaffViewBodyState extends State<CreateStaffViewBody> {
                             backgroundColor: WidgetStateProperty.all(ColorManager.bluelight),
                           ),
                           onPressed: register,
-                          child: state is CreateStaffLoading ? const Center(child: CircularProgressIndicator()) : Text('Create', style: StyleManage.h4Regular(color: ColorManager.bc0)),
+                          child: state is CreateStaffLoading ? const Center(child: CircularProgressIndicator()) : Text('Create', style: StyleManager.h4Regular(color: ColorManager.bc0)),
                         ),
                       ],
                     ),

@@ -45,21 +45,21 @@ class StaffsViewBody extends StatelessWidget {
           children: [
             Text(
               "Rank",
-              style: StyleManage.body1Regular(),
+              style: StyleManager.body1Regular(),
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.045,
             ),
             Text(
               "Name",
-              style: StyleManage.body1Regular(),
+              style: StyleManager.body1Regular(),
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.455,
             ),
             Text(
               "Date of join",
-              style: StyleManage.body1Regular(),
+              style: StyleManager.body1Regular(),
             ),
           ],
         ),

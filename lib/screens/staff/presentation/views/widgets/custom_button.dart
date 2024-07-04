@@ -48,7 +48,7 @@ class TextIconButton extends StatelessWidget {
           children: [
             Text(
               textButton,
-              style: StyleManage.button1(
+              style: StyleManager.button1(
                 color: textColor ?? Colors.white,
                 fontWeight: textWeight ?? FontWeight.w500,
                 size: textSize ?? 14.5,
@@ -120,7 +120,7 @@ class SelectButton extends StatelessWidget {
                     textButton,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: StyleManage.button1(
+                    style: StyleManager.button1(
                       color: textColor ?? Colors.black,
                       fontWeight: textWeight ?? FontWeight.w500,
                       size: textSize ?? 14.5,
