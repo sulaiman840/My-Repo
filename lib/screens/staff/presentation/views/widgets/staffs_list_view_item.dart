@@ -37,7 +37,7 @@ class StaffsListViewItem extends StatelessWidget {
       children: [
         Text(
           rank,
-          style: StyleManage.body1Regular(),
+          style: StyleManager.body1Regular(),
         ),
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.06,
@@ -56,13 +56,13 @@ class StaffsListViewItem extends StatelessWidget {
             children: [
               Text(
                 name,
-                style: StyleManage.body1SemiBold(
+                style: StyleManager.body1SemiBold(
                   size: nameSize ?? 15.5,
                 ),
               ),
               Text(
                 description,
-                style: StyleManage.labelRegular(
+                style: StyleManager.labelRegular(
                   color: descriptionColor ?? Colors.grey.shade600,
                   size: descriptionSize ?? 12.5,
                 ),
@@ -75,7 +75,7 @@ class StaffsListViewItem extends StatelessWidget {
         ),
         Text(
           date.replaceRange(10, 27, " "),
-          style: StyleManage.body1Regular(),
+          style: StyleManager.body1Regular(),
         ),
       ],
     );

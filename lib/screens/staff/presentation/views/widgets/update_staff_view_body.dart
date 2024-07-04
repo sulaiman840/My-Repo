@@ -243,7 +243,7 @@ class _UpdateStaffViewBodyState extends State<UpdateStaffViewBody> {
                           onPressed: state is UpdateStaffLoading ? () {} : (){
                             Navigator.pop(context);
                           },
-                          child: Text('Cancel', style: StyleManage.h4Regular(color: ColorManager.bc0)),
+                          child: Text('Cancel', style: StyleManager.h4Regular(color: ColorManager.bc0)),
                         ),
                         Spacer(),
                         ElevatedButton(
@@ -251,7 +251,7 @@ class _UpdateStaffViewBodyState extends State<UpdateStaffViewBody> {
                             backgroundColor: WidgetStateProperty.all(ColorManager.bluelight),
                           ),
                           onPressed: register,
-                          child: state is UpdateStaffLoading ? const Center(child: CircularProgressIndicator()) : Text('Save', style: StyleManage.h4Regular(color: ColorManager.bc0)),
+                          child: state is UpdateStaffLoading ? const Center(child: CircularProgressIndicator()) : Text('Save', style: StyleManager.h4Regular(color: ColorManager.bc0)),
                         ),
                       ],
                     ),

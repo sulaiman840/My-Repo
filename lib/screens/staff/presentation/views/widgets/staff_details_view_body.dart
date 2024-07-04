@@ -67,14 +67,14 @@ class StaffDetailsViewBody extends StatelessWidget {
                         children: [
                           Text(
                             state.staffDetails[0].name,
-                            style: StyleManage.h2SemiBold(),
+                            style: StyleManager.h2SemiBold(),
                           ),
                           SizedBox(
                             height: MediaQuery.of(context).size.height * .02,
                           ),
                           Text(
                             "Last update: ${(state.staffDetails[0].updatedAt).replaceRange(10, 27, " ")}",
-                            style: StyleManage.labelMedium(),
+                            style: StyleManager.labelMedium(),
                           ),
                         ],
                       ),
@@ -121,9 +121,9 @@ class StaffDetailsViewBody extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       text: "This is ",
-                      style: StyleManage.body1Medium(),
+                      style: StyleManager.body1Medium(),
                       children: <TextSpan>[
-                        TextSpan(text: state.staffDetails[0].role, style: TextStyle(color: ColorManager.saffron)),
+                        TextSpan(text: state.staffDetails[0].role, style: TextStyle(color: ColorManager.orangeLight)),
                         TextSpan(text: " account!"),
                       ],
                     ),
@@ -133,14 +133,14 @@ class StaffDetailsViewBody extends StatelessWidget {
                   ),
                   Text(
                     "Join at: ${(state.staffDetails[0].createdAt).replaceRange(10, 27, " ")}",
-                    style: StyleManage.body1Medium(),
+                    style: StyleManager.body1Medium(),
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .015,
                   ),
                   Text(
                     "Contact information:",
-                    style: StyleManage.body2Medium(
+                    style: StyleManager.body2Medium(
                       color: Colors.grey.shade500,
                     ),
                   ),

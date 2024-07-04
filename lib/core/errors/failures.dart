@@ -9,24 +9,20 @@ abstract class Failure {
 class ServerFailure extends Failure {
   ServerFailure(super.errorMessage);
 
-  factory ServerFailure.fromDioError(DioException dioException){
+  factory ServerFailure.fromDioError(DioError dioException){
     switch (dioException.type){
 
-      case DioExceptionType.connectionTimeout:
+      case DioErrorType.connectTimeout:
         return ServerFailure("Connection timeout with ApiServer!");
-      case DioExceptionType.sendTimeout:
+      case DioErrorType.sendTimeout:
         return ServerFailure("Send timeout with ApiServer!");
-      case DioExceptionType.receiveTimeout:
+      case DioErrorType.receiveTimeout:
         return ServerFailure("Receive timeout with ApiServer!");
-      case DioExceptionType.badCertificate:
-        return ServerFailure("Bad certificate with ApiServer!");
-      case DioExceptionType.badResponse:
+      case DioErrorType.response:
         return ServerFailure.fromResponse(dioException.response!.statusCode!, dioException.response!.data);
-      case DioExceptionType.cancel:
+      case DioErrorType.cancel:
         return ServerFailure("Request to ApiServer was canceled!");
-      case DioExceptionType.connectionError:
-        return ServerFailure("Connection error with ApiServer");
-      case DioExceptionType.unknown:
+      case DioErrorType.other:
         if(dioException.message!.contains('SocketException')) {
           return ServerFailure("No internet connection!");
         }
@@ -35,7 +31,7 @@ class ServerFailure extends Failure {
         return ServerFailure("Opps there was an error, Pleas try again!");
     }
   }
-  
+
   factory ServerFailure.fromResponse(int statusCode, dynamic response) {
     if (statusCode == 400 || statusCode == 401 || statusCode == 403) {
       return ServerFailure("Erorr massage 400 401 403");
