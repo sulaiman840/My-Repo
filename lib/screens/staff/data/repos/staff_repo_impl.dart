@@ -33,7 +33,7 @@ class StaffRepoImpl implements StaffRepo {
       }
       return right(showAllStaffModel);
     } catch (e) {
-      if (e is DioException){
+      if (e is DioError){
         return left(ServerFailure.fromDioError(e),);
       }
       return left(ServerFailure(e.toString()));
@@ -96,7 +96,7 @@ class StaffRepoImpl implements StaffRepo {
       deleteStaffModel = DeleteStaffModel.fromJson(data);
       return right(deleteStaffModel);
     } catch (e) {
-      if (e is DioException){
+      if (e is DioError){
         return left(ServerFailure.fromDioError(e),);
       }
       return left(ServerFailure(e.toString()));
@@ -119,7 +119,7 @@ class StaffRepoImpl implements StaffRepo {
       }
       return right(showStaffDetailsModel);
     } catch (e) {
-      if (e is DioException){
+      if (e is DioError){
         return left(ServerFailure.fromDioError(e),);
       }
       return left(ServerFailure(e.toString()));
