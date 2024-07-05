@@ -3,6 +3,8 @@ import 'package:get_it/get_it.dart';
 import 'package:project2/core/utils/dio_api_service.dart';
 import 'package:project2/screens/staff/data/repos/staff_repo_impl.dart';
 
+import '../../screens/Manager_Screens/warehouse/data/repos/type_repo_impl.dart';
+
 final getIt = GetIt.instance;
 
 void setupServiceLocator() {
@@ -14,6 +16,11 @@ void setupServiceLocator() {
   getIt.registerSingleton<StaffRepoImpl>(
     StaffRepoImpl(
         getIt.get<DioApiService>(),
+    ),
+  );
+  getIt.registerSingleton<TypeRepoImpl>(
+    TypeRepoImpl(
+      getIt.get<DioApiService>(),
     ),
   );
 }
