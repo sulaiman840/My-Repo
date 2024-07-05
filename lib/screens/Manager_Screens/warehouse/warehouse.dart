@@ -6,7 +6,7 @@ import 'package:project2/core/utils/color_manager.dart';
 import 'package:project2/core/utils/style_manager.dart';
 import 'package:project2/screens/Manager_Screens/warehouse/presentation/manager/get_all_type_cubit/get_all_type_cubit.dart';
 import 'package:project2/screens/Manager_Screens/warehouse/presentation/manager/get_all_type_cubit/get_all_type_state.dart';
-
+import 'package:project2/screens/Manager_Screens/warehouse/categories/category_screen.dart';
 
 import 'widget/circular_icon_widget.dart';
 import 'widget/elevated_btn_widget.dart';
