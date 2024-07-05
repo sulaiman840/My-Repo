@@ -43,6 +43,22 @@ class DioApiService
     return response.data;
   }
 
+  Future<dynamic> delete({
+    required String endPoint,
+    required Map<String, dynamic>? data,
+    String? token,
+  }) async {
+    _dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+    var response = await _dio.delete(
+      '$_baseUrl$endPoint',
+      data: data,
+    );
+
+    return response.data;
+  }
+
   /*Future<Map<String, dynamic>> postWithImage({
     required String endPoint,
     required Map<String, dynamic>? data,

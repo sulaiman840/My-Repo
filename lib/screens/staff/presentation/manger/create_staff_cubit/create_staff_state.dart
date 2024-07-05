@@ -20,9 +20,9 @@ class CreateStaffFailure extends CreateStaffState {
   const CreateStaffFailure(this.errorMessage);
 }
 class CreateStaffSuccess extends CreateStaffState {
-  final CreateStaffModel CreateResult;
+  final CreateStaffModel createResult;
 
-  const CreateStaffSuccess(this.CreateResult);
+  const CreateStaffSuccess(this.createResult);
 }
 
 class ImagePickedSuccess extends CreateStaffState {
