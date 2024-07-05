@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:project2/core/utils/app_manager.dart';
 import 'package:project2/core/utils/color_manager.dart';
 import 'package:project2/core/utils/style_manager.dart';
+import 'package:project2/screens/Manager_Screens/warehouse/categories/category_screen.dart';
 
 
 import 'widget/circular_icon_widget.dart';
@@ -42,6 +43,7 @@ class WareHouse extends StatelessWidget {
           //الضغط على العنصر
           onTap: ()
           {
+            Navigator.push(context,MaterialPageRoute(builder: (_)=>CategoryScreen()));
             //الربط هنا
           },
         ),
