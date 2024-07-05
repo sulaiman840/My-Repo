@@ -12,8 +12,8 @@ class AppRouter {
   static const String profile = '/profile';
 
   static final routes = <String, WidgetBuilder>{
-    LoginScreen.id:(context) =>LoginScreen(),
-    RegisterScreen.id:(context) =>LoginScreen(),
+   // LoginScreen.id:(context) =>LoginScreen(),
+   // RegisterScreen.id:(context) =>LoginScreen(),
     home: (context) => ManagerHome(),
     profile: (context) => ProfileScreen(),
 

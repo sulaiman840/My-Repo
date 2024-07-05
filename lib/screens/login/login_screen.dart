@@ -6,6 +6,8 @@ import 'package:project2/core/utils/color_manager.dart';
 import 'package:project2/core/utils/style_manager.dart';
 import 'package:project2/screens/register/register_screen.dart';
 
+import '../Home/manger_home.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
      static String id = "LoginScreen";
@@ -138,7 +140,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             backgroundColor: WidgetStateProperty.all(ColorManager.bluelight ),
                             ),
                           onPressed: (){
-                             if (_formKey.currentState!.validate()) {} else {}
+                             if (_formKey.currentState!.validate())
+                              {
+                                Navigator.push(context,MaterialPageRoute(builder: (_)=>ManagerHome()));
+                              } 
                           },
                          child: Text('\t\t\t      Login      \t\t\t',style: StyleManager.h4Regular(color: ColorManager.bc0),),
                         ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../screens/Manager_Screens/beneficiary_education.dart';
 import '../../screens/Manager_Screens/dashboard_overview.dart';
 import '../../screens/Manager_Screens/staff_management.dart';
-import '../../screens/Manager_Screens/warehouse.dart';
+import '../../screens/Manager_Screens/warehouse/warehouse.dart';
 
 class CustomTabBarView extends StatelessWidget {
   @override
