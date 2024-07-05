@@ -49,7 +49,7 @@ class WareHouse extends StatelessWidget {
                           //الضغط على العنصر
                           onTap: ()
                           {
-                            //الربط هنا
+                            Navigator.push(context,MaterialPageRoute(builder: (_)=>CategoryScreen()));
                           },
                         ),
 
