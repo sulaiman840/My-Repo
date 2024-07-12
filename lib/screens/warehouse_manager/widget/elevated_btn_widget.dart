@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:project2/core/utils/color_manager.dart';
 
 import '../../../core/utils/app_manager.dart';
-import '../../Manager_Screens/warehouse/widget/circular_icon_widget.dart';
 
 elevatedbtn({
   Color? color,
   required String text,
-  Color? textColor,
+  
   double? radius, 
   required TextStyle style,
   Function()? onPressed,

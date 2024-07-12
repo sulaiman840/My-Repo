@@ -194,6 +194,17 @@ class StyleManager {
 
 /////////////////////////////////
   // Body 01
+
+    static TextStyle body1Bold({
+        Color? color,
+       double size = AppSize.s16,
+       FontWeight fontWeight = FontWeight.bold}) {
+    return TextStyle(
+      color: color,
+      fontWeight: fontWeight,
+      fontSize: size,
+    );
+  }
      static TextStyle body1SemiBold({
         Color? color,
        double size = AppSize.s16,

@@ -4,8 +4,8 @@
 import '../../../core/utils/color_manager.dart';
 import '../../../core/utils/style_manager.dart';
 import 'elevated_btn_widget.dart';
-/*
-Future openDialog()=>showDialog(
+
+Future openDialog({required BuildContext context})=>showDialog(
                     context: context, 
                     builder:(context)=> AlertDialog(
                       title: Text('Add New Type' ,
@@ -28,6 +28,6 @@ Future openDialog()=>showDialog(
                       ],                  
                      )
                      );
-  */                  
+                 
 
    

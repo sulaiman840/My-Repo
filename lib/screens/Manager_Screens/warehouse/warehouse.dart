@@ -36,9 +36,7 @@ class _WareHouseState extends State<WareHouse> {
                   width:MediaQuery.of(context).size.width/6,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                     
-                                
+                    children: [         
                       const SizedBox(height: AppSize.s10,),
                       // list of type item
                       Expanded(
@@ -125,9 +123,6 @@ class _WareHouseState extends State<WareHouse> {
         )
             ],
           );
-      
-       
-       
        
           // return Text(state.errorMessage);
         } else {
