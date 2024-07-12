@@ -28,7 +28,7 @@ class TypeItemWidget extends StatelessWidget {
               horizontal: AppPadding.p16
               ),
             decoration: BoxDecoration(
-              color: ColorManager.bc0,
+              color: ColorManager.bc1,
               borderRadius: BorderRadius.circular(AppSize.s12)
             ),
             child: Column(

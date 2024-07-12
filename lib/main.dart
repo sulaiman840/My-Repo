@@ -11,8 +11,8 @@ import 'core/utils/bloc_ob_server.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: firebaseOptions);
-  await FirebaseMessagingService.initialize();
+ // await Firebase.initializeApp(options: firebaseOptions);
+  //await FirebaseMessagingService.initialize();
   setupServiceLocator();
   Bloc.observer = MyBlocObserver();
 
