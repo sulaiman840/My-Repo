@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:project2/core/utils/color_manager.dart';
 
-import '../../../../core/utils/app_manager.dart';
-import 'circular_icon_widget.dart';
+import '../../../core/utils/app_manager.dart';
 
 elevatedbtn({
   Color? color,
   required String text,
-  Color? textColor,
+  
   double? radius, 
   required TextStyle style,
   Function()? onPressed,
@@ -37,3 +36,18 @@ elevatedbtn({
       onPressed: onPressed,
     
      );
+
+
+
+     /*  elevatedbtn(
+                        icon: circleIconWidget(icon: Icons.add,
+                            backgroundColor: ColorManager.orange, color: ColorManager.bc0),
+                        text: 'Add New Type',
+                        style: StyleManager.labelMedium(color: ColorManager.bc4),
+                        onPressed: ()
+                        {
+                           openDialog();
+                          //الربط هنا
+                        },
+                                
+                      ),*/

@@ -27,6 +27,7 @@ import 'package:project2/screens/staff/presentation/manger/featured_staff_cubit/
 import 'screens/Home/ware_house_app.dart';
 import 'screens/staff/presentation/views/staff_details_view.dart';
 import 'screens/staff/presentation/views/staffs_view.dart';
+import 'screens/warehouse_manager/screens/home/warehouse_manager_home.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
           create: (context) {
             return GetAllTypeCubit(
               getIt.get<TypeRepoImpl>(),
-            )..fetchAllTypes();
+            );//..fetchAllTypes();
           },
         ),*/
         BlocProvider(
@@ -56,8 +57,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeManager.appTheme,
-        initialRoute: LoginScreen.id,
-        routes: AppRouter.routes,
+        home:WarehouseManagerHome() ,
+        //edit it , please
+       // initialRoute: WarehouseManagerHome.id,
+        //routes: AppRouter.routes,
         
       ),
     );

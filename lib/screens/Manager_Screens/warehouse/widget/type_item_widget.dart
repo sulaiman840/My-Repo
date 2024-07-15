@@ -6,7 +6,9 @@ import '../../../../core/utils/style_manager.dart';
 import '../../../../widgets/icon_btn_widget.dart';
 
 class TypeItemWidget extends StatelessWidget {
-   TypeItemWidget({super.key,required this.onTap, required this.allTypeModel});
+   TypeItemWidget({super.key,required this.onTap,
+    required this.allTypeModel
+    });
 
    final GetAllTypeModel allTypeModel;
   
@@ -19,7 +21,8 @@ class TypeItemWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
          children: [
           Container(
-            constraints: BoxConstraints.tightFor(width: MediaQuery.of(context).size.width/6),
+            constraints: BoxConstraints.tightFor(
+              width: MediaQuery.of(context).size.width/6.5),
             padding:const EdgeInsetsDirectional.symmetric(
               vertical: AppPadding.p16,
               horizontal: AppPadding.p16
@@ -31,35 +34,17 @@ class TypeItemWidget extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                  Row(      
-                     mainAxisSize: MainAxisSize.min,
-      
-                    children: [
-                    const Spacer(),
-                    // edit icon
-                    /* 
-                    IconBtnWidget(
-                      onPressed: ()
-                      {
-                        //الربط هنا 
-                      },
-                      icon: Icons.edit,
-                      color: ColorManager.blue2,
-                    ),*/
-                    // delelte icon
-                    IconBtnWidget(
-                      onPressed: ()
-                      {
-                        //الربط هنا 
-                      },
-                      icon: Icons.delete,
-                      color: ColorManager.orange,
-                    ),
-                  ],),
-                  const SizedBox(height: AppSize.s20,),
+                  const SizedBox(height: AppSize.s26,),
                   //name
-                  Center(child: Text(allTypeModel.name,style: StyleManager.body1SemiBold(color: ColorManager.blackColor),)),
-                  const SizedBox(height: AppSize.s50,),
+                  Center(
+                    child: Text(
+                      allTypeModel.name,
+                      style: StyleManager.body1SemiBold(
+                        color: ColorManager.blackColor
+                        ),
+                        ),
+                        ),
+                  const SizedBox(height: AppSize.s26,),
               ],
             ),
           )
