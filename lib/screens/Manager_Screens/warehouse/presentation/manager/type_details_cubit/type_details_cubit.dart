@@ -1,13 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project2/screens/Manager_Screens/warehouse/presentation/manager/type_details_cubit/type_details_state.dart';
 
 import '../../../data/repos/type_repo.dart';
+import 'type_details_state.dart';
 
 class TypeDetailsCubit extends Cubit<TypeDetailsState> {
 
   static TypeDetailsCubit get(context) => BlocProvider.of(context);
 
-  TypeDetailsCubit(super.initialState, this.typeRepo);
+  TypeDetailsCubit(this.typeRepo) : super(TypeDetailsInitial());
 
   final TypeRepo typeRepo;
 

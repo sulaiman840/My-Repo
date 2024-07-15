@@ -41,7 +41,9 @@ class TypeRepoImpl implements TypeRepo {
     try{
       var data = await (dioApiService.post(
           endPoint: 'types',
-          data: {},
+          data: {
+            "name": name,
+          },
           token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzE4OTk4ODk3LCJleHAiOjE3MzYyNzg4OTcsIm5iZiI6MTcxODk5ODg5NywianRpIjoiSXlDc1Jra05OTUlmYTg4UyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.6TbxacWg4WVxZBY3eutqQkubtf9ELwQS5YiwZz1heFs"
       ));
       print(data.toString());
@@ -64,8 +66,8 @@ class TypeRepoImpl implements TypeRepo {
           data: {},
           token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzE4OTk4ODk3LCJleHAiOjE3MzYyNzg4OTcsIm5iZiI6MTcxODk5ODg5NywianRpIjoiSXlDc1Jra05OTUlmYTg4UyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.6TbxacWg4WVxZBY3eutqQkubtf9ELwQS5YiwZz1heFs"
       ));
-      print(data.statusCode);
-      return right(data.statusCode);
+      print(data.toString());
+      return right(data);
     } catch (e) {
       if (e is DioError){
         return left(ServerFailure.fromDioError(e));

@@ -3,8 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project2/core/utils/app_manager.dart';
 import 'package:project2/core/utils/color_manager.dart';
 import 'package:project2/core/utils/style_manager.dart';
+import 'package:project2/screens/Manager_Screens/warehouse/categories/presentaion/manager/category_by_id_cubit/category_by_id_cubit.dart';
+import 'package:project2/screens/Manager_Screens/warehouse/categories/presentaion/manager/category_by_id_cubit/category_by_id_state.dart';
+import 'package:project2/screens/Manager_Screens/warehouse/categories/presentaion/manager/create_category_cubit/create_category_cubit.dart';
+import 'package:project2/screens/Manager_Screens/warehouse/categories/presentaion/manager/create_category_cubit/create_category_state.dart';
+import 'package:project2/screens/Manager_Screens/warehouse/categories/presentaion/manager/delete_category_cubit/delete_category_cubit.dart';
+import 'package:project2/screens/Manager_Screens/warehouse/categories/presentaion/manager/delete_category_cubit/delete_category_state.dart';
+import 'package:project2/screens/Manager_Screens/warehouse/categories/presentaion/manager/get_all_category_cubit/get_all_category_cubit.dart';
+import 'package:project2/screens/Manager_Screens/warehouse/categories/presentaion/manager/get_all_category_cubit/get_all_category_state.dart';
 import 'package:project2/screens/Manager_Screens/warehouse/presentation/manager/get_all_type_cubit/get_all_type_cubit.dart';
 import 'package:project2/screens/Manager_Screens/warehouse/presentation/manager/get_all_type_cubit/get_all_type_state.dart';
+
 import '../../../widgets/custom_constrainedb_widget.dart';
 import 'widget/category_item_widget.dart';
 import '../../warehouse_manager/widget/elevated_btn_widget.dart';
