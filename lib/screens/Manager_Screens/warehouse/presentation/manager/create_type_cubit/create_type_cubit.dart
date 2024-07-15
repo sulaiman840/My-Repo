@@ -7,7 +7,7 @@ class CreateTypeCubit extends Cubit<CreateTypeState> {
 
   static CreateTypeCubit get(context) => BlocProvider.of(context);
 
-  CreateTypeCubit(super.initialState, this.typeRepo);
+  CreateTypeCubit(this.typeRepo) : super(CreateTypeInitial());
 
   final TypeRepo typeRepo;
 
