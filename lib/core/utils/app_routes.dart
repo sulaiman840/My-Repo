@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:project2/screens/staff/presentation/views/staff_details_view.dart';
 import 'package:project2/screens/login/login_screen.dart';
 
 import '../../screens/Home/home_screen.dart';
@@ -8,7 +8,7 @@ import '../../screens/Home/secretary_home.dart';
 import '../../screens/Manager_Screens/profile_screen.dart';
 import '../../screens/login/stafflogin_screen.dart';
 import '../../screens/register/register_screen.dart';
-
+import '../../screens/staff/presentation/views/staffs_view.dart';
 
 class AppRouter {
   static const String home = '/';
@@ -16,9 +16,11 @@ class AppRouter {
   static const String profile = '/profile';
 
   static final routes = <String, WidgetBuilder>{
+
     LoginScreen.id:(context) =>LoginScreen(),
     RegisterScreen.id:(context) =>LoginScreen(),
     StaffLoginScreen.id:(context) =>StaffLoginScreen(),
+
 
 
     home: (context) => ManagerHome(),
@@ -29,3 +31,4 @@ class AppRouter {
 
   };
 }
+

@@ -1,0 +1,5 @@
+class Constants{
+  static final baseUrl = "http://127.0.0.1:8000";
+
+  static const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzE4OTk4ODk3LCJleHAiOjE3MzYyNzg4OTcsIm5iZiI6MTcxODk5ODg5NywianRpIjoiSXlDc1Jra05OTUlmYTg4UyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.6TbxacWg4WVxZBY3eutqQkubtf9ELwQS5YiwZz1heFs";
+}

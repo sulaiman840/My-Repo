@@ -11,7 +11,9 @@ import '../../widgets/general_widgets/loading_indicator.dart';
 import '../register/register_screen.dart';
 import '../../widgets/general_widgets/custom_text_form_field.dart';
 
+
 class LoginScreen extends StatelessWidget {
+
   const LoginScreen({super.key});
   static const id = 'LoginScreen';
 
@@ -237,6 +239,36 @@ class _LoginFormState extends State<LoginForm> {
                                 ),
                               ),
                             ),
+
+                          onPressed: (){
+                             if (_formKey.currentState!.validate())
+                              {
+                                Navigator.push(context,MaterialPageRoute(builder: (_)=>ManagerHome()));
+                              } 
+                          },
+                         child: Text('\t\t\t      Login      \t\t\t',style: StyleManager.h4Regular(color: ColorManager.bc0),),
+                        ),
+                        const Spacer(),
+                      ],
+                    ),
+                  ),
+                 
+
+                  SizedBox(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: AppSize.s12,vertical: AppSize.s12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                         Text('Not registered yet?',style: StyleManager.labelRegular(color: ColorManager.bc3),),
+                           TextButton(
+                            onPressed: ()
+                            {
+                              Navigator.pushReplacement(context,MaterialPageRoute(builder: (_)=> RegisterScreen()) );
+                            },
+                           child: Text('Create an account',style: StyleManager.labelMedium(color: ColorManager.bluelight),),
+
                           ),
                         ),
                       ),

@@ -5,7 +5,7 @@ import 'package:project2/screens/Manager_Screens/request_managment.dart';
 import '../../screens/Manager_Screens/beneficiary_education.dart';
 import '../../screens/Manager_Screens/dashboard_overview.dart';
 import '../../screens/Manager_Screens/staff_management.dart';
-import '../../screens/Manager_Screens/warehouse.dart';
+import '../../screens/Manager_Screens/warehouse/warehouse.dart';
 
 class CustomTabBarView extends StatelessWidget {
   final TabController tabController;
