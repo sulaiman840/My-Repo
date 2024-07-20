@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../Bloc/profile/user_profile_cubit.dart';
 import '../../core/utils/app_routes.dart';
+import '../../core/utils/color_manager.dart';
 
 class Search_Bar extends StatelessWidget {
   final String title;
   final Color searchIconColor;
   final Color fillColor;
 
+
   Search_Bar({
     required this.title,
     required this.searchIconColor,
     required this.fillColor,
+
   });
 
   @override
@@ -50,19 +53,41 @@ class Search_Bar extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(width: 10),
               IconButton(
-                icon: Icon(Icons.notifications, color: Colors.black),
-                onPressed: () {
-
-                },
+               style: ButtonStyle(backgroundColor:  WidgetStatePropertyAll(fillColor)),
+                icon: Icon(Icons.notifications, color: Colors.black,),
+                onPressed: () {},
               ),
-              IconButton(
+            /*  IconButton(
                 icon: Icon(Icons.person, color: Colors.black),
                 onPressed: () {
                   context.read<UserProfileCubit>().getUserProfile();
                   Navigator.pushNamed(context, AppRouter.profile);
                 },
+              ),*/
+              SizedBox(width: 20),
+              Container(
+                width: 110,
+              //  height: 80,
+                height: 60,
+                decoration: BoxDecoration(
+
+                  border: Border.all(color: Colors.white24 ,width:1),
+                borderRadius: BorderRadiusDirectional.all(Radius.circular(55)),
+
+                  image: DecorationImage(
+
+                    image: AssetImage('images/logo18.png'),
+                    fit: BoxFit.fitWidth,
+                  ),
+                ),
               ),
+             /* CircleAvatar(
+                radius: 15,
+                backgroundImage: AssetImage('images/logo10.png'),
+                backgroundColor: Colors.transparent,
+              ),*/
             ],
           ),
         ],
