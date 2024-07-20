@@ -4,8 +4,8 @@ import 'package:project2/models/user_profile.dart';
 class MangerProfileService {
   final Dio _dio = Dio();
   final String _baseUrl = 'http://127.0.0.1:8000/api';
-  final String _token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzE5MTAzMjUzLCJleHAiOjE3MzYzODMyNTMsIm5iZiI6MTcxOTEwMzI1MywianRpIjoiUmZmRHhPR2pEdkpkbktZTSIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.FTdTjGK08B_BTL8sEcLY4z3POQlwlbmUPeESXwI6K8Q';
-
+  final String _token =
+'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzE5Nzk0OTQwLCJleHAiOjE3MzcwNzQ5NDAsIm5iZiI6MTcxOTc5NDk0MCwianRpIjoicnR5RWUyZEJ3aGx3czZjZyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.J4aAWZCv5VQJvLzJgs-HeLIkhXdpLY9G6LnA8Oz5qWU';
   Future<UserProfile> fetchUserProfile() async {
     try {
       final response = await _dio.get(

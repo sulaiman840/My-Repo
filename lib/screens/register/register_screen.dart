@@ -1,300 +1,215 @@
-import 'package:flutter/material.dart';
-import 'package:project2/screens/login/login_screen.dart';
 
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:typed_data';
+
+import '../../Bloc/auth/register_cubit.dart';
+import '../../Bloc/auth/register_state.dart';
+import '../../services/auth_services.dart';
+import '../../widgets/general_widgets/custom_text_form_field.dart';
 import '../../core/utils/app_manager.dart';
 import '../../core/utils/color_manager.dart';
 import '../../core/utils/style_manager.dart';
+import '../login/login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
-   static const id = 'RegisterScreen';
+  static const id = 'RegisterScreen';
+
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  @override
-   Widget build(BuildContext context) {
-
-    final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   late final TextEditingController emailController;
   late final TextEditingController passwordController;
   late final TextEditingController userNameController;
   late final TextEditingController numberController;
-    late final TextEditingController roleController;
+  late final TextEditingController roleController;
+  Uint8List? selectedImage;
 
+  @override
+  void initState() {
+    super.initState();
+    _initControllers();
+  }
 
-  
-
-  _initControllers() {
+  void _initControllers() {
     emailController = TextEditingController();
     passwordController = TextEditingController();
     userNameController = TextEditingController();
     numberController = TextEditingController();
     roleController = TextEditingController();
-
   }
 
-  _disposeControllers() {
+  @override
+  void dispose() {
     emailController.dispose();
     passwordController.dispose();
     userNameController.dispose();
     numberController.dispose();
     roleController.dispose();
-  }
-
-  @override
-  void initState() {
-    _initControllers();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _disposeControllers();
     super.dispose();
   }
 
+  Future<void> pickImage() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+          type: FileType.image,
+          withData: true
+      );
 
-    var width= MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
-        return Scaffold(
-      body: SelectionArea(
-        child: Center(
-        
-          child: Padding(
-            padding:  EdgeInsets.symmetric(
-              horizontal:width/3,// AppSize.s220
-              vertical: width/79
+      if (result != null && result.files.single.bytes != null) {
+        setState(() {
+          selectedImage = result.files.single.bytes!;
+        });
+      } else {
+        print('No image selected or image data is unavailable.');
+      }
+    } catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
+
+  void register() {
+    if (_formKey.currentState!.validate() && selectedImage != null) {
+      context.read<RegisterCubit>().register(
+        name: userNameController.text,
+        email: emailController.text,
+        number: numberController.text,
+        password: passwordController.text,
+        role: roleController.text,
+        imageBytes: selectedImage!,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please select an image.')),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => RegisterCubit(RegisterService()),
+      child: Scaffold(
+        body: SelectionArea(
+          child: Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width / 3,
+                vertical: MediaQuery.of(context).size.width / 79,
               ),
-            child: Card(
-                   elevation: AppSize.s10,
-                   color: ColorManager.bc1,
-                   shadowColor: ColorManager.bc2,
-                   //shape: ShapeBorder.lerp(   ),
-              child: Padding(
-                padding: const EdgeInsets.all(AppSize.s30),
-                child: Form(
-                   key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      
-                //  const Spacer(),
-                  Row(
-                    children: [
-                      
-                   Text('Register',style:StyleManager.h1Bold(color: ColorManager.bluelight) ,
-),
-                 
-                   const Spacer(),   
-                  Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(AppSize.s12,),
-                      child: const CircleAvatar(
-                        radius: 50,
-                        backgroundImage: NetworkImage(
-                            "https://wallpapers.com/images/hd/waving-technoblade-anime-fan-art-xjz8fyxbzakvitgq.jpg"),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: -6,
-                      left :60,
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.add,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                    ],
-                  ),
-                 // const SizedBox(height: AppSize.s2),
+              child: Card(
+                elevation: 10,
+                color: ColorManager.bc1,
+                shadowColor: ColorManager.bc2,
+                child: Padding(
+                  padding: const EdgeInsets.all(30),
+                  child: BlocConsumer<RegisterCubit, RegisterState>(
+                    listener: (context, state) {
+                      if (state is RegisterSuccess) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Registration successful')),
+                        );
+                      } else if (state is RegisterFailure) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(state.error)),
+                        );
+                      }
+                    },
+                    builder: (context, state) {
+                      if (state is RegisterLoading) {
+                        return Center(child: CircularProgressIndicator());
+                      }
 
-                  TextFormField(
-                    //  controller: userNameController,
-                       validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Required*';
-                              }
-                              return null;
-                            },
-                      decoration: const InputDecoration(
-                        labelText: 'Name',
-                        hintStyle: TextStyle(color:ColorManager.bc3),
-                        border: OutlineInputBorder(),
-                      ),
-                                       ),
-                  const SizedBox(height: AppSize.s10),
-                   TextFormField(
-                   // controller: emailController,
-                     validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Required*';
-                            }
-                            return null;
-                          },
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      hintStyle: TextStyle(color:ColorManager.bc3),
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: AppSize.s10),
-                   TextFormField(
-                    //controller: passwordController,
-                     validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Required*';
-                            }
-                            return null;
-                          },
-                    decoration:const InputDecoration(
-                      labelText: 'Password',
-                      hintStyle: TextStyle(color:ColorManager.bc3),
-                      border: OutlineInputBorder(),
-                    ),
-                    obscureText: true,
-                  ),
-                   const SizedBox(height: AppSize.s10),
-                   TextFormField(
-                  //  controller: numberController,
-                     validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Required*';
-                            }
-                            return null;
-                          },
-                    decoration:const InputDecoration(
-                      labelText: 'Number',
-                      hintStyle: TextStyle(color:ColorManager.bc3),
-                      border: OutlineInputBorder(),
-                    ),
-                    obscureText: true,
-                  ),
-                  
-                  const SizedBox(height: AppSize.s10),
-
-                  TextFormField(
-                    //  controller: roleController,
-                       validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Required*';
-                              }
-                              return null;
-                            },
-                      decoration: const InputDecoration(
-                        labelText: 'Role',
-                        hintStyle: TextStyle(color:ColorManager.bc3),
-                        border: OutlineInputBorder(),
-                      ),
-                                       ),
-                  const SizedBox(height: AppSize.s10),
-                   SizedBox(
-                    width: double.infinity,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Spacer(),
-                        ElevatedButton(
-                          style: ButtonStyle(                            
-                            backgroundColor: WidgetStateProperty.all(ColorManager.bluelight ),
-                            ),
-                          onPressed: (){
-                             if (_formKey.currentState!.validate()) {} else {}
-                          },
-                         child: Text('\t\t\t    register   \t\t\t',style: StyleManager.h4Regular(color: ColorManager.bc0),),
-                        ),
-                        const Spacer(),
-                      ],
-                    ),
-                  ),
-                 
-
-                  SizedBox(
-                    width: double.infinity,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: AppSize.s12,vertical: AppSize.s12),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                         Text('Already have an account?',style: StyleManager.labelRegular(color: ColorManager.bc3),),
-                           TextButton(
-                            onPressed: ()
-                            {
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>LoginScreen()));
-                            },
-                           child: Text('Login',style: StyleManager.labelMedium(color: ColorManager.bluelight),),
+                      return SingleChildScrollView(
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Text('Register', style: StyleManager.h1Bold(color: ColorManager.bluelight)),
+                              if (selectedImage != null)
+                                Container(
+                                  height: 150,
+                                  width: 150,
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.blueAccent),
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: MemoryImage(selectedImage!),
+                                    ),
+                                  ),
+                                ),
+                              OutlinedButton(
+                                onPressed: pickImage,
+                                child: Text('Select Image'),
+                              ),
+                              SizedBox(height: 20),
+                              CustomTextFormField(
+                                controller: userNameController,
+                                labelText: 'Name',
+                                validator: (value) => value!.isEmpty ? 'Required*' : null,
+                              ),
+                              SizedBox(height: 10),
+                              CustomTextFormField(
+                                controller: emailController,
+                                labelText: 'Email',
+                                validator: (value) => value!.isEmpty ? 'Required*' : null,
+                              ),
+                              SizedBox(height: 10),
+                              CustomTextFormField(
+                                controller: passwordController,
+                                labelText: 'Password',
+                                validator: (value) => value!.isEmpty ? 'Required*' : null,
+                                obscureText: true,
+                              ),
+                              SizedBox(height: 10),
+                              CustomTextFormField(
+                                controller: numberController,
+                                labelText: 'Number',
+                                validator: (value) => value!.isEmpty ? 'Required*' : null,
+                              ),
+                              SizedBox(height: 10),
+                              CustomTextFormField(
+                                controller: roleController,
+                                labelText: 'Role',
+                                validator: (value) => value!.isEmpty ? 'Required*' : null,
+                              ),
+                              SizedBox(height: 20),
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: WidgetStateProperty.all(ColorManager.bluelight),
+                                ),
+                                onPressed: register,
+                                child: Text('Register', style: StyleManager.h4Regular(color: ColorManager.bc0)),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pushReplacement(
+                                      context, MaterialPageRoute(builder: (_) => LoginScreen()));
+                                },
+                                child: Text('Login', style: StyleManager.labelMedium(color: ColorManager.bluelight)),
+                              ),
+                            ],
                           ),
-                          
-                        ],
-                      ),
-                    ),
+                        ),
+                      );
+                    },
                   ),
-                  const Spacer(flex: 2,),
-
-                  ],
-                      ),
                 ),
               ),
             ),
           ),
         ),
-            ),
-            );
-    
+      ),
+    );
   }
-
 }
-
-
-
-
-/*Row(
-                    children: [
-                      
-                   Padding(
-                     padding: const EdgeInsets.symmetric(horizontal: AppSize.s12),
-                     child: TextFormField(
-                    //  controller: userNameController,
-                       validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Required*';
-                              }
-                              return null;
-                            },
-                      decoration: const InputDecoration(
-                        labelText: 'Name',
-                        hintStyle: TextStyle(color:ColorManager.bc3),
-                        border: OutlineInputBorder(),
-                      ),
-                                       ),
-                   ),
-                 
-                   const Spacer(),   
-                  Stack(
-                  children: [
-                    const CircleAvatar(
-                      radius: 64,
-                      backgroundImage: NetworkImage(
-                          "https://wallpapers.com/images/hd/waving-technoblade-anime-fan-art-xjz8fyxbzakvitgq.jpg"),
-                    ),
-                    Positioned(
-                      bottom: -15,
-                      left :90,
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.add_a_photo,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                    ],
-                  ),*/

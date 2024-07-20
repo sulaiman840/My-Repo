@@ -7,17 +7,16 @@ class FirebaseMessagingService {
   }
 
   static Future<void> initialize() async {
-    await Firebase.initializeApp(); // Initialize Firebase
+    await Firebase.initializeApp();
 
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-    // Request permission for notifications
     await requestPermission(messaging);
 
     FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("A new message arrived at the foreground!");
+      print("A new message arrived in the foreground!");
       print("Message data: ${message.data}");
       if (message.notification != null) {
         print("Notification Title: ${message.notification!.title}, Body: ${message.notification!.body}");
@@ -39,6 +38,23 @@ class FirebaseMessagingService {
       print("User granted provisional permission");
     } else {
       print("User declined or has not accepted permission");
+    }
+  }
+
+  static Future<String?> getFcmToken() async {
+    try {
+      FirebaseMessaging messaging = FirebaseMessaging.instance;
+      String? token = await messaging.getToken();
+      if (token != null) {
+        return token;
+      } else {
+        throw Exception("No FCM token found");
+      }
+    } catch (e) {
+      print("Error retrieving FCM token: $e");
+      // Retry mechanism
+      await Future.delayed(Duration(seconds: 5));
+      return await getFcmToken();
     }
   }
 }
