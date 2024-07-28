@@ -16,7 +16,7 @@ class ShowAllStaffModel {
   late final String email;
   late final int number;
   late final String? imagePath;
-  late final Null emailVerifiedAt;
+  late final String? emailVerifiedAt;
   late final String createdAt;
   late final String updatedAt;
 
@@ -26,8 +26,8 @@ class ShowAllStaffModel {
     role = json['role'];
     email = json['email'];
     number = json['number'];
-    imagePath = json['imagePath'] ?? null;
-    emailVerifiedAt = null;
+    imagePath = json['imagePath'];
+    emailVerifiedAt = json['email_verified_at'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project2/screens/staff/presentation/manger/delete_staff_cubit/delete_staff_state.dart';
 import 'package:project2/screens/staff/presentation/manger/featured_staff_cubit/featured_staff_cubit.dart';
 import 'package:project2/screens/staff/presentation/manger/featured_staff_cubit/featured_staff_state.dart';
 import 'package:project2/screens/staff/presentation/views/staff_details_view.dart';
 
+import '../../../../../core/utils/app_manager.dart';
+import '../../manger/delete_staff_cubit/delete_staff_cubit.dart';
 import 'staffs_list_view_item.dart';
 
 class StaffsListView extends StatelessWidget {
@@ -11,38 +14,55 @@ class StaffsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FeaturedStaffCubit, FeaturedStaffState>(
+    return BlocConsumer<FeaturedStaffCubit, FeaturedStaffState>(
+      listener: (context, state) {
+
+      },
       builder: (context, state) {
-        if (state is FeaturedStaffSuccess) {
-          return Expanded(
-            child: ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              itemCount: state.allStaff.length,
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemBuilder: (context, index) => GestureDetector(
-                onTap: () {
-                  print('nav!!!!!!!!!!!!!!!!!!!');
-                  Navigator.push(
+        return BlocConsumer<DeleteStaffCubit, DeleteStaffState>(
+          listener: (contextInner, stateInner) {
+            if (stateInner is DeleteStaffFailure) {
+              ScaffoldMessenger.of(contextInner).showSnackBar(
+                const SnackBar(content: Text("Staff deleted failed")),
+              );
+            } else if (stateInner is DeleteStaffSuccess) {
+              contextInner.read<FeaturedStaffCubit>().fetchFeaturedStaff();
+              ScaffoldMessenger.of(contextInner).showSnackBar(
+                const SnackBar(content: Text('Staff deleted successfully')),
+              );
+            }
+          },
+          builder: (contextInner, stateInner) {
+            if (state is FeaturedStaffSuccess) {
+              return ListView.separated(
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: state.allStaff.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) => GestureDetector(
+                  onTap: () {
+                    Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => StaffDetailsView(id: state.allStaff[index].id),),
-                  );
-                },
-                child: StaffsListViewItem(
-                  image: state.allStaff[index].imagePath!,
-                  rank: (index + 1).toString(),
-                  name: state.allStaff[index].name,
-                  description: state.allStaff[index].role,
-                  date: state.allStaff[index].createdAt,
+                      MaterialPageRoute(
+                        builder: (_)=> StaffDetailsView(id: state.allStaff[index].id),
+                      ),
+                    );
+                  },
+                  child: StaffsListViewItem(
+                    allStaff: state.allStaff[index],
+                    rank: (index + 1).toString(),
+                  ),
                 ),
-              ),
-            ),
-          );
-        } else if (state is FeaturedStaffFailure) {
-          return Text(state.errorMessage);
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
+                separatorBuilder: (context, index) => const SizedBox(
+                  height: AppSize.s24,
+                ),
+              );
+            } else if (state is FeaturedStaffFailure) {
+              return Text(state.errorMessage);
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
+        );
       },
     );
   }

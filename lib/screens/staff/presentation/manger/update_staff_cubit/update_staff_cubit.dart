@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:typed_data';
@@ -44,7 +46,7 @@ class UpdateStaffCubit extends Cubit<UpdateStaffState> {
     );
 
     result.fold((failure) {
-      print(failure.errorMessage);
+      log(failure.errorMessage);
       emit(UpdateStaffFailure(failure.errorMessage));
     }, (createStaff) {
       emit(UpdateStaffSuccess(createStaff));

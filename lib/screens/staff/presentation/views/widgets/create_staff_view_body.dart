@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:file_picker/file_picker.dart';
@@ -8,6 +10,7 @@ import '../../../../../core/utils/color_manager.dart';
 import '../../../../../core/utils/style_manager.dart';
 import '../../manger/create_staff_cubit/create_staff_cubit.dart';
 import '../../manger/create_staff_cubit/create_staff_state.dart';
+import '../../manger/featured_staff_cubit/featured_staff_cubit.dart';
 import 'custom_edit_text_field.dart';
 
 class CreateStaffViewBody extends StatefulWidget {
@@ -26,8 +29,8 @@ class _CreateStaffViewBodyState extends State<CreateStaffViewBody> {
   late final TextEditingController numberController;
   late final TextEditingController roleController;
   Uint8List? selectedImage;
-  List<String> items = ['secr', 'wear'];
-  String selectedItem = 'secr';
+  List<String> items = ['Secretary', 'Warehouse guard'];
+  String selectedItem = 'Secretary';
 
   @override
   void initState() {
@@ -65,10 +68,10 @@ class _CreateStaffViewBodyState extends State<CreateStaffViewBody> {
           selectedImage = result.files.single.bytes!;
         });
       } else {
-        print('No image selected or image data is unavailable.');
+        log('No image selected or image data is unavailable.');
       }
     } catch (e) {
-      print('Failed to pick image: $e');
+      log('Failed to pick image: $e');
     }
   }
 
@@ -94,10 +97,13 @@ class _CreateStaffViewBodyState extends State<CreateStaffViewBody> {
     return BlocConsumer<CreateStaffCubit, CreateStaffState>(
       listener: (context, state) {
         if (state is CreateStaffFailure) {
+          context.read<FeaturedStaffCubit>().fetchFeaturedStaff();
+          Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Staff created failed")),
           );
         } else if (state is CreateStaffSuccess) {
+          context.read<FeaturedStaffCubit>().fetchFeaturedStaff();
           Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Staff created successfully')),
@@ -151,13 +157,13 @@ class _CreateStaffViewBodyState extends State<CreateStaffViewBody> {
                               width: 0.1,
                               color: Colors.black,
                             ),
-                            image: DecorationImage(
+                            image: const DecorationImage(
                               image: AssetImage(AssetsManager.testImage),
                             )
                         ),
                       ),
                       IconButton(
-                        icon: Icon(Icons.camera_alt_outlined),
+                        icon: const Icon(Icons.camera_alt_outlined),
                         onPressed: pickImage,
                       ),
                     ],
@@ -204,6 +210,20 @@ class _CreateStaffViewBodyState extends State<CreateStaffViewBody> {
                   SizedBox(height: MediaQuery.of(context).size.width * .02),
                   DropdownButtonFormField<String>(
                     decoration: const InputDecoration(
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.red,
+                          width: .9,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.black54,
+                          width: .9,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.black54,
@@ -221,10 +241,18 @@ class _CreateStaffViewBodyState extends State<CreateStaffViewBody> {
                     onChanged: (value) {
                       setState(() {
                         selectedItem = value!;
-                        roleController.text = selectedItem;
-                        print(roleController.text);
+                        value == "Warehouse guard" ? roleController.text = "warehourseguard" : roleController.text = "secr";
                       });
                     },
+                    validator: (value) {
+                      if (value?.isEmpty ?? true) {
+                        return 'Please select role!';
+                      }
+                      return null;
+                    },
+                    hint: const Text(
+                      "Role"
+                    ),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.width * .02),
                   Align(
@@ -240,7 +268,7 @@ class _CreateStaffViewBodyState extends State<CreateStaffViewBody> {
                           },
                           child: Text('Cancel', style: StyleManager.h4Regular(color: ColorManager.bc0)),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         ElevatedButton(
                           style: ButtonStyle(
                             backgroundColor: WidgetStateProperty.all(ColorManager.bluelight),

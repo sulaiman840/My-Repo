@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/utils/service_locator.dart';
-import '../../data/models/show_staff_details_model.dart';
+import '../../data/models/show_all_staff_model.dart';
 import '../../data/repos/staff_repo_impl.dart';
 import '../manger/update_staff_cubit/update_staff_cubit.dart';
 import 'widgets/update_staff_view_body.dart';
 
 class UpdateStaffView extends StatelessWidget {
-  const UpdateStaffView({Key? key, required this.showStaffDetailsModel}) : super(key: key);
+  const UpdateStaffView({Key? key, required this.allStaff}) : super(key: key);
 
-  final ShowStaffDetailsModel showStaffDetailsModel;
+  final ShowAllStaffModel allStaff;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class UpdateStaffView extends StatelessWidget {
         );
       },
       child: Scaffold(
-        body: UpdateStaffViewBody(showStaffDetailsModel: showStaffDetailsModel,),
+        body: UpdateStaffViewBody(allStaff: allStaff,),
       ),
     );
   }

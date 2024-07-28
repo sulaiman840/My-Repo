@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project2/core/errors/failures.dart';
 import 'package:project2/screens/staff/data/repos/staff_repo.dart';
 import 'package:project2/screens/staff/presentation/manger/featured_staff_cubit/featured_staff_state.dart';
 

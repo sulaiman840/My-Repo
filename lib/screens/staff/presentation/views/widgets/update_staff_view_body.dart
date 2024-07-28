@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:file_picker/file_picker.dart';
@@ -6,15 +8,16 @@ import 'dart:typed_data';
 import '../../../../../core/utils/assets_manager.dart';
 import '../../../../../core/utils/color_manager.dart';
 import '../../../../../core/utils/style_manager.dart';
-import '../../../data/models/show_staff_details_model.dart';
+import '../../../data/models/show_all_staff_model.dart';
+import '../../manger/featured_staff_cubit/featured_staff_cubit.dart';
 import '../../manger/update_staff_cubit/update_staff_cubit.dart';
 import '../../manger/update_staff_cubit/update_staff_state.dart';
 import 'custom_edit_text_field.dart';
 
 class UpdateStaffViewBody extends StatefulWidget {
-  const UpdateStaffViewBody({Key? key, required this.showStaffDetailsModel}) : super(key: key);
+  const UpdateStaffViewBody({Key? key, required this.allStaff}) : super(key: key);
 
-  final ShowStaffDetailsModel showStaffDetailsModel;
+  final ShowAllStaffModel allStaff;
 
   @override
   State<UpdateStaffViewBody> createState() => _UpdateStaffViewBodyState();
@@ -29,8 +32,8 @@ class _UpdateStaffViewBodyState extends State<UpdateStaffViewBody> {
   late final TextEditingController numberController;
   late final TextEditingController roleController;
   Uint8List? selectedImage;
-  List<String> items = ['secr', 'wear'];
-  String selectedItem = 'secr';
+  List<String> items = ['Secretary', 'Warehouse guard'];
+  String selectedItem = 'Secretary';
 
   @override
   void initState() {
@@ -39,11 +42,11 @@ class _UpdateStaffViewBodyState extends State<UpdateStaffViewBody> {
   }
 
   void _initControllers() {
-    emailController = TextEditingController(text: widget.showStaffDetailsModel.email);
+    emailController = TextEditingController(text: widget.allStaff.email);
     passwordController = TextEditingController();
-    userNameController = TextEditingController(text: widget.showStaffDetailsModel.name);
-    numberController = TextEditingController(text: (widget.showStaffDetailsModel.number).toString());
-    roleController = TextEditingController(text: widget.showStaffDetailsModel.role);
+    userNameController = TextEditingController(text: widget.allStaff.name);
+    numberController = TextEditingController(text: (widget.allStaff.number).toString());
+    roleController = TextEditingController(text: widget.allStaff.role);
   }
 
   @override
@@ -68,18 +71,17 @@ class _UpdateStaffViewBodyState extends State<UpdateStaffViewBody> {
           selectedImage = result.files.single.bytes!;
         });
       } else {
-        print('No image selected or image data is unavailable.');
+        log('No image selected or image data is unavailable.');
       }
     } catch (e) {
-      print('Failed to pick image: $e');
+      log('Failed to pick image: $e');
     }
   }
 
   void register() {
     if (_formKey.currentState!.validate() && selectedImage != null) {
-      print(widget.showStaffDetailsModel.id);
       context.read<UpdateStaffCubit>().fetchUpdateStaff(
-        id: widget.showStaffDetailsModel.id,
+        id: widget.allStaff.id,
         name: userNameController.text,
         email: emailController.text,
         number: numberController.text,
@@ -99,10 +101,13 @@ class _UpdateStaffViewBodyState extends State<UpdateStaffViewBody> {
     return BlocConsumer<UpdateStaffCubit, UpdateStaffState>(
       listener: (context, state) {
         if (state is UpdateStaffFailure) {
+          context.read<FeaturedStaffCubit>().fetchFeaturedStaff();
+          Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Staff Updated failed")),
           );
         } else if (state is UpdateStaffSuccess) {
+          context.read<FeaturedStaffCubit>().fetchFeaturedStaff();
           Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Staff Updated successfully')),
@@ -209,6 +214,20 @@ class _UpdateStaffViewBodyState extends State<UpdateStaffViewBody> {
                   SizedBox(height: MediaQuery.of(context).size.width * .02),
                   DropdownButtonFormField<String>(
                     decoration: const InputDecoration(
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.red,
+                          width: .9,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.black54,
+                          width: .9,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.black54,
@@ -226,10 +245,18 @@ class _UpdateStaffViewBodyState extends State<UpdateStaffViewBody> {
                     onChanged: (value) {
                       setState(() {
                         selectedItem = value!;
-                        roleController.text = selectedItem;
-                        print(roleController.text);
+                        value == "Warehouse guard" ? roleController.text = "warehourseguard" : roleController.text = "secr";
                       });
                     },
+                    validator: (value) {
+                      if (value?.isEmpty ?? true) {
+                        return 'Please select role!';
+                      }
+                      return null;
+                    },
+                    hint: const Text(
+                        "Role"
+                    ),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.width * .02),
                   Align(
@@ -245,7 +272,7 @@ class _UpdateStaffViewBodyState extends State<UpdateStaffViewBody> {
                           },
                           child: Text('Cancel', style: StyleManager.h4Regular(color: ColorManager.bc0)),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         ElevatedButton(
                           style: ButtonStyle(
                             backgroundColor: WidgetStateProperty.all(ColorManager.bluelight),

@@ -1,21 +1,11 @@
 import 'package:flutter/cupertino.dart';
-/*
-class CategoryScreen extends StatelessWidget {
-  const CategoryScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}*/
 import 'package:flutter/material.dart';
 
 import '../../../../core/utils/app_manager.dart';
 import '../../../../core/utils/color_manager.dart';
 import '../../../../core/utils/style_manager.dart';
-import '../widget/circular_icon_widget.dart';
-import '../../../warehouse_manager/widget/elevated_btn_widget.dart';
-
+import '../../../warehouse_home/widget/elevated_btn_widget.dart';
+import '../../../warehouse_home/widget/circular_icon_widget.dart';
 
 class CategoryScreen extends StatelessWidget {
   @override
