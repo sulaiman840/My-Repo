@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../constants.dart';
 import '../../../../../core/utils/assets_manager.dart';
 
 class CustomImageNetwork extends StatelessWidget {
@@ -20,12 +19,12 @@ class CustomImageNetwork extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: imageHeight ?? 55,
-      width: imageWidth ?? 55,
+      width: imageWidth ?? 50,
       //margin: EdgeInsets.only(top: screenSize.height * .16),
       decoration: BoxDecoration(
         color: Colors.grey.shade800,
         borderRadius: BorderRadius.circular(borderRadius ?? 35.0),
-        image: DecorationImage(
+        image: const DecorationImage(
                     image: AssetImage(AssetsManager.testImage),
                     /*NetworkImage(
                       'http://127.0.0.1:8000/api$image',

@@ -1,7 +1,9 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:project2/constants.dart';
 import 'package:project2/core/errors/failures.dart';
 import 'package:project2/core/utils/dio_api_service.dart';
 import 'package:project2/screens/staff/data/models/create_staff_model.dart';
@@ -24,9 +26,9 @@ class StaffRepoImpl implements StaffRepo {
     try {
       var data = await (dioApiService.get(
           endPoint: 'showallstaff',
-        token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzE4OTk4ODk3LCJleHAiOjE3MzYyNzg4OTcsIm5iZiI6MTcxODk5ODg5NywianRpIjoiSXlDc1Jra05OTUlmYTg4UyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.6TbxacWg4WVxZBY3eutqQkubtf9ELwQS5YiwZz1heFs"
+        token: Constants.token,
       ));
-    print(data.toString());
+      log(data.toString());
       List<ShowAllStaffModel> showAllStaffModel = [];
       for (var item in data) {
         showAllStaffModel.add(ShowAllStaffModel.fromJson(item));
@@ -63,7 +65,7 @@ class StaffRepoImpl implements StaffRepo {
 
     try{
       dio.options.headers = {
-        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzE4OTk4ODk3LCJleHAiOjE3MzYyNzg4OTcsIm5iZiI6MTcxODk5ODg5NywianRpIjoiSXlDc1Jra05OTUlmYTg4UyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.6TbxacWg4WVxZBY3eutqQkubtf9ELwQS5YiwZz1heFs',
+        'Authorization': 'Bearer ${Constants.token}',
       };
       var response =
       await dio.post("http://127.0.0.1:8000/api/createstaff", data: formData);
@@ -89,9 +91,9 @@ class StaffRepoImpl implements StaffRepo {
       var data = await (dioApiService.post(
           endPoint: 'destroystaff/$id',
           data: {},
-          token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzE4OTk4ODk3LCJleHAiOjE3MzYyNzg4OTcsIm5iZiI6MTcxODk5ODg5NywianRpIjoiSXlDc1Jra05OTUlmYTg4UyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.6TbxacWg4WVxZBY3eutqQkubtf9ELwQS5YiwZz1heFs"
+          token: Constants.token,
       ));
-      print(data.toString());
+      log(data.toString());
       DeleteStaffModel deleteStaffModel;
       deleteStaffModel = DeleteStaffModel.fromJson(data);
       return right(deleteStaffModel);
@@ -110,9 +112,9 @@ class StaffRepoImpl implements StaffRepo {
     try {
       var data = await (dioApiService.get(
           endPoint: 'showstaff/$id',
-          token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzE4OTk4ODk3LCJleHAiOjE3MzYyNzg4OTcsIm5iZiI6MTcxODk5ODg5NywianRpIjoiSXlDc1Jra05OTUlmYTg4UyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.6TbxacWg4WVxZBY3eutqQkubtf9ELwQS5YiwZz1heFs"
+          token: Constants.token,
       ));
-      print(data.toString());
+      log(data.toString());
       List<ShowStaffDetailsModel> showStaffDetailsModel = [];
       for (var item in data) {
         showStaffDetailsModel.add(ShowStaffDetailsModel.fromJson(item));
@@ -150,7 +152,7 @@ class StaffRepoImpl implements StaffRepo {
 
     try{
       dio.options.headers = {
-        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzE4OTk4ODk3LCJleHAiOjE3MzYyNzg4OTcsIm5iZiI6MTcxODk5ODg5NywianRpIjoiSXlDc1Jra05OTUlmYTg4UyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.6TbxacWg4WVxZBY3eutqQkubtf9ELwQS5YiwZz1heFs',
+        'Authorization': 'Bearer ${Constants.token}',
       };
       var response =
       await dio.post("http://127.0.0.1:8000/api/updatestaff/$id", data: formData);

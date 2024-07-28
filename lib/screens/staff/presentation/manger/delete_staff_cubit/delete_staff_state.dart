@@ -19,5 +19,5 @@ class DeleteStaffFailure extends DeleteStaffState {
 class DeleteStaffSuccess extends DeleteStaffState {
   final DeleteStaffModel deleteResult;
 
-  DeleteStaffSuccess(this.deleteResult);
+  const DeleteStaffSuccess(this.deleteResult);
 }

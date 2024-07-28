@@ -19,5 +19,5 @@ class FeaturedStaffFailure extends FeaturedStaffState {
 class FeaturedStaffSuccess extends FeaturedStaffState {
   final List<ShowAllStaffModel> allStaff;
 
-  FeaturedStaffSuccess(this.allStaff);
+  const FeaturedStaffSuccess(this.allStaff);
 }

@@ -9,8 +9,8 @@ class DeleteStaffModel {
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['message'] = message;
-    return _data;
+    final data = <String, dynamic>{};
+    data['message'] = message;
+    return data;
   }
 }

@@ -1,82 +1,96 @@
 import 'package:flutter/material.dart';
+import 'package:project2/core/utils/assets_manager.dart';
+import 'package:project2/screens/staff/data/models/show_all_staff_model.dart';
+import 'package:project2/screens/staff/presentation/manger/delete_staff_cubit/delete_staff_cubit.dart';
+import 'package:project2/screens/staff/presentation/views/update_staff_view.dart';
 
+import '../../../../../core/utils/app_manager.dart';
+import '../../../../../core/utils/color_manager.dart';
 import '../../../../../core/utils/style_manager.dart';
+import '../../../../../widgets/icon_btn_widget.dart';
 import 'custom_image_network.dart';
 
 class StaffsListViewItem extends StatelessWidget {
   const StaffsListViewItem({
     super.key,
-    required this.image,
+    required this.allStaff,
     required this.rank,
-    this.nameHeight,
-    this.nameWidth,
-    required this.name,
-    this.nameSize,
-    required this.description,
-    this.descriptionColor,
-    this.descriptionSize,
-    required this.date,
   });
-  final String image;
+  final ShowAllStaffModel allStaff;
   final String rank;
-  final double? nameHeight;
-  final double? nameWidth;
-  final String name;
-  final double? nameSize;
-  final String description;
-  final Color? descriptionColor;
-  final double? descriptionSize;
-  final String date;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          rank,
-          style: StyleManager.body1Regular(),
-        ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.06,
-        ),
-        CustomImageNetwork(image: image,),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.007,
-        ),
-        SizedBox(
-          height: nameHeight ?? 70,
-          width: nameWidth ?? 70,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
+        Container(
+          constraints: BoxConstraints.tightFor(
+            width: MediaQuery.of(context).size.width / 1,
+            height: 80.0,
+          ),
+          padding:const EdgeInsetsDirectional.symmetric(
+            vertical: AppPadding.p16,
+            horizontal: AppPadding.p16,
+          ),
+          decoration: BoxDecoration(
+            color: ColorManager.bc2,
+            borderRadius: BorderRadius.circular(AppSize.s12),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                name,
-                style: StyleManager.body1SemiBold(
-                  size: nameSize ?? 15.5,
-                ),
+                rank.toString(),
+                style: StyleManager.body1Regular(),
+              ),
+              const SizedBox(width: AppSize.s50,),
+              const CustomImageNetwork(image: AssetsManager.testImage,),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.007,
               ),
               Text(
-                description,
-                style: StyleManager.labelRegular(
-                  color: descriptionColor ?? Colors.grey.shade600,
-                  size: descriptionSize ?? 12.5,
+                allStaff.name,
+                style: StyleManager.body1Regular(),
+              ),
+              const Spacer(),
+              Text(
+                allStaff.role,
+                style: StyleManager.body1Regular(
                 ),
               ),
+              const Spacer(),
+              Text(
+                allStaff.createdAt.replaceRange(10, 27, ""),
+                style: StyleManager.body1Regular(color: ColorManager.blackColor),
+              ),
+              const SizedBox(width: AppSize.s50,),
+              const Spacer(),
+              IconBtnWidget(
+                onPressed: ()
+                {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UpdateStaffView(
+                      allStaff: allStaff,
+                    ),),
+                  );
+                },
+                icon: Icons.edit,
+                color: ColorManager.blue2,
+              ),
+              IconBtnWidget(
+                onPressed: ()
+                {
+                  DeleteStaffCubit.get(context).fetchDeleteStaff(id: allStaff.id);
+                },
+                icon: Icons.delete,
+                color: ColorManager.orange,
+              ),
+              const SizedBox(height: AppSize.s20,),
             ],
           ),
-        ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.4,
-        ),
-        Text(
-          date.replaceRange(10, 27, " "),
-          style: StyleManager.body1Regular(),
-        ),
+        )
       ],
     );
   }

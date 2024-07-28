@@ -24,7 +24,7 @@ class CustomTextInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height ?? MediaQuery.of(context).size.height * .06,
+      height: height ?? 50.0,
       width: width ?? MediaQuery.of(context).size.width * .8,
       decoration: BoxDecoration(
         color: color ?? Colors.grey.shade200,

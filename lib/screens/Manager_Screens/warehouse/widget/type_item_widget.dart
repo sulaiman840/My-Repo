@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:project2/screens/Manager_Screens/warehouse/data/models/get_all_type_model.dart';
 import '../../../../core/utils/app_manager.dart';
 import '../../../../core/utils/color_manager.dart';
 import '../../../../core/utils/style_manager.dart';
-import '../../../../widgets/icon_btn_widget.dart';
+import '../../../type_warehouse/data/models/get_all_type_model.dart';
 
 class TypeItemWidget extends StatelessWidget {
-   TypeItemWidget({super.key,required this.onTap,
-    required this.allTypeModel
+   TypeItemWidget({
+     super.key,
+     required this.onTap,
+     required this.allTypeModel
     });
 
    final GetAllTypeModel allTypeModel;
@@ -34,17 +35,17 @@ class TypeItemWidget extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                  const SizedBox(height: AppSize.s26,),
-                  //name
-                  Center(
-                    child: Text(
-                      allTypeModel.name,
-                      style: StyleManager.body1SemiBold(
-                        color: ColorManager.blackColor
-                        ),
-                        ),
-                        ),
-                  const SizedBox(height: AppSize.s26,),
+                const SizedBox(height: AppSize.s26,),
+                //name
+                Center(
+                  child: Text(
+                    allTypeModel.name,
+                    style: StyleManager.body1SemiBold(
+                      color: ColorManager.blackColor
+                    ),
+                  ),
+                ),
+                const SizedBox(height: AppSize.s26,),
               ],
             ),
           )

@@ -1,10 +1,4 @@
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
-
-import '../../constants.dart';
 
 class DioApiService
 {
@@ -43,6 +37,22 @@ class DioApiService
     return response.data;
   }
 
+  Future<Map<String, dynamic>> put({
+    required String endPoint,
+    required Map<String, dynamic>? data,
+    String? token,
+  }) async {
+    _dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+    var response = await _dio.put(
+      '$_baseUrl$endPoint',
+      data: data,
+    );
+
+    return response.data;
+  }
+
   Future<dynamic> delete({
     required String endPoint,
     required Map<String, dynamic>? data,
@@ -53,6 +63,22 @@ class DioApiService
     };
     var response = await _dio.delete(
       '$_baseUrl$endPoint',
+    );
+
+    return response.data;
+  }
+
+  Future<List<dynamic>> postH({
+    required String endPoint,
+    required Map<String, dynamic>? data,
+    String? token,
+  }) async {
+    _dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+    var response = await _dio.post(
+      '$_baseUrl$endPoint',
+      data: data,
     );
 
     return response.data;

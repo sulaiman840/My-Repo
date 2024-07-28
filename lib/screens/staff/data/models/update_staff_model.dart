@@ -12,9 +12,9 @@ class UpdateStaffModel {
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['message'] = message;
-    _data['user'] = user;
-    return _data;
+    final data = <String, dynamic>{};
+    data['message'] = message;
+    data['user'] = user;
+    return data;
   }
 }

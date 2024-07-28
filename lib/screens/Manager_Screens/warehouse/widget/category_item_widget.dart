@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/utils/app_manager.dart';
 import '../../../../core/utils/color_manager.dart';
 import '../../../../core/utils/style_manager.dart';
-import '../../../../widgets/icon_btn_widget.dart';
 
 class CategoryItemWidget extends StatelessWidget {
    CategoryItemWidget({super.key});
