@@ -13,6 +13,8 @@ import 'package:project2/services/Secertary%20Services/student_srevice_s.dart';
 import 'package:project2/services/auth_services.dart';
 import 'package:project2/services/stafflogin_service.dart';
 
+import 'Bloc/auth/register_cubit.dart';
+import 'core/utils/app_routes.dart';
 import 'core/utils/service_locator.dart';
 import 'core/utils/theme_manager.dart';
 import 'Bloc/auth/stafflogin_cubit.dart';
@@ -28,20 +30,23 @@ import 'Bloc/secertary/student/student_cubit.dart';
 import 'core/utils/shared_preferences_helper.dart';
 import 'Bloc/auth/login_cubit.dart';
 import 'Bloc/auth/logout_cubit.dart';
-import 'screens/category_warehouse/data/repos/category_repo_impl.dart';
-import 'screens/category_warehouse/presentation/manager/create_category_cubit/create_category_cubit.dart';
-import 'screens/category_warehouse/presentation/manager/update_category_cubit/update_category_cubit.dart';
+import 'screens/login/login_screen.dart';
 import 'screens/staff/data/repos/staff_repo_impl.dart';
 import 'screens/staff/presentation/manger/featured_staff_cubit/featured_staff_cubit.dart';
-import 'screens/type_warehouse/data/repos/type_repo_impl.dart';
-import 'screens/type_warehouse/presentation/manager/create_type_cubit/create_type_cubit.dart';
-import 'screens/type_warehouse/presentation/manager/get_all_type_cubit/get_all_type_cubit.dart';
-import 'screens/warehouse_home/screens/home/warehouse_home_view.dart';
 import 'screens/Home/manger_home.dart';
 
 import 'package:project2/services/manger_profile_service.dart';
 
 import 'Bloc/profile/user_profile_cubit.dart';
+import 'screens/warehouse_home/category_warehouse/data/repos/category_repo_impl.dart';
+import 'screens/warehouse_home/category_warehouse/presentation/manager/create_category_cubit/create_category_cubit.dart';
+import 'screens/warehouse_home/category_warehouse/presentation/manager/request_category_cubit/request_category_cubit.dart';
+import 'screens/warehouse_home/category_warehouse/presentation/manager/request_items_cubit/request_items_cubit.dart';
+import 'screens/warehouse_home/category_warehouse/presentation/manager/update_category_cubit/update_category_cubit.dart';
+import 'screens/warehouse_home/type_warehouse/data/repos/type_repo_impl.dart';
+import 'screens/warehouse_home/type_warehouse/presentation/manager/create_type_cubit/create_type_cubit.dart';
+import 'screens/warehouse_home/type_warehouse/presentation/manager/get_all_type_cubit/get_all_type_cubit.dart';
+import 'services/login_service.dart';
 
 
 class MyApp extends StatelessWidget {
@@ -98,6 +103,20 @@ class MyApp extends StatelessWidget {
             );
           },
         ),
+        BlocProvider(
+          create: (context) {
+            return RequestItemsCubit(
+              getIt.get<CategoryRepoImpl>(),
+            )..fetchRequestItems();
+          },
+        ),
+        BlocProvider(
+          create: (context) {
+            return RequestCategoryCubit(
+              getIt.get<CategoryRepoImpl>(),
+            )..fetchRequestCategories();
+          },
+        ),
       ],
       child: FutureBuilder<bool>(
         future: SharedPreferencesHelper.isLoggedIn(),
@@ -113,6 +132,8 @@ class MyApp extends StatelessWidget {
                 } else if (roleSnapshot.hasData && roleSnapshot.data != null) {
                   final initialRoute = roleSnapshot.data == "secretary"
                       ? '/secretary_home'
+                      : roleSnapshot.data == "warehourseguard"
+                      ? '/warehouseHome'
                       : '/';
                   return MaterialApp(
                     debugShowCheckedModeBanner: false,

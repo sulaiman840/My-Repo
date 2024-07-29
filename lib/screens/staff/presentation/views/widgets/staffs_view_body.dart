@@ -32,7 +32,7 @@ class StaffsViewBody extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const CreateStaffView(),)
+                        MaterialPageRoute(builder: (context) => CreateStaffView(),)
                     );
                   },
                   child: circleIconWidget(

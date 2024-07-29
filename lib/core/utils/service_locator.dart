@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../screens/category_warehouse/data/repos/category_repo_impl.dart';
-import '../../screens/item_warehouse/data/repos/item_repo_impl.dart';
+import '../../screens/warehouse_home/category_warehouse/data/repos/category_repo_impl.dart';
+import '../../screens/warehouse_home/item_warehouse/data/repos/item_repo_impl.dart';
 import '../../screens/staff/data/repos/staff_repo_impl.dart';
-import '../../screens/type_warehouse/data/repos/type_repo_impl.dart';
+import '../../screens/warehouse_home/type_warehouse/data/repos/type_repo_impl.dart';
 import 'dio_api_service.dart';
 
 final getIt = GetIt.instance;

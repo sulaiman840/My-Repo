@@ -8,6 +8,8 @@ import '../../Bloc/secertary/student/pending_beneficiary_state.dart';
 import '../../core/utils/color_manager.dart';
 import 'beneficiary_detail_manager_screen.dart';
 import 'course_detail_manager_screen.dart';
+import 'warehouse/request_manager/presentation/view/request_category_view.dart';
+import 'warehouse/request_manager/presentation/view/request_item_view.dart';
 
 
 class RequestManagementScreen extends StatelessWidget {
@@ -16,7 +18,7 @@ class RequestManagementScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorManager.bc1,
@@ -35,6 +37,8 @@ class RequestManagementScreen extends StatelessWidget {
             tabs: [
               Tab(text: 'Courses'),
               Tab(text: 'Beneficiaries'),
+              Tab(text: 'Category'),
+              Tab(text: 'Items'),
             ],
           ),
         ),
@@ -42,6 +46,8 @@ class RequestManagementScreen extends StatelessWidget {
           children: [
             _buildCourseTab(context),
             _buildBeneficiaryTab(context),
+            const RequestCategoryView(),
+            const RequestItemView(),
           ],
         ),
       ),

@@ -26,7 +26,7 @@ class StaffRepoImpl implements StaffRepo {
     try {
       var data = await (dioApiService.get(
           endPoint: 'showallstaff',
-        token: Constants.token,
+        token: await Constants.token,
       ));
       log(data.toString());
       List<ShowAllStaffModel> showAllStaffModel = [];
@@ -91,7 +91,7 @@ class StaffRepoImpl implements StaffRepo {
       var data = await (dioApiService.post(
           endPoint: 'destroystaff/$id',
           data: {},
-          token: Constants.token,
+          token: await Constants.token,
       ));
       log(data.toString());
       DeleteStaffModel deleteStaffModel;
@@ -112,7 +112,7 @@ class StaffRepoImpl implements StaffRepo {
     try {
       var data = await (dioApiService.get(
           endPoint: 'showstaff/$id',
-          token: Constants.token,
+          token: await Constants.token,
       ));
       log(data.toString());
       List<ShowStaffDetailsModel> showStaffDetailsModel = [];
