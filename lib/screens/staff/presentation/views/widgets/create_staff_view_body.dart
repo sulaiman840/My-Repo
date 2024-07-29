@@ -241,7 +241,7 @@ class _CreateStaffViewBodyState extends State<CreateStaffViewBody> {
                     onChanged: (value) {
                       setState(() {
                         selectedItem = value!;
-                        value == "Warehouse guard" ? roleController.text = "warehourseguard" : roleController.text = "secr";
+                        value == "Warehouse guard" ? roleController.text = "warehourseguard" : roleController.text = "secretary";
                       });
                     },
                     validator: (value) {

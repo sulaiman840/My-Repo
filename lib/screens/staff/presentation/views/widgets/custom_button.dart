@@ -12,7 +12,7 @@ class TextIconButton extends StatelessWidget {
     this.textColor,
     this.textWeight,
     this.textSize,
-    required this.icon,
+    this.icon,
     this.iconColor,
     this.iconSize,
     this.buttonHeight,
@@ -54,7 +54,7 @@ class TextIconButton extends StatelessWidget {
                 size: textSize ?? 14.5,
               ),
             ),
-            Icon(
+            icon == null ? SizedBox(height: 0,width: 0,) : Icon(
               icon,
               color: iconColor ?? Colors.white,
               size: iconSize ?? 23,

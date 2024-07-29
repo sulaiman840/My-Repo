@@ -1,6 +1,7 @@
+import 'core/utils/shared_preferences_helper.dart';
+
 class Constants{
   static const baseUrl = "http://127.0.0.1:8000";
 
-  static const tokenManager = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzIxNTQ5MzAwLCJleHAiOjE3Mzg4MjkzMDAsIm5iZiI6MTcyMTU0OTMwMCwianRpIjoiTGRVckRkaldYOGRnWXljTCIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.eJ9baFigU3Ws-KPAKw6FoCPbRyTa7EDVYAGlWwKOepc";
-  static const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzIxNTUyNzIzLCJleHAiOjE3Mzg4MzI3MjMsIm5iZiI6MTcyMTU1MjcyMywianRpIjoiWWprVmlVMm1RdjJNQWdyMyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.0qgZSL3_S6Qsh1u7R4kC1DtXRla2MDqLYju8Ckb7kEw";
+  static final token = SharedPreferencesHelper.getJwtToken();
 }
