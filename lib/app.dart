@@ -1,32 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project2/Bloc/manager/pending_trainer_cubit.dart';
+import 'package:project2/Bloc/secertary/trainer/trainer_course_cubit.dart';
+import 'package:project2/services/Manager_Services/pending_trainer_service.dart';
+import 'package:project2/services/Secertary%20Services/beneficiary_course_service.dart';
 import 'package:project2/services/Secertary%20Services/beneficiary_service.dart';
-import 'package:project2/services/Secertary%20Services/combined_request_service.dart';
 import 'package:project2/services/Secertary%20Services/course_service.dart';
 import 'package:project2/services/Secertary%20Services/document_service%20.dart';
-import 'package:project2/services/Secertary%20Services/pending_beneficiary_service.dart';
-import 'package:project2/services/Secertary%20Services/pending_service.dart';
-import 'package:project2/services/Secertary%20Services/student_service.dart';
-import 'package:project2/services/Secertary%20Services/student_srevice_s.dart';
-import 'package:project2/services/auth_services.dart';
+import 'package:project2/services/Manager_Services/pending_beneficiary_service.dart';
+import 'package:project2/services/Manager_Services/pending_courses_service.dart';
+
+import 'package:project2/services/Auth_Services/auth_services.dart';
+import 'package:project2/services/Secertary%20Services/trainer_course_service.dart';
+import 'package:project2/services/Secertary%20Services/trainer_services.dart';
 import 'package:project2/services/stafflogin_service.dart';
 import 'Bloc/auth/stafflogin_cubit.dart';
-import 'Bloc/manager/combined_request_cubit.dart';
 import 'Bloc/secertary/course/course_cubit.dart';
 import 'Bloc/secertary/course/course_detail_cubit.dart';
-import 'Bloc/secertary/course/pending_course_cubit.dart';
-import 'Bloc/secertary/student/add_beneficiary_cubit.dart';
+import 'Bloc/manager/pending_course_cubit.dart';
+
+import 'Bloc/secertary/student/beneficiary_course_cubit.dart';
 import 'Bloc/secertary/student/beneficiary_cubit.dart';
 import 'Bloc/secertary/student/document_cubit.dart';
-import 'Bloc/secertary/student/pending_beneficiary_cubit.dart';
-import 'Bloc/secertary/student/student_cubit.dart';
+import 'Bloc/manager/pending_beneficiary_cubit.dart';
+
+import 'Bloc/secertary/trainer/trainer_cubit.dart';
 import 'core/utils/shared_preferences_helper.dart';
 import 'Bloc/auth/login_cubit.dart';
 import 'Bloc/auth/logout_cubit.dart';
 import 'Bloc/profile/user_profile_cubit.dart';
 import 'Bloc/auth/register_cubit.dart';
-import 'services/login_service.dart';
-import 'services/manger_profile_service.dart';
+import 'services/Auth_Services/login_service.dart';
+import 'services/Auth_Services/manger_profile_service.dart';
 import 'core/utils/app_routes.dart';
 import 'core/utils/theme_manager.dart';
 import 'screens/login/login_screen.dart';
@@ -51,7 +56,10 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => PendingBeneficiaryCubit(PendingBeneficiaryService())),
         BlocProvider(create: (context) => BeneficiaryCubit(BeneficiaryService())),
         BlocProvider(create: (context) => DocumentCubit(DocumentService())),
-        BlocProvider( create: (context) => CombinedRequestCubit(CombinedRequestService())),
+        BlocProvider(create: (context) => TrainerCubit(TrainerService())),
+        BlocProvider(create: (context) => PendingTrainerCubit(PendingTrainerService())),
+        BlocProvider(create: (context) => TrainerCourseCubit(TrainerCourseService())),
+        BlocProvider(create: (context) => BeneficiaryCourseCubit(BeneficiaryCourseService())),
       ],
       child: FutureBuilder<bool>(
         future: SharedPreferencesHelper.isLoggedIn(),

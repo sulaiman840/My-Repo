@@ -47,6 +47,8 @@ class BeneficiaryUpdateScreen extends StatelessWidget {
     late String _supportRequiredEntrepreneurship = beneficiary.supportRequiredEntrepreneurship ?? '';
     late String _careerGuidanceCounselling = beneficiary.careerGuidanceCounselling ?? '';
     late String _generalNotes = beneficiary.generalNotes ?? '';
+    late String _updatedAt = beneficiary.updatedAt ?? '';
+    late String _createdAt = beneficiary.createdAt ?? '';
 
     return CommonScaffold(
       title: 'Update Beneficiary',
@@ -98,7 +100,9 @@ class BeneficiaryUpdateScreen extends StatelessWidget {
                   ]),
                   _buildRow([
                     _buildTextFormField('Number Line', _numberLine, (value) => _numberLine = value!),
-                    _buildTextFormField('Number Phone', _numberPhone, (value) => _numberPhone = value!)
+                   _buildTextFormField('Number Phone', _numberPhone, (value) => _numberPhone = value!)
+                //    _buildTextFormField('Number Phone', _numberPhone.toString(), (value) => _numberPhone = int.parse(value!))
+
                   ]),
                   _buildRow([
                     _buildTextFormField('Number ID', _numberId, (value) => _numberId = value!),

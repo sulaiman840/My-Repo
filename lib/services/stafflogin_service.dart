@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import '../../models/user_model.dart';
+import '../models/Auth Model/user_model.dart';
 import '../../services/dio_error.dart';
 import '../core/utils/shared_preferences_helper.dart';
 
