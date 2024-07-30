@@ -131,4 +131,15 @@ class BeneficiaryCubit extends Cubit<BeneficiaryState> {
       print('Error adding beneficiary: $e');
       emit(BeneficiaryError(e.toString()));
     }
-  }}
+  }
+
+  Future<void> searchBeneficiaries(String query) async {
+    try {
+      emit(BeneficiaryLoading());
+      final beneficiaries = await _beneficiaryService.searchBeneficiaries(query);
+      emit(BeneficiaryLoaded(beneficiaries));
+    } catch (e) {
+      emit(BeneficiaryError(e.toString()));
+    }
+  }
+}

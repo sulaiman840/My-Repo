@@ -4,7 +4,7 @@ import 'package:project2/core/utils/color_manager.dart';
 
 
 import '../../Bloc/profile/user_profile_cubit.dart';
-import '../../models/user_profile.dart';
+import '../../models/Auth Model/user_profile.dart';
 import '../../widgets/manager_home_widgets/custom_app_bar.dart';
 import '../../widgets/manager_home_widgets/main_nav_bar.dart';
 

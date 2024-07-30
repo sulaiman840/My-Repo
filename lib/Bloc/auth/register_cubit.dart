@@ -1,7 +1,7 @@
 
 import 'dart:typed_data';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../services/auth_services.dart';
+import '../../services/Auth_Services/auth_services.dart';
 
 import 'register_state.dart';
 
