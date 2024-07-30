@@ -5,8 +5,7 @@ import '../../models/Secertary Model/beneficiary_model.dart';
 class BeneficiaryService {
   final Dio _dio = Dio();
 
-  Future<void> updateBeneficiary(
-      int id,
+  Future<void> updateBeneficiary(int id,
       int serialNumber,
       String date,
       String province,
@@ -56,7 +55,8 @@ class BeneficiaryService {
         'thereIsDisbility': thereIsDisbility.map((e) => e.toJson()).toList(),
         'needAttendant': needAttendant,
         'NumberFamilyMember': numberFamilyMember,
-        'thereIsDisbilityFamilyMember': thereIsDisbilityFamilyMember.map((e) => e.toJson()).toList(),
+        'thereIsDisbilityFamilyMember': thereIsDisbilityFamilyMember.map((e) =>
+            e.toJson()).toList(),
         'losingBreadwinner': losingBreadwinner,
         'governorate': governorate,
         'address': address,
@@ -64,12 +64,15 @@ class BeneficiaryService {
         'numberline': numberLine,
         'numberPhone': numberPhone,
         'numberId': numberId,
-        'educationalAttainment': educationalAttainments.map((e) => e.toJson()).toList(),
-        'previousTrainingCourses': previousTrainingCourses.map((e) => e.toJson()).toList(),
+        'educationalAttainment': educationalAttainments.map((e) => e.toJson())
+            .toList(),
+        'previousTrainingCourses': previousTrainingCourses.map((e) =>
+            e.toJson()).toList(),
         'foreignLanguages': foreignLanguages.map((e) => e.toJson()).toList(),
         'computerDriving': computerDriving,
         'computerSkills': computerSkills,
-        'professionalSkills': professionalSkills.map((e) => e.toJson()).toList(),
+        'professionalSkills': professionalSkills.map((e) => e.toJson())
+            .toList(),
         'sectorPreferences': sectorPreferences,
         'employment': employment,
         'supportRequiredTrainingLearning': supportRequiredTrainingLearning,
@@ -102,8 +105,10 @@ class BeneficiaryService {
       if (e.response != null) {
         print('Error response status code: ${e.response?.statusCode}');
         print('Error response data: ${e.response?.data}');
-        throw Exception('Failed to update beneficiary: ${e.response?.statusMessage}');
+        throw Exception(
+            'Failed to update beneficiary: ${e.response?.statusMessage}');
       } else {
+        print(e);
         throw Exception('Failed to update beneficiary: ${e.message}');
       }
     }
@@ -111,19 +116,23 @@ class BeneficiaryService {
 
   Future<List<DataBeneficiary>> fetchBeneficiaries() async {
     try {
+      final token = await SharedPreferencesHelper.getJwtToken();
+
       print('Fetching beneficiaries...');
       final response = await _dio.get(
         'http://127.0.0.1:8000/api/getallbeneficiary',
         options: Options(
           headers: {
-            'Authorization': 'Bearer your_token_here',
+            'Authorization': 'Bearer $token',
           },
         ),
       );
 
       if (response.statusCode == 200) {
         print('Fetch successful, raw data: ${response.data}');
-        List<DataBeneficiary> beneficiaries = Beneficiary.fromJson(response.data).dataBeneficiary!;
+        List<DataBeneficiary> beneficiaries = Beneficiary
+            .fromJson(response.data)
+            .dataBeneficiary!;
         print('Fetched beneficiaries: ${beneficiaries.length}');
         beneficiaries.forEach((b) => print(b.toJson()));
         return beneficiaries;
@@ -138,12 +147,14 @@ class BeneficiaryService {
 
   Future<void> deleteBeneficiary(int id) async {
     try {
+      final token = await SharedPreferencesHelper.getJwtToken();
+
       print('Deleting beneficiary with id: $id...');
       final response = await _dio.post(
         'http://127.0.0.1:8000/api/deletebeneficiary/$id',
         options: Options(
           headers: {
-            'Authorization': 'Bearer your_token_here',
+            'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
           },
         ),
@@ -163,12 +174,14 @@ class BeneficiaryService {
 
   Future<DataBeneficiary> fetchBeneficiaryById(int id) async {
     try {
+      final token = await SharedPreferencesHelper.getJwtToken();
+
       print('Fetching beneficiary details for ID: $id...');
       final response = await _dio.get(
         'http://127.0.0.1:8000/api/getbeneficiary/$id',
         options: Options(
           headers: {
-            'Authorization': 'Bearer your_token_here',
+            'Authorization': 'Bearer $token',
           },
         ),
       );
@@ -185,8 +198,7 @@ class BeneficiaryService {
     }
   }
 
-  Future<void> addBeneficiary(
-      int serialNumber,
+  Future<void> addBeneficiary(int serialNumber,
       String date,
       String province,
       String name,
@@ -235,7 +247,8 @@ class BeneficiaryService {
         'thereIsDisbility': thereIsDisbility.map((e) => e.toJson()).toList(),
         'needAttendant': needAttendant,
         'NumberFamilyMember': numberFamilyMember,
-        'thereIsDisbilityFamilyMember': thereIsDisbilityFamilyMember.map((e) => e.toJson()).toList(),
+        'thereIsDisbilityFamilyMember': thereIsDisbilityFamilyMember.map((e) =>
+            e.toJson()).toList(),
         'losingBreadwinner': losingBreadwinner,
         'governorate': governorate,
         'address': address,
@@ -243,12 +256,15 @@ class BeneficiaryService {
         'numberline': numberLine,
         'numberPhone': numberPhone,
         'numberId': numberId,
-        'educationalAttainment': educationalAttainments.map((e) => e.toJson()).toList(),
-        'previousTrainingCourses': previousTrainingCourses.map((e) => e.toJson()).toList(),
+        'educationalAttainment': educationalAttainments.map((e) => e.toJson())
+            .toList(),
+        'previousTrainingCourses': previousTrainingCourses.map((e) =>
+            e.toJson()).toList(),
         'foreignLanguages': foreignLanguages.map((e) => e.toJson()).toList(),
         'computerDriving': computerDriving,
         'computerSkills': computerSkills,
-        'professionalSkills': professionalSkills.map((e) => e.toJson()).toList(),
+        'professionalSkills': professionalSkills.map((e) => e.toJson())
+            .toList(),
         'sectorPreferences': sectorPreferences,
         'employment': employment,
         'supportRequiredTrainingLearning': supportRequiredTrainingLearning,
@@ -281,9 +297,38 @@ class BeneficiaryService {
       if (e.response != null) {
         print('Error response status code: ${e.response?.statusCode}');
         print('Error response data: ${e.response?.data}');
-        throw Exception('Failed to add beneficiary: ${e.response?.statusMessage}');
+        throw Exception(
+            'Failed to add beneficiary: ${e.response?.statusMessage}');
       } else {
         throw Exception('Failed to add beneficiary: ${e.message}');
+      }
+    }
+  }
+
+  Future<List<DataBeneficiary>> searchBeneficiaries(String query) async {
+    try {
+      final token = await SharedPreferencesHelper.getJwtToken();
+
+      final response = await _dio.get(
+        'http://127.0.0.1:8000/api/searchbeneficiary/$query',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> responseData = response.data as List<dynamic>;
+        return responseData.map((item) => DataBeneficiary.fromJson(item)).toList();
+      } else {
+        throw Exception('Failed to search beneficiaries: ${response.statusCode}');
+      }
+    } catch (error) {
+      if (error is DioError && error.response?.statusCode == 404) {
+        throw ('No results found.');
+      } else {
+        throw Exception('Failed to search beneficiaries: $error');
       }
     }
   }
