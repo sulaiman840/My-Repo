@@ -1,0 +1,180 @@
+import 'package:dio/dio.dart';
+import '../../models/Secertary Model/trainer_course_registration.dart';
+import '../../models/Secertary Model/trainer_model.dart';
+
+class TrainerService {
+  final Dio _dio = Dio();
+
+  Future<List<Trainer>> fetchTrainers() async {
+    try {
+      final response = await _dio.get(
+        'http://127.0.0.1:8000/api/showalltrainer',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer your_token_here',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        List<Trainer> trainers = (response.data['message'] as List)
+            .map((trainerJson) => Trainer.fromJson(trainerJson))
+            .toList();
+        return trainers;
+      } else {
+        throw Exception('Failed to load trainers');
+      }
+    } catch (error) {
+      throw Exception('Failed to load trainers: $error');
+    }
+  }
+
+  Future<Trainer> fetchTrainerDetail(int id) async {
+    try {
+      final response = await _dio.post(
+        'http://127.0.0.1:8000/api/showtrainer/$id',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer your_token_here',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        return Trainer.fromJson(response.data['data']);
+      } else {
+        throw Exception('Failed to load trainer detail');
+      }
+    } catch (error) {
+      throw Exception('Failed to load trainer detail: $error');
+    }
+  }
+
+
+  Future<void> deleteTrainer(int id) async {
+    try {
+      final response = await _dio.post(
+        'http://127.0.0.1:8000/api/destroytrainer/$id',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer your_token_here',
+          },
+        ),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to delete trainer');
+      }
+    } catch (error) {
+      throw Exception('Failed to delete trainer: $error');
+    }
+  }
+
+  Future<void> updateTrainer(int id, Trainer trainer) async {
+    try {
+      final response = await _dio.post(
+        'http://127.0.0.1:8000/api/updatetrainer/$id',
+        data: trainer.toJson(),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer your_token_here',
+          },
+        ),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to update trainer');
+      }
+    } catch (error) {
+      throw Exception('Failed to update trainer: $error');
+    }
+  }
+  Future<void> addTrainer(Trainer trainer) async {
+    try {
+      final response = await _dio.post(
+        'http://127.0.0.1:8000/api/addtrainer',
+        data: trainer.toJson(),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer your_token_here',
+          },
+        ),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to add trainer');
+      }
+    } catch (error) {
+      throw Exception('Failed to add trainer: $error');
+    }
+  }
+
+  Future<void> registerTrainerInCourse(TrainerCourseRegistration registration) async {
+    try {
+      final response = await _dio.post(
+        'http://127.0.0.1:8000/api/trainerwithcourse',
+        data: registration.toJson(),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer your_token_here', // Replace with actual token
+          },
+        ),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to register trainer in course');
+      }
+    } catch (error) {
+      throw Exception('Failed to register trainer in course: $error');
+    }
+  }
+
+
+
+  Future<List<TrainerCourseRegistration>> fetchTrainerDetailWithCourses(int id) async {
+    try {
+      final response = await _dio.get(
+        'http://127.0.0.1:8000/api/showtrainerwithcourse/$id',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer your_token_here',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        List<TrainerCourseRegistration> registrations = (response.data['message'] as List)
+            .map((json) => TrainerCourseRegistration.fromJson(json))
+            .toList();
+        return registrations;
+      } else {
+        throw Exception('Failed to load trainer details');
+      }
+    } catch (error) {
+      throw Exception('Failed to load trainer details: $error');
+    }
+  }
+
+  Future<void> deleteTrainerFromCourse(int trainerId, int courseId) async {
+    try {
+      final response = await _dio.post(
+        'http://127.0.0.1:8000/api/deletetrainerwithcourse',
+        data: {
+          'trainer_id': trainerId.toString(),
+          'course_id': courseId.toString(),
+        },
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer your_token_here',
+          },
+        ),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to delete trainer from course');
+      }
+    } catch (error) {
+      throw Exception('Failed to delete trainer from course: $error');
+    }
+  }
+}
