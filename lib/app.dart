@@ -7,7 +7,6 @@ import 'package:project2/Bloc/secertary/trainer/trainer_course_cubit.dart';
 import 'package:project2/services/Manager_Services/pending_trainer_service.dart';
 import 'package:project2/services/Secertary%20Services/beneficiary_course_service.dart';
 import 'package:project2/services/Secertary%20Services/beneficiary_service.dart';
-import 'package:project2/services/Secertary%20Services/combined_request_service.dart';
 import 'package:project2/services/Secertary%20Services/course_service.dart';
 import 'package:project2/services/Secertary%20Services/document_service%20.dart';
 import 'package:project2/services/Manager_Services/pending_beneficiary_service.dart';
