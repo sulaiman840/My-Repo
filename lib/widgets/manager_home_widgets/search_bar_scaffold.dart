@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../Bloc/profile/user_profile_cubit.dart';
-import '../../core/utils/app_routes.dart';
+import '../../Bloc/secertary/student/beneficiary_cubit.dart';
 import '../../core/utils/color_manager.dart';
 import '../../screens/Home/search_screen.dart';
 import '../../services/Secertary Services/beneficiary_service.dart';
