@@ -2,7 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesHelper {
   static const _jwtTokenKey = 'jwt_token';
-  static const _userRoleKey = 'role';
+  static const _userRoleKey = 'role_const';
   static const _fcmTokenKey = 'fcm_token';
   static const _imageFilenameKey = 'image_filename';
   static const _pdfFilenameKey = 'pdf_filename';

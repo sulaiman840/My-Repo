@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:project2/models/user_profile.dart';
-import 'package:project2/services/manger_profile_service.dart';
+import 'package:project2/models/Auth%20Model/user_profile.dart';
+import 'package:project2/services/Auth_Services/manger_profile_service.dart';
 
 part 'user_profile_state.dart';
 

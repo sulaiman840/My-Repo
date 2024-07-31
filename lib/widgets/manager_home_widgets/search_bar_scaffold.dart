@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../Bloc/profile/user_profile_cubit.dart';
 import '../../core/utils/app_routes.dart';
 import '../../core/utils/color_manager.dart';
+import '../../screens/Home/search_screen.dart';
+import '../../services/Secertary Services/beneficiary_service.dart';
 
 class SearchBarScaffold extends StatelessWidget {
   final String title;
@@ -55,11 +57,31 @@ class SearchBarScaffold extends StatelessWidget {
                 Container(
                   width: screenWidth * 0.3,
                   child: TextField(
+                    onSubmitted: (query) {
+                      if (query.trim().isEmpty) {
+                        // If the query is empty, do nothing or show a message
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Please enter a search term.'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider(
+                              create: (context) => BeneficiaryCubit(BeneficiaryService())..searchBeneficiaries(query),
+                              child: SearchResultsScreen(query: query),
+                            ),
+                          ),
+                        );
+                      }
+                    },
                     decoration: InputDecoration(
                       hintText: 'Search...',
                       prefixIcon: Icon(Icons.search, color: searchIconColor),
-                      contentPadding:
-                      EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+                      contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30.0),
                         borderSide: BorderSide.none,
