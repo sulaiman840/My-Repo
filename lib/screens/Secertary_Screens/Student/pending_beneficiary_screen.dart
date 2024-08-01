@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project2/screens/Secertary_Screens/Student/add_beneficiary_screen.dart';
-import '../../../Bloc/secertary/student/pending_beneficiary_cubit.dart';
-import '../../../Bloc/secertary/student/pending_beneficiary_state.dart';
+import '../../../Bloc/manager/pending_beneficiary_cubit.dart';
+import '../../../Bloc/manager/pending_beneficiary_state.dart';
 import '../../../core/utils/color_manager.dart';
 import '../../../widgets/general_widgets/common_scaffold.dart';
 
@@ -31,7 +31,7 @@ class _PendingBeneficiaryScreenState extends State<PendingBeneficiaryScreen> {
       context,
       MaterialPageRoute(builder: (context) => BeneficiaryCreateScreen(onBeneficiaryAdded: _fetchPendingRequests)),
     ).then((_) {
-      _fetchPendingRequests();  // Refresh the list when coming back
+      _fetchPendingRequests();
     });
   }
 

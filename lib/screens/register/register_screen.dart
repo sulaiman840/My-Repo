@@ -7,7 +7,7 @@ import 'dart:typed_data';
 
 import '../../Bloc/auth/register_cubit.dart';
 import '../../Bloc/auth/register_state.dart';
-import '../../services/auth_services.dart';
+import '../../services/Auth_Services/auth_services.dart';
 import '../../widgets/general_widgets/custom_text_form_field.dart';
 import '../../core/utils/app_manager.dart';
 import '../../core/utils/color_manager.dart';
