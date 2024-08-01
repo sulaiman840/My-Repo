@@ -1,5 +1,5 @@
 
-import '../../models/register_model.dart';
+import '../../models/Auth Model/register_model.dart';
 
 abstract class RegisterState {}
 

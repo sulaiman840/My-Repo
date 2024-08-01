@@ -150,7 +150,9 @@ class _BeneficiaryCreateScreenState extends State<BeneficiaryCreateScreen> {
                   ]),
                   _buildRow([
                     _buildTextFormField('Number Line', (value) => _numberLine = value!, initialValue: _numberLine),
-                    _buildTextFormField('Number Phone', (value) => _numberPhone = value!, initialValue: _numberPhone)
+                   _buildTextFormField('Number Phone', (value) => _numberPhone = value!, initialValue: _numberPhone)
+                    //_buildTextFormField('Number Phone', (value) => _numberPhone = int.parse(value!), initialValue: _numberPhone.toString())
+
                   ]),
                   _buildRow([
                     _buildTextFormField('Number ID', (value) => _numberId = value!, initialValue: _numberId),
