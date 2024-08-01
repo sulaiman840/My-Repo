@@ -5,7 +5,9 @@ import 'package:project2/screens/Manager_Screens/Request_Managmenet_Screen/reque
 import '../../screens/Manager_Screens/Education_Screen/education_screen.dart';
 import '../../screens/Manager_Screens/dashboard_overview.dart';
 import '../../screens/Manager_Screens/staff_management.dart';
-import '../../screens/Manager_Screens/warehouse.dart';
+import '../../screens/Manager_Screens/warehouse/old/warehouse.dart';
+import '../../screens/Manager_Screens/warehouse/type_manager/presentation/view/all_type_view_manager.dart';
+import '../../screens/staff/presentation/views/staffs_view.dart';
 
 class CustomTabBarView extends StatelessWidget {
   final TabController tabController;
@@ -18,7 +20,8 @@ class CustomTabBarView extends StatelessWidget {
       controller: tabController,
       children: [
         DashboardOverview(),
-        StaffManagement(),
+        StaffsView(),
+        AllTypeViewManager(),
         EducationScreen(),
         WareHouse(),
         RequestManagementScreen()

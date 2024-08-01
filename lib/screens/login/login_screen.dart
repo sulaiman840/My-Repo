@@ -11,7 +11,9 @@ import '../../widgets/general_widgets/loading_indicator.dart';
 import '../register/register_screen.dart';
 import '../../widgets/general_widgets/custom_text_form_field.dart';
 
+
 class LoginScreen extends StatelessWidget {
+
   const LoginScreen({super.key});
   static const id = 'LoginScreen';
 

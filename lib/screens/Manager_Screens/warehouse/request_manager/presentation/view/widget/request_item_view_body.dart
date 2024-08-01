@@ -1,0 +1,35 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../../../warehouse_home/category_warehouse/presentation/manager/request_items_cubit/request_items_cubit.dart';
+import '../../../../../../warehouse_home/category_warehouse/presentation/manager/request_items_cubit/request_items_state.dart';
+import '../request_item_details_view.dart';
+import 'request_item_List_item.dart';
+
+class RequestItemViewBody extends StatelessWidget {
+  const RequestItemViewBody({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RequestItemsCubit, RequestItemsState>(
+      builder: (context, state) {
+        if(state is RequestItemsSuccess) {
+          return ListView.separated(
+            itemCount: state.allRequestItems.dataRequestItem.length,
+            itemBuilder: (context, index) => GestureDetector(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => RequestItemDetailsView(allRequestItem: state.allRequestItems.dataRequestItem[index],),));
+              },
+              child: RequestItemListItem(allRequestItem: state.allRequestItems.dataRequestItem[index],),
+            ),
+            separatorBuilder: (context, index) => const SizedBox(height: 10.0,),
+          );
+        } else if (state is RequestItemsFailure) {
+          return Text(state.errorMessage);
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+}

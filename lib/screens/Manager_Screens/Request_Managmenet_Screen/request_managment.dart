@@ -13,13 +13,14 @@ import '../../../core/utils/color_manager.dart';
 import 'beneficiary_detail_manager_screen.dart';
 import 'course_detail_manager_screen.dart';
 
+
 class RequestManagementScreen extends StatelessWidget {
   const RequestManagementScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 5,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorManager.bc1,
@@ -39,6 +40,8 @@ class RequestManagementScreen extends StatelessWidget {
               Tab(text: 'Courses'),
               Tab(text: 'Beneficiaries'),
               Tab(text: 'Trainers'),
+              Tab(text: 'Category'),
+              Tab(text: 'Items'),
             ],
           ),
         ),
@@ -47,6 +50,8 @@ class RequestManagementScreen extends StatelessWidget {
             _buildCourseTab(context),
             _buildBeneficiaryTab(context),
             _buildTrainersTab(context),
+            const RequestCategoryView(),
+            const RequestItemView(),
           ],
         ),
       ),
