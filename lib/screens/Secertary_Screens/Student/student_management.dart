@@ -25,6 +25,7 @@ class _BeneficiaryManagementScreenState extends State<BeneficiaryManagementScree
   void _fetchBeneficiaries() {
     Future.microtask(() => context.read<BeneficiaryCubit>().fetchBeneficiaries());
   }
+  int a=0;
 
   void _confirmDelete(BuildContext context, int beneficiaryId) {
     showDialog(
@@ -170,6 +171,8 @@ class _BeneficiaryManagementScreenState extends State<BeneficiaryManagementScree
                                     child: Text(beneficiary.numberPhone ?? '',
                                         textAlign: TextAlign.start,
                                         style: TextStyle(color: ColorManager.bc5, fontWeight: FontWeight.w500))),
+
+
                               ],
                             ),
                             trailing: Row(

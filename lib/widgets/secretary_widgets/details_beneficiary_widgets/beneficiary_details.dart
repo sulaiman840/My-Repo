@@ -48,7 +48,8 @@ class BeneficiaryDetails extends StatelessWidget {
                 DetailItem(icon: Icons.home, label: 'Address', value: beneficiary.address ?? ''),
                 DetailItem(icon: Icons.email, label: 'Email', value: beneficiary.email ?? ''),
                 DetailItem(icon: Icons.phone, label: 'Number Line', value: beneficiary.numberLine ?? ''),
-                DetailItem(icon: Icons.phone_android, label: 'Number Phone', value: beneficiary.numberPhone ?? ''),
+              DetailItem(icon: Icons.phone_android, label: 'Number Phone', value: beneficiary.numberPhone  ?? ''),
+
                 DetailItem(icon: Icons.perm_identity, label: 'Number ID', value: beneficiary.numberId ?? ''),
                 DetailItem(icon: Icons.school, label: 'Educational Attainment', value: beneficiary.educationalAttainment ?? ''),
                 DetailItem(icon: Icons.computer, label: 'Computer Driving', value: beneficiary.computerDriving ?? ''),

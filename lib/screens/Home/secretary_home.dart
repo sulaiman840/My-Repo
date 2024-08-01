@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../Bloc/secertary/student/beneficiary_cubit.dart';
+import '../../Bloc/secertary/student/beneficiary_state.dart';
 import '../../core/utils/color_manager.dart';
-import '../../widgets/manager_home_widgets/custom_app_bar.dart';
-import '../../widgets/manager_home_widgets/custom_tab_bar_view.dart';
+import '../../services/Secertary Services/beneficiary_service.dart';
+
 import '../../widgets/manager_home_widgets/main_nav_bar.dart';
 import '../../widgets/manager_home_widgets/search_bar.dart';
-import '../../widgets/manager_home_widgets/tab_bar.dart';
 import '../../widgets/secretary_widgets/custom_tab_bar_view_secretary.dart';
 import '../../widgets/secretary_widgets/tab_bar_secertary.dart';
-
 
 class SecretaryHome extends StatefulWidget {
   const SecretaryHome({super.key});
@@ -23,7 +24,7 @@ class _SecretaryHomeState extends State<SecretaryHome> with SingleTickerProvider
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length:4, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -42,7 +43,22 @@ class _SecretaryHomeState extends State<SecretaryHome> with SingleTickerProvider
     return Scaffold(
       key: _scaffoldKey,
       appBar: isMobile
-          ? CustomAppBar(scaffoldKey: _scaffoldKey)
+          ? AppBar(
+        title: Text('Secretary Dashboard'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.5,
+              child: Search_Bar(
+                title: 'Secretary Dashboard',
+                searchIconColor: ColorManager.bc4,
+                fillColor: ColorManager.bc1,
+              ),
+            ),
+          ),
+        ],
+      )
           : null,
       drawer: isMobile ? MainNavBar() : null,
       body: Row(
@@ -50,7 +66,7 @@ class _SecretaryHomeState extends State<SecretaryHome> with SingleTickerProvider
           if (!isMobile)
             Container(
               width: 200,
-              color:  ColorManager.bc5,
+              color: ColorManager.bc5,
               child: MainNavBar(),
             ),
           Expanded(
@@ -61,7 +77,7 @@ class _SecretaryHomeState extends State<SecretaryHome> with SingleTickerProvider
                     color: ColorManager.bc0,
                     child: Search_Bar(
                       title: 'Secretary Dashboard',
-                      searchIconColor:ColorManager.bc4,
+                      searchIconColor: ColorManager.bc4,
                       fillColor: ColorManager.bc1,
                     ),
                   ),
@@ -84,3 +100,5 @@ class _SecretaryHomeState extends State<SecretaryHome> with SingleTickerProvider
     );
   }
 }
+
+
