@@ -46,3 +46,11 @@ class BeneficiaryCourseError extends BeneficiaryCourseState {
   @override
   List<Object?> get props => [message];
 }
+class BeneficiaryCheckedIn extends BeneficiaryCourseState {
+  final String message;
+
+  const BeneficiaryCheckedIn(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}

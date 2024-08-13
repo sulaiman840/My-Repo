@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import '../../core/utils/shared_preferences_helper.dart';
 import '../../models/Secertary Model/trainer_course_registration.dart';
 import '../../models/Secertary Model/trainer_model.dart';
 
@@ -116,7 +117,7 @@ class TrainerService {
         data: registration.toJson(),
         options: Options(
           headers: {
-            'Authorization': 'Bearer your_token_here', // Replace with actual token
+            'Authorization': 'Bearer your_token_here',
           },
         ),
       );
@@ -177,4 +178,33 @@ class TrainerService {
       throw Exception('Failed to delete trainer from course: $error');
     }
   }
+
+  Future<List<Trainer>> searchTrainers(String query) async {
+    try {
+      final token = await SharedPreferencesHelper.getJwtToken();
+
+      final response = await _dio.get(
+        'http://127.0.0.1:8000/api/searchtrainer/$query',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> responseData = response.data as List<dynamic>;
+        return responseData.map((item) => Trainer.fromJson(item)).toList();
+      } else {
+        throw Exception('Failed to search Trainer: ${response.statusCode}');
+      }
+    } catch (error) {
+      if (error is DioError && error.response?.statusCode == 404) {
+        throw ('No results found.');
+      } else {
+        throw Exception('Failed to search Trainer: $error');
+      }
+    }
+  }
+
 }

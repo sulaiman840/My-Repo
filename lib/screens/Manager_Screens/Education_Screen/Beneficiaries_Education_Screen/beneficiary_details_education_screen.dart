@@ -122,7 +122,7 @@ class _BeneficiaryDetailsEducationScreenState extends State<BeneficiaryDetailsEd
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             _buildDetailItem(Icons.book, 'Course Name', course.course.nameCourse),
-            _buildDetailItem(Icons.schedule, 'Course Period', course.course.coursePeriod),
+         //   _buildDetailItem(Icons.schedule, 'Course Period', course.course.coursePeriod),
             _buildDetailItem(Icons.access_time, 'Status', course.status),
           ],
         ),

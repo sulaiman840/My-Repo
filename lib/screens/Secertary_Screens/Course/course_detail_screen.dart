@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/scheduler.dart';
 import '../../../Bloc/secertary/course/course_detail_cubit.dart';
 import '../../../Bloc/secertary/course/course_detail_state.dart';
 import '../../../Bloc/secertary/student/beneficiary_course_cubit.dart';
@@ -20,8 +21,9 @@ class CourseDetailScreen extends StatefulWidget {
   _CourseDetailScreenState createState() => _CourseDetailScreenState();
 }
 
-class _CourseDetailScreenState extends State<CourseDetailScreen> with SingleTickerProviderStateMixin {
+class _CourseDetailScreenState extends State<CourseDetailScreen> with SingleTickerProviderStateMixin, RouteAware {
   late TabController _tabController;
+  final GlobalKey _beneficiaryListKey = GlobalKey();
 
   @override
   void initState() {
@@ -40,6 +42,14 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> with SingleTick
     context.read<CourseDetailCubit>().fetchCourseDetail(widget.courseId);
     context.read<BeneficiaryCourseCubit>().fetchBeneficiariesByCourse(widget.courseId);
     context.read<TrainerCourseCubit>().fetchTrainersByCourse(widget.courseId);
+  }
+
+  void _checkInBeneficiary(int beneficiaryId, int courseId) {
+    context.read<BeneficiaryCourseCubit>().checkInBeneficiary(beneficiaryId, courseId);
+  }
+
+  void _checkInTrainer(int trainerId, int courseId) {
+    context.read<TrainerCourseCubit>().checkInTrainer(trainerId, courseId);
   }
 
   @override
@@ -69,8 +79,10 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> with SingleTick
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _buildDetailItem(Icons.book, 'Course Name', course.nameCourse ?? 'N/A'),
-                            _buildDetailItem(Icons.schedule, 'Period', course.coursePeriod ?? 'N/A'),
+                            _buildDetailItem(Icons.schedule, 'Period', course.coursePeriod.toString()),
                             _buildDetailItem(Icons.category, 'Type', course.type ?? 'N/A'),
+                            _buildDetailItem(Icons.timeline, 'Session Duration', course.sessionDuration ?? 'N/A'),
+                            _buildDetailItem(Icons.timer, 'Sessions Given', course.sessionsGiven.toString()),
                             _buildDetailItem(Icons.info_outline, 'Status', course.courseStatus ?? 'N/A'),
                             _buildDetailItem(Icons.star, 'Specialty', course.specialty ?? 'N/A'),
                             _buildDetailItem(Icons.description, 'Description', course.description ?? 'N/A'),
@@ -115,11 +127,34 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> with SingleTick
       builder: (context, state) {
         if (state is BeneficiaryCourseLoading) {
           return Center(child: CircularProgressIndicator());
+        } else if (state is BeneficiaryCheckedIn) {
+          SchedulerBinding.instance.addPostFrameCallback((_) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Row(
+                  children: [
+                    Icon(Icons.check_circle_outline, color: Colors.white),
+                    SizedBox(width: 10),
+                    Expanded(child: Text(state.message)),
+                  ],
+                ),
+                backgroundColor: Colors.green,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                margin: EdgeInsets.all(10),
+              ),
+            );
+
+            // Re-fetch the beneficiaries to update the list
+            context.read<BeneficiaryCourseCubit>().fetchBeneficiariesByCourse(widget.courseId);
+          });
+          return Container(); // Returning empty container until the state updates
         } else if (state is BeneficiaryByCourseLoaded) {
           if (state.beneficiary.isEmpty) {
             return Center(child: Text('No beneficiaries registered in this course.'));
           }
           return ListView.builder(
+            key: _beneficiaryListKey,
             padding: EdgeInsets.all(8),
             itemCount: state.beneficiary.length,
             itemBuilder: (context, index) {
@@ -142,14 +177,29 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> with SingleTick
                       Text('Phone: ${beneficiaryCourse.beneficiary.phone}', style: TextStyle(color: Colors.grey[700])),
                     ],
                   ),
-                  trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
-                  onTap: () {
-                    Navigator.push(
+                  trailing: ElevatedButton(
+                    onPressed: () => _checkInBeneficiary(beneficiary.id!, widget.courseId),
+                    child: Text('Check In', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: ColorManager.blue,
+                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      textStyle: TextStyle(letterSpacing: 1.2),
+                      elevation: 8,
+                      shadowColor: ColorManager.blue.withOpacity(0.5),
+                    ),
+                  ),
+                  onTap: () async {
+                    await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => BeneficiaryDetailsScreen(beneficiaryId: beneficiary.id),
                       ),
-                    ).then((_) => _fetchData());
+                    );
+
+                    // After returning, refresh the beneficiary data
+                    _fetchData();
                   },
                 ),
               );
@@ -169,6 +219,30 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> with SingleTick
       builder: (context, state) {
         if (state is TrainerCourseLoading) {
           return Center(child: CircularProgressIndicator());
+        } else if (state is TrainerCheckedIn) {
+          // Use a post-frame callback to ensure the UI is updated after the Snackbar
+          SchedulerBinding.instance.addPostFrameCallback((_) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Row(
+                  children: [
+                    Icon(Icons.check_circle_outline, color: Colors.white),
+                    SizedBox(width: 10),
+                    Expanded(child: Text(state.message)),
+                  ],
+                ),
+                backgroundColor: Colors.green,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                margin: EdgeInsets.all(10),
+              ),
+            );
+
+            // Fetch updated course details and trainers after check-in
+            context.read<CourseDetailCubit>().fetchCourseDetail(widget.courseId);
+            context.read<TrainerCourseCubit>().fetchTrainersByCourse(widget.courseId);
+          });
+          return Container();  // Returning empty container until the state updates
         } else if (state is TrainerByCourseLoaded) {
           if (state.trainerCourses.isEmpty) {
             return Center(child: Text('No trainers assigned to this course.'));
@@ -196,14 +270,29 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> with SingleTick
                       Text('${trainerCourse.countHours} hours', style: TextStyle(color: Colors.grey[700])),
                     ],
                   ),
-                  trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
-                  onTap: () {
-                    Navigator.push(
+                  trailing: ElevatedButton(
+                    onPressed: () => _checkInTrainer(trainer.id!, widget.courseId),
+                    child: Text('Check In', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: ColorManager.blue,
+                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      textStyle: TextStyle(letterSpacing: 1.2),
+                      elevation: 8,
+                      shadowColor: ColorManager.blue.withOpacity(0.5),
+                    ),
+                  ),
+                  onTap: () async {
+                    await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => TrainerDetailsScreen(trainerId: trainer.id),
                       ),
-                    ).then((_) => _fetchData());
+                    );
+
+                    // After returning, refresh the trainer data
+                    _fetchData();
                   },
                 ),
               );

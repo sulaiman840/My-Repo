@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../Bloc/notification_cubit.dart';
+import '../../Bloc/secertary/course/course_cubit.dart';
 import '../../Bloc/secertary/student/beneficiary_cubit.dart';
+import '../../Bloc/secertary/trainer/trainer_cubit.dart';
 import '../../core/utils/color_manager.dart';
 import '../../screens/Home/search_screen.dart';
 import '../../services/Secertary Services/beneficiary_service.dart';
-
+import '../../services/Secertary Services/course_service.dart';
+import '../../services/Secertary Services/trainer_services.dart';
 
 class Search_Bar extends StatelessWidget {
   final String title;
   final Color searchIconColor;
   final Color fillColor;
 
-  Search_Bar({
+  const Search_Bar({
+    Key? key,
     required this.title,
     required this.searchIconColor,
     required this.fillColor,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +32,8 @@ class Search_Bar extends StatelessWidget {
           Flexible(
             child: Text(
               title,
-              style: TextStyle(
-                fontSize: 20,
+              style: const TextStyle(
+                fontSize: 25,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
@@ -42,9 +47,8 @@ class Search_Bar extends StatelessWidget {
                 child: TextField(
                   onSubmitted: (query) {
                     if (query.trim().isEmpty) {
-                      // If the query is empty, do nothing or show a message
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text('Please enter a search term.'),
                           duration: Duration(seconds: 2),
                         ),
@@ -53,9 +57,25 @@ class Search_Bar extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BlocProvider(
-                            create: (context) => BeneficiaryCubit(BeneficiaryService())..searchBeneficiaries(query),
-                            child: SearchResultsScreen(query: query),
+                          builder: (context) => MultiBlocProvider(
+                            providers: [
+                              BlocProvider(
+                                create: (context) =>
+                                    BeneficiaryCubit(BeneficiaryService())
+                                      ..searchBeneficiaries(query),
+                              ),
+                              BlocProvider(
+                                create: (context) =>
+                                    TrainerCubit(TrainerService())
+                                      ..searchTrainers(query),
+                              ),
+                              BlocProvider(
+                                create: (context) =>
+                                    CourseCubit(CourseService())
+                                      ..searchCourses(query),
+                              ),
+                            ],
+                            child: SearchScreen(),
                           ),
                         ),
                       );
@@ -64,9 +84,10 @@ class Search_Bar extends StatelessWidget {
                   decoration: InputDecoration(
                     hintText: 'Search...',
                     prefixIcon: Icon(Icons.search, color: searchIconColor),
-                    contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 15.0, horizontal: 20.0),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
+                      borderRadius: BorderRadius.circular(50.0),
                       borderSide: BorderSide.none,
                     ),
                     filled: true,
@@ -74,19 +95,20 @@ class Search_Bar extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               IconButton(
+                iconSize: 25,
                 icon: Icon(Icons.notifications, color: Colors.black),
                 onPressed: () {},
               ),
-              SizedBox(width: 20),
+              const SizedBox(width: 20),
               Container(
-                width: 110,
+                width: 140,
                 height: 60,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.white24, width: 1),
-                  borderRadius: BorderRadius.all(Radius.circular(55)),
-                  image: DecorationImage(
+                  borderRadius: const BorderRadius.all(Radius.circular(55)),
+                  image: const DecorationImage(
                     image: AssetImage('images/logo18.png'),
                     fit: BoxFit.fitWidth,
                   ),

@@ -114,7 +114,7 @@ class _TrainerDetailsEducationScreenState extends State<TrainerDetailsEducationS
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             _buildDetailItem(Icons.book, 'Course Name', trainerCourse.course.nameCourse),
-            _buildDetailItem(Icons.schedule, 'Course Period', trainerCourse.course.coursePeriod),
+       //     _buildDetailItem(Icons.schedule, 'Course Period', trainerCourse.course.coursePeriod),
             _buildDetailItem(Icons.access_time, 'Count Hours', trainerCourse.countHours.toString()),
           ],
         ),

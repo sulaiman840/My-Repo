@@ -73,8 +73,10 @@ class _CourseDetailEducationState extends State<CourseDetailEducation> with Sing
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _buildDetailItem(Icons.book, 'Course Name', course.nameCourse ?? 'N/A'),
-                            _buildDetailItem(Icons.schedule, 'Period', course.coursePeriod ?? 'N/A'),
+                            _buildDetailItem(Icons.schedule, 'Period', course.coursePeriod.toString()),
                             _buildDetailItem(Icons.category, 'Type', course.type ?? 'N/A'),
+                            _buildDetailItem(Icons.timeline, 'Session Duration', course.sessionDuration?.toString() ?? 'N/A'),
+                            _buildDetailItem(Icons.timer, 'Sessions Given', course.sessionsGiven?.toString() ?? 'N/A'),
                             _buildDetailItem(Icons.info_outline, 'Status', course.courseStatus ?? 'N/A'),
                             _buildDetailItem(Icons.star, 'Specialty', course.specialty ?? 'N/A'),
                             _buildDetailItem(Icons.description, 'Description', course.description ?? 'N/A'),

@@ -69,4 +69,28 @@ class TrainerCourseService {
       throw Exception('Failed to load trainers: $error');
     }
   }
+  Future<String> checkInTrainer(int trainerId, int courseId) async {
+    try {
+      final response = await _dio.post(
+        'http://127.0.0.1:8000/api/trackingtrainer',
+        data: {
+          'trainer_id': trainerId.toString(),
+          'course_id': courseId.toString(),
+        },
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer your_token_here',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        return response.data['message'];
+      } else {
+        throw Exception('Failed to check in trainer');
+      }
+    } catch (error) {
+      throw Exception('Failed to check in trainer: $error');
+    }
+  }
 }

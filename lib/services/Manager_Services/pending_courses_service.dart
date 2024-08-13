@@ -27,7 +27,7 @@ class PendingRequestService {
       } else {
         throw Exception('Failed to load pending requests');
       }
-    } catch (e) {
+    } on DioError catch (e) {
       print(" error: $e");
       throw Exception(DioErrorHandler.handleError(e));
     }

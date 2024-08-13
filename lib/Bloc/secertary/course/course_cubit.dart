@@ -51,4 +51,14 @@ class CourseCubit extends Cubit<CourseState> {
       emit(CourseError(e.toString()));
     }
   }
+
+  Future<void> searchCourses(String query) async {
+    try {
+      emit(CourseLoading());
+      final courses = await _courseService.searchCourses(query);
+      emit(CourseLoaded(courses));
+    } catch (e) {
+      emit(CourseError(e.toString()));
+    }
+  }
 }

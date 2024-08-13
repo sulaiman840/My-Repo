@@ -3,8 +3,8 @@ class UserModel {
   final String name;
   final String role;
   final String email;
-  final int number;
-  final String imagePath;
+  final String number;
+  final String? imagePath;
   final String fcmToken;
   final String createdAt;
   final String updatedAt;
@@ -17,7 +17,7 @@ class UserModel {
     required this.role,
     required this.email,
     required this.number,
-    required this.imagePath,
+     this.imagePath,
     required this.fcmToken,
     required this.createdAt,
     required this.updatedAt,
@@ -32,7 +32,7 @@ class UserModel {
       role: json['role'],
       email: json['email'],
       number: json['number'],
-      imagePath: json['imagePath'],
+      imagePath: json['imagePath']?? '',
       fcmToken: json['fcm_token'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],

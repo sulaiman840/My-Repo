@@ -10,6 +10,8 @@ import '../../../Bloc/manager/pending_beneficiary_state.dart';
 import '../../../Bloc/manager/pending_trainer_cubit.dart';
 import '../../../Bloc/manager/pending_trainer_state.dart';
 import '../../../core/utils/color_manager.dart';
+import '../warehouse/request_manager/presentation/view/request_category_view.dart';
+import '../warehouse/request_manager/presentation/view/request_item_view.dart';
 import 'beneficiary_detail_manager_screen.dart';
 import 'course_detail_manager_screen.dart';
 

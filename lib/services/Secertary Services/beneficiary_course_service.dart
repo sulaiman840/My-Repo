@@ -84,4 +84,24 @@ class BeneficiaryCourseService {
       throw Exception('Failed to load beneficiaries: $error');
     }
   }
+
+  Future<String> checkInBeneficiary(int beneficiaryId, int courseId) async {
+    try {
+      final response = await _dio.post(
+        'http://127.0.0.1:8000/api/trackingbeneficiary',
+        data: {
+          'beneficiary_id': beneficiaryId.toString(),
+          'course_id': courseId.toString(),
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return response.data['message'];
+      } else {
+        throw Exception('Failed to check in beneficiary');
+      }
+    } catch (error) {
+      throw Exception('Failed to check in beneficiary: $error');
+    }
+  }
 }

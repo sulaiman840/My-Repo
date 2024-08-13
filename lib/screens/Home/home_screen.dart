@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
-  static const String id = 'HomeScreen'; // Add a static id for navigation purposes
+  static const String id = 'HomeScreen';
 
   @override
   Widget build(BuildContext context) {

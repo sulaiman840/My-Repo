@@ -41,3 +41,11 @@ class TrainerCourseError extends TrainerCourseState {
 }
 
 class TrainerCourseDeleted extends TrainerCourseState {}
+class TrainerCheckedIn extends TrainerCourseState {
+  final String message;
+
+  TrainerCheckedIn(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}

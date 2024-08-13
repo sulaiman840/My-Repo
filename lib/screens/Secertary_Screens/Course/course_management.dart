@@ -52,11 +52,15 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
   void _showUpdateDialog(BuildContext context, Course course) {
     final _formKey = GlobalKey<FormState>();
     late String _nameCourse = course.nameCourse;
-    late String _coursePeriod = course.coursePeriod;
+    late int _coursePeriod = course.coursePeriod ;
+    late String _sessionDuration = course.sessionDuration;
+  //  late String _sessionsGiven = course.sessionsGiven;
     late String _type = course.type;
     late String _courseStatus = course.courseStatus;
     late String _specialty = course.specialty;
     late String _description = course.description;
+
+
 
     showDialog(
       context: context,
@@ -82,16 +86,19 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
                     },
                   ),
                   TextFormField(
-                    initialValue: _coursePeriod,
+                    initialValue: _coursePeriod.toString(),
                     decoration: InputDecoration(labelText: 'Course Period'),
+                    keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Please enter the course period';
+                      } else if (int.tryParse(value) == null) {
+                        return 'Please enter a valid number';
                       }
                       return null;
                     },
                     onSaved: (value) {
-                      _coursePeriod = value!;
+                      _coursePeriod = int.parse(value!);
                     },
                   ),
                   TextFormField(
@@ -107,6 +114,32 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
                       _type = value!;
                     },
                   ),
+                  TextFormField(
+                    initialValue: _sessionDuration,
+                    decoration: InputDecoration(labelText: 'Session Duration'),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter the Session Duration';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _sessionDuration = value!;
+                    },
+                  ),
+                  // TextFormField(
+                  //   initialValue: _sessionsGiven,
+                  //   decoration: InputDecoration(labelText: 'Session Is Given'),
+                  //   validator: (value) {
+                  //     if (value!.isEmpty) {
+                  //       return 'Please enter the Session Is Given';
+                  //     }
+                  //     return null;
+                  //   },
+                  //   onSaved: (value) {
+                  //     _sessionsGiven = value!;
+                  //   },
+                  // ),
                   DropdownButtonFormField<String>(
                     value: _courseStatus,
                     decoration: InputDecoration(labelText: 'Status'),
@@ -171,6 +204,8 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
                     id: course.id,
                     nameCourse: _nameCourse,
                     coursePeriod: _coursePeriod,
+                    sessionDuration:_sessionDuration ,
+              //      sessionsGiven: _sessionsGiven,
                     type: _type,
                     courseStatus: _courseStatus,
                     specialty: _specialty,
@@ -245,7 +280,11 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Period: ${course.coursePeriod}', style: TextStyle(color: ColorManager.bc4)),
+                         // Text('Period: ${course.sessionsGiven} Hours from ${course.coursePeriod} Hours', style: TextStyle(color: ColorManager.bc4)),
+                          Text(
+                            'Period: ${course.coursePeriod}',
+                            style: TextStyle(color: ColorManager.bc4),
+                          ),
                           Text('Status: ${course.courseStatus}', style: TextStyle(color: ColorManager.bc3)),
                         ],
                       ),

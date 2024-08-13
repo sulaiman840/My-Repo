@@ -58,8 +58,11 @@ class CourseDetailManagerScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildDetailItem(Icons.book, 'Course Name', course.nameCourse),
-                    _buildDetailItem(Icons.schedule, 'Period', course.coursePeriod),
+                    _buildDetailItem(Icons.schedule, 'Period', course.coursePeriod.toString()),
                     _buildDetailItem(Icons.category, 'Type', course.type),
+                    // _buildDetailItem(Icons.timeline, 'Session Duration', course.sessionDuration?.toString() ?? 'N/A'),
+          //          _buildDetailItem(Icons.timeline, 'Session Duration', course.sessionDuration.toString()),
+
                     _buildDetailItem(Icons.info_outline, 'Status', course.courseStatus),
                     _buildDetailItem(Icons.star, 'Specialty', course.specialty),
                     _buildDetailItem(Icons.description, 'Description', course.description),

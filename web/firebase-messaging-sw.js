@@ -12,9 +12,28 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-
 const messaging = firebase.messaging();
-
 messaging.onBackgroundMessage((message) => {
-  console.log("onBackgroundMessage", message);
-});
+  console.log("Received background message", message);
+
+  const notificationTitle = message.data.title;
+  const notificationOptions = {
+    body: message.data.body,
+    icon: '/icons/Icon-192.png'
+  };
+
+  self.registration.showNotification(notificationTitle, notificationOptions);
+
+   // Send notification to all open clients
+   self.clients.matchAll().then(clients => {
+     clients.forEach(client => {
+       client.postMessage({
+         type: 'NEW_NOTIFICATION',
+         notification: {
+           title: notificationTitle,
+           body: message.data.body
+         }
+       });
+     });
+   });
+ });

@@ -1,70 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <base href="$FLUTTER_BASE_HREF">
+    <base href="/">
     <meta charset="UTF-8">
     <meta content="IE=Edge" http-equiv="X-UA-Compatible">
     <meta name="description" content="A new Flutter project.">
-
-    <!-- iOS meta tags & icons -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="project2">
     <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png"/>
-
-    <title>project2</title>
+    <title>Project2</title>
     <link rel="manifest" href="manifest.json">
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-messaging.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-analytics.js"></script>
 
     <script>
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyByFyhWeTuXTxC2OVT3w0-OmI7q-WHx3hc",
-      authDomain: "warehouse-management-d8a87.firebaseapp.com",
-      projectId: "warehouse-management-d8a87",
-      storageBucket: "warehouse-management-d8a87.appspot.com",
-      messagingSenderId: "193004774523",
-      appId: "1:193004774523:web:4b3b459ea4d55f02a06ede",
-      measurementId: "G-WBG1QY7VP6"
+  // Initialize Firebase and messaging
+  firebase.initializeApp(firebaseConfig);
+  const messaging = firebase.messaging();
+
+  // Handle foreground messages
+  messaging.onMessage((payload) => {
+    console.log("Message received in the foreground: ", payload);
+
+    const notificationData = {
+      title: payload.notification?.title || payload.data?.title,
+      body: payload.notification?.body || payload.data?.body,
+      icon: '/icons/Icon-192.png'
     };
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    firebase.analytics();
-
-    const messaging = firebase.messaging();
-
-    // Register service worker and initialize FCM
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/firebase-messaging-sw.js')
-        .then((registration) => {
-          console.log('Service Worker registered with scope:', registration.scope);
-          messaging.useServiceWorker(registration);
-
-          // Get the FCM token
-          return messaging.getToken();
-        })
-        .then((token) => {
-          if (token) {
-            console.log('FCM Token:', token);
-            // Store the token in local storage
-            window.localStorage.setItem('fcmToken', token);
-          } else {
-            console.log('No registration token available. Request permission to generate one.');
-          }
-        })
-        .catch((err) => {
-          console.log('Service Worker registration or FCM token retrieval failed:', err);
-        });
+    if (Notification.permission === 'granted') {
+      new Notification(notificationData.title, {
+        body: notificationData.body,
+        icon: notificationData.icon
+      });
     }
-    </script>
+
+    // Store the notification data in localStorage
+    let notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+    notifications.push(notificationData);
+    localStorage.setItem('notifications', JSON.stringify(notifications));
+
+    // Notify Flutter app about the new message
+    window.dispatchEvent(new CustomEvent('notification-received', { detail: notificationData }));
+  });
+</script>
 </head>
 <body>
 <!-- Flutter application script -->

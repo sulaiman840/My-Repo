@@ -1,12 +1,20 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:project2/core/utils/app_routes.dart';
 
 class FirebaseMessagingService {
+  static late GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey;
+  static late GlobalKey<NavigatorState> navigatorKey;
+
   static Future<void> backgroundHandler(RemoteMessage message) async {
     print("Handling a background message: ${message.messageId}");
   }
 
-  static Future<void> initialize() async {
+  static Future<void> initialize(GlobalKey<ScaffoldMessengerState> key, GlobalKey<NavigatorState> navKey) async {
+    scaffoldMessengerKey = key;
+    navigatorKey = navKey;
+
     await Firebase.initializeApp();
 
     FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -15,12 +23,19 @@ class FirebaseMessagingService {
 
     FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("A new message arrived in the foreground!");
-      print("Message data: ${message.data}");
-      if (message.notification != null) {
-        print("Notification Title: ${message.notification!.title}, Body: ${message.notification!.body}");
-      }
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      scaffoldMessengerKey.currentState?.showSnackBar(
+        SnackBar(
+          content: Text('${message.notification?.title ?? "New Notification"}: ${message.notification?.body ?? ""}'),
+          action: SnackBarAction(
+            label: 'View',
+            onPressed: () {
+              Navigator.of(navigatorKey.currentContext!).pushNamed(AppRouter.notifications);
+            },
+
+          ),
+        ),
+      );
     });
   }
 
@@ -52,8 +67,7 @@ class FirebaseMessagingService {
       }
     } catch (e) {
       print("Error retrieving FCM token: $e");
-      // Retry mechanism
-      await Future.delayed(Duration(seconds: 5));
+      await Future.delayed(const Duration(seconds: 5));
       return await getFcmToken();
     }
   }

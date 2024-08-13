@@ -1,8 +1,13 @@
 import 'package:dio/dio.dart';
+import '../../core/utils/shared_preferences_helper.dart';
 import '../../models/Secertary Model/course_model.dart';
+import '../notification_service.dart';
+import '../token_service.dart';
 
 class CourseService {
   final Dio _dio = Dio();
+  final TokenService _tokenService = TokenService();
+  final NotificationService _notificationService = NotificationService();
 
   Future<List<Course>> fetchCourses() async {
     try {
@@ -16,14 +21,18 @@ class CourseService {
       );
 
       if (response.statusCode == 200) {
+
         List<Course> courses = (response.data['data'] as List)
             .map((courseJson) => Course.fromJson(courseJson))
             .toList();
         return courses;
       } else {
         throw Exception('Failed to load courses');
+
       }
-    } catch (error) {
+    }  on DioError catch (error) {
+      print(error.response);
+
       throw Exception('Failed to load courses: $error');
     }
   }
@@ -74,6 +83,7 @@ class CourseService {
         data: {
           'nameCourse': course.nameCourse,
           'coursePeriod': course.coursePeriod,
+          'sessionDoration': course.sessionDuration,
           'type': course.type,
           'courseStatus': course.courseStatus,
           'specialty': course.specialty,
@@ -86,13 +96,27 @@ class CourseService {
         ),
       );
 
-      if (response.statusCode != 200) {
+      if (response.statusCode == 200) {
+
+        String accessToken = await _tokenService.fetchAccessToken();
+
+        String? managerFcmToken = await _tokenService.fetchFcmTokenByRole('manager');
+
+        if (managerFcmToken != null) {
+          await _notificationService.sendNotification(accessToken, managerFcmToken);
+          print('Notification has sent to Manager FCM token correctly');
+        } else {
+          print('Manager FCM token is null');
+        }
+      } else {
         throw Exception('Failed to add course');
       }
     } catch (error) {
       throw Exception('Failed to add course: $error');
     }
   }
+
+
   Future<Course> fetchCourseDetail(int id) async {
     try {
       final response = await _dio.post(
@@ -113,4 +137,33 @@ class CourseService {
       throw Exception('Failed to load course detail: $error');
     }
   }
+
+  Future<List<Course>> searchCourses(String query) async {
+    try {
+      final token = await SharedPreferencesHelper.getJwtToken();
+
+      final response = await _dio.get(
+        'http://127.0.0.1:8000/api/searchcourse/$query',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> responseData = response.data as List<dynamic>;
+        return responseData.map((item) => Course.fromJson(item)).toList();
+      } else {
+        throw Exception('Failed to search Courses: ${response.statusCode}');
+      }
+    } catch (error) {
+      if (error is DioError && error.response?.statusCode == 404) {
+        throw ('No results found.');
+      } else {
+        throw Exception('Failed to search Courses: $error');
+      }
+    }
+  }
+
 }

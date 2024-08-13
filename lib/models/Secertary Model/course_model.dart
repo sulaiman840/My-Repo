@@ -1,7 +1,9 @@
 class Course {
   final int id;
   final String nameCourse;
-  final String coursePeriod;
+  final int coursePeriod;
+  final String sessionDuration;
+  final String? sessionsGiven;
   final String type;
   final String courseStatus;
   final String specialty;
@@ -13,6 +15,8 @@ class Course {
     required this.id,
     required this.nameCourse,
     required this.coursePeriod,
+    required this.sessionDuration,
+     this.sessionsGiven,
     required this.type,
     required this.courseStatus,
     required this.specialty,
@@ -26,6 +30,8 @@ class Course {
       id: json['id'],
       nameCourse: json['nameCourse'],
       coursePeriod: json['coursePeriod'],
+      sessionDuration: json['sessionDoration'],
+      sessionsGiven:json['sessionsGiven'],
       type: json['type'],
       courseStatus: json['courseStatus'],
       specialty: json['specialty'],
@@ -40,6 +46,8 @@ class Course {
       'id': id,
       'nameCourse': nameCourse,
       'coursePeriod': coursePeriod,
+      'sessionDoration': sessionDuration,
+      'sessionsGiven': sessionsGiven,
       'type': type,
       'courseStatus': courseStatus,
       'specialty': specialty,

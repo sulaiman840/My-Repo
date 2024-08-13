@@ -31,11 +31,13 @@ class _PendingCourseScreenState extends State<PendingCourseScreen> {
   void _showAddCourseDialog(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
     String nameCourse = '';
-    String coursePeriod = '';
+    int coursePeriod = 0;
     String type = '';
     String courseStatus = 'Active';
     String specialty = '';
     String description = '';
+    String sessionDuration = '';
+    String sessionsGiven = '';
 
     showDialog(
       context: context,
@@ -75,14 +77,17 @@ class _PendingCourseScreenState extends State<PendingCourseScreen> {
                         ),
                         TextFormField(
                           decoration: InputDecoration(labelText: 'Course Period'),
+                          keyboardType: TextInputType.number,
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Please enter the course period';
+                            } else if (int.tryParse(value) == null) {
+                              return 'Please enter a valid number';
                             }
                             return null;
                           },
                           onSaved: (value) {
-                            coursePeriod = value!;
+                            coursePeriod = int.parse(value!);
                           },
                         ),
                         TextFormField(
@@ -95,6 +100,18 @@ class _PendingCourseScreenState extends State<PendingCourseScreen> {
                           },
                           onSaved: (value) {
                             type = value!;
+                          },
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(labelText: 'Session Duration'),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter the Session Duration';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            sessionDuration = value!;
                           },
                         ),
                         DropdownButtonFormField<String>(
@@ -164,6 +181,8 @@ class _PendingCourseScreenState extends State<PendingCourseScreen> {
                           id: 0,
                           nameCourse: nameCourse,
                           coursePeriod: coursePeriod,
+                          sessionDuration:sessionDuration ,
+                          sessionsGiven: sessionsGiven,
                           type: type,
                           courseStatus: courseStatus,
                           specialty: specialty,

@@ -66,6 +66,7 @@ class _CoursesEducationScreenState extends State<CoursesEducationScreen> {
                             color: course.courseStatus == 'Active' ? Colors.green : Colors.red,
                             size: 12,
                           ),
+
                         ],
                       ),
                       onTap: () {

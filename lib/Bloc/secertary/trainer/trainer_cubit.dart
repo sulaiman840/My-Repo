@@ -72,7 +72,17 @@ class TrainerCubit extends Cubit<TrainerState> {
         ),
       );
       emit(TrainerRegisteredInCourse());
-      fetchTrainerDetail(trainerId); // Refresh trainer detail
+      fetchTrainerDetail(trainerId);
+    } catch (e) {
+      emit(TrainerError(e.toString()));
+    }
+  }
+
+  Future<void> searchTrainers(String query) async {
+    try {
+      emit(TrainerLoading());
+      final trainers = await _trainerService.searchTrainers(query);
+      emit(TrainerLoaded(trainers));
     } catch (e) {
       emit(TrainerError(e.toString()));
     }

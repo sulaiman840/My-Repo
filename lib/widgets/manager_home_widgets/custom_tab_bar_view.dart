@@ -21,7 +21,6 @@ class CustomTabBarView extends StatelessWidget {
       children: [
         DashboardOverview(),
         StaffsView(),
-        AllTypeViewManager(),
         EducationScreen(),
         WareHouse(),
         RequestManagementScreen()

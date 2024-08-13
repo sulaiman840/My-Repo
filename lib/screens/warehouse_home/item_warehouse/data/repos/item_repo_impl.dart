@@ -8,6 +8,7 @@ import 'package:file_saver/file_saver.dart';
 import '../../../../../../constants.dart';
 import '../../../../../../core/errors/failures.dart';
 import '../../../../../../core/utils/dio_api_service.dart';
+import '../../../../../core/utils/shared_preferences_helper.dart';
 import '../models/all_items_model.dart';
 import '../models/create_item_model.dart';
 import '../models/item_by_id_model.dart';
@@ -196,6 +197,7 @@ class ItemRepoImpl implements ItemRepo {
   @override
   Future<Either<Failure, dynamic>> fetchImportFromExcel({
     required Uint8List excelFile
+
   }) async {
     FormData formData = FormData.fromMap({
       "excel_file": MultipartFile.fromBytes(
@@ -205,8 +207,9 @@ class ItemRepoImpl implements ItemRepo {
     });
 
     try{
+      final token = await SharedPreferencesHelper.getJwtToken();
       dio.options.headers = {
-        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzE4OTcyMTQ5LCJleHAiOjE3MzYyNTIxNDksIm5iZiI6MTcxODk3MjE0OSwianRpIjoiUjliR2wyb29lbWRMYllXWSIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.kH85S2zkC_TW98UXbXTvMAsRYMpmJ3g0_RV9GbNRwg8eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzIyMDEzMDM2LCJleHAiOjE3MzkyOTMwMzYsIm5iZiI6MTcyMjAxMzAzNiwianRpIjoiUGlJU0NHcklFYkNUWXYweiIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.R4BKX4RurBrmUyvYImseagusba7iXiwamy94C4Lo6gI',
+        'Authorization': 'Bearer $token',
       };
       var response =
       await dio.post("http://127.0.0.1:8000/api/items/import/excel", data: formData);
@@ -230,8 +233,10 @@ class ItemRepoImpl implements ItemRepo {
     required List<String> fields
   }) async {
     try{
+      final token = await SharedPreferencesHelper.getJwtToken();
+
       dio.options.headers = {
-        'Authorization': 'Bearer your_access_token_here',
+        'Authorization': 'Bearer $token',
       };
 
       var response = await dio.post(
@@ -257,9 +262,12 @@ class ItemRepoImpl implements ItemRepo {
         log('File saved successfully: $filename');
         return right("r");
       } else {
+        print("HELLO");
         throw Exception('Export failed with status: ${response.statusCode}');
       }
     } catch (e) {
+      print("HELLO1");
+      print(e);
       //throw left(ServerFailure.fromDioError(e));
       return left(ServerFailure(e.toString()));
     }
