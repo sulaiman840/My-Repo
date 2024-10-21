@@ -3,11 +3,14 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:go_router/go_router.dart';
 import 'dart:typed_data';
 
+import '../../../../../core/localization/app_localizations.dart';
 import '../../../../../core/utils/assets_manager.dart';
 import '../../../../../core/utils/color_manager.dart';
 import '../../../../../core/utils/style_manager.dart';
+import '../../../../../widgets/custom_snack_bar.dart';
 import '../../../data/models/show_all_staff_model.dart';
 import '../../manger/featured_staff_cubit/featured_staff_cubit.dart';
 import '../../manger/update_staff_cubit/update_staff_cubit.dart';
@@ -80,6 +83,8 @@ class _UpdateStaffViewBodyState extends State<UpdateStaffViewBody> {
 
   void register() {
     if (_formKey.currentState!.validate() && selectedImage != null) {
+      log(userNameController.text);
+      log(widget.allStaff.id.toString());
       context.read<UpdateStaffCubit>().fetchUpdateStaff(
         id: widget.allStaff.id,
         name: userNameController.text,
@@ -90,32 +95,40 @@ class _UpdateStaffViewBodyState extends State<UpdateStaffViewBody> {
         imageBytes: selectedImage!,
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select an image.')),
-      );
+      CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('please_select_an_image'),);
+      /*ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${AppLocalizations.of(context).translate("please_select_an_image")}.')),
+      );*/
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations local = AppLocalizations.of(context);
+    log("updat*************");
     return BlocConsumer<UpdateStaffCubit, UpdateStaffState>(
       listener: (context, state) {
         if (state is UpdateStaffFailure) {
           context.read<FeaturedStaffCubit>().fetchFeaturedStaff();
-          Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Staff Updated failed")),
-          );
+          context.go('/manager_home?tab=1');
+          //Navigator.pop(context);
+          CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('staff_updated_failed'),);
+          /*ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(local.translate("staff_updated_failed"))),
+          );*/
         } else if (state is UpdateStaffSuccess) {
           context.read<FeaturedStaffCubit>().fetchFeaturedStaff();
-          Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Staff Updated successfully')),
-          );
+          context.go('/manager_home?tab=1');
+          //Navigator.pop(context);
+          CustomSnackBar.showSnackBar(context, msg: AppLocalizations.of(context).translate('staff_updated_successfully'),);
+          /*ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(local.translate("staff_updated_successfully"))),
+          );*/
         } else if (state is ImagePickedSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Image picked successfully')),
-          );
+          CustomSnackBar.showSnackBar(context, msg: AppLocalizations.of(context).translate('image_picked_successfully'),);
+          /*ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(local.translate("image_picked_successfully"))),
+          );*/
         }
       },
       builder: (context, state) =>  Center(
@@ -174,9 +187,9 @@ class _UpdateStaffViewBodyState extends State<UpdateStaffViewBody> {
                   ),
                   SizedBox(height: MediaQuery.of(context).size.width * .02),
                   CustomEditTextField(
-                    hintText: "Full name",
+                    hintText: local.translate("full_name"),
                     controller: userNameController,
-                    validator: (value) => value!.isEmpty ? 'Required*' : null,
+                    validator: (value) => value!.isEmpty ? local.translate("validate_required") : null,
                     textCapitalization: TextCapitalization.words,
                     enabled: true,
                     obscureText: false,
@@ -184,8 +197,8 @@ class _UpdateStaffViewBodyState extends State<UpdateStaffViewBody> {
                   SizedBox(height: MediaQuery.of(context).size.width * .02),
                   CustomEditTextField(
                     controller: emailController,
-                    hintText: 'Email',
-                    validator: (value) => value!.isEmpty ? 'Required*' : null,
+                    hintText: local.translate("email"),
+                    validator: (value) => value!.isEmpty ? null : null,
                     textCapitalization: TextCapitalization.words,
                     enabled: true,
                     obscureText: false,
@@ -193,8 +206,8 @@ class _UpdateStaffViewBodyState extends State<UpdateStaffViewBody> {
                   SizedBox(height: MediaQuery.of(context).size.width * .02),
                   CustomEditTextField(
                       controller: passwordController,
-                      hintText: 'Password',
-                      validator: (value) => value!.isEmpty ? 'Required*' : null,
+                      hintText: local.translate("password"),
+                      validator: (value) => value!.isEmpty ? null : null,
                       enabled: true,
                       obscureText: UpdateStaffCubit.get(context).isPassShow,
                       suffixIcon: UpdateStaffCubit.get(context).suffixIcon,
@@ -205,8 +218,8 @@ class _UpdateStaffViewBodyState extends State<UpdateStaffViewBody> {
                   SizedBox(height: MediaQuery.of(context).size.width * .02),
                   CustomEditTextField(
                     controller: numberController,
-                    hintText: 'Number',
-                    validator: (value) => value!.isEmpty ? 'Required*' : null,
+                    hintText: local.translate("number"),
+                    validator: (value) => value!.isEmpty ? local.translate("validate_required") : null,
                     textCapitalization: TextCapitalization.words,
                     enabled: true,
                     obscureText: false,
@@ -245,17 +258,17 @@ class _UpdateStaffViewBodyState extends State<UpdateStaffViewBody> {
                     onChanged: (value) {
                       setState(() {
                         selectedItem = value!;
-                        value == "Warehouse guard" ? roleController.text = "warehourseguard" : roleController.text = "secr";
+                        value == "Warehouse guard" ? roleController.text = "warehouseguard" : roleController.text = "secretary";
                       });
                     },
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
-                        return 'Please select role!';
+                        return '${local.translate("please_select_role")}!';
                       }
                       return null;
                     },
-                    hint: const Text(
-                        "Role"
+                    hint: Text(
+                        local.translate("role")
                     ),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.width * .02),
@@ -268,9 +281,10 @@ class _UpdateStaffViewBodyState extends State<UpdateStaffViewBody> {
                             backgroundColor: WidgetStateProperty.all(ColorManager.bluelight),
                           ),
                           onPressed: state is UpdateStaffLoading ? () {} : (){
-                            Navigator.pop(context);
+                            context.go('/manager_home?tab=1');
+                            //Navigator.pop(context);
                           },
-                          child: Text('Cancel', style: StyleManager.h4Regular(color: ColorManager.bc0)),
+                          child: Text(local.translate("cancel"), style: StyleManager.h4Regular(color: ColorManager.bc0)),
                         ),
                         const Spacer(),
                         ElevatedButton(
@@ -278,7 +292,7 @@ class _UpdateStaffViewBodyState extends State<UpdateStaffViewBody> {
                             backgroundColor: WidgetStateProperty.all(ColorManager.bluelight),
                           ),
                           onPressed: register,
-                          child: state is UpdateStaffLoading ? const Center(child: CircularProgressIndicator()) : Text('Save', style: StyleManager.h4Regular(color: ColorManager.bc0)),
+                          child: state is UpdateStaffLoading ? const Center(child: CircularProgressIndicator()) : Text(local.translate("save"), style: StyleManager.h4Regular(color: ColorManager.bc0)),
                         ),
                       ],
                     ),
@@ -292,80 +306,3 @@ class _UpdateStaffViewBodyState extends State<UpdateStaffViewBody> {
     );
   }
 }
-
-/*class UpdateSecurityInformation extends StatelessWidget {
-  UpdateSecurityInformation({Key? key, required this.showStaffDetailsModel}) : super(key: key);
-
-  final ShowStaffDetailsModel showStaffDetailsModel;
-
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  Uint8List? selectedImage;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: MediaQuery.of(context).size.width / 3,
-        vertical: MediaQuery.of(context).size.width / 79,
-      ),
-      child: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(height: MediaQuery.of(context).size.width * .02),
-              CustomEditTextField(
-                controller: emailController,
-                hintText: 'Email',
-                validator: (value) => value!.isEmpty ? 'Required*' : null,
-                textCapitalization: TextCapitalization.words,
-                enabled: true,
-                obscureText: false,
-              ),
-              SizedBox(height: MediaQuery.of(context).size.width * .02),
-              CustomEditTextField(
-                controller: passwordController,
-                hintText: 'Password',
-                validator: (value) => value!.isEmpty ? 'Required*' : null,
-                enabled: true,
-                obscureText: true,
-              ),
-              SizedBox(height: MediaQuery.of(context).size.width * .02),
-              Align(
-                alignment: AlignmentDirectional.centerEnd,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(ColorManager.bluelight),
-                  ),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate() && selectedImage != null) {
-                      context.read<UpdateStaffCubit>().fetchUpdateStaff(
-                        id: showStaffDetailsModel.id,
-                        name: "",
-                        email: emailController.text,
-                        number: "",
-                        password: passwordController.text,
-                        role: "",
-                        imageBytes: selectedImage!,
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Please select an image.')),
-                      );
-                    }
-                  },
-                  child: state is UpdateStaffLoading ? const Center(child: CircularProgressIndicator()) : Text('Save', style: StyleManage.h4Regular(color: ColorManager.bc0)),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}*/

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import '../../core/utils/shared_preferences_helper.dart';
 import '../../models/Secertary Model/course_model.dart';
+import '../../models/notification_data.dart';
 import '../notification_service.dart';
 import '../token_service.dart';
 
@@ -78,6 +79,8 @@ class CourseService {
 
   Future<void> addCourse(Course course) async {
     try {
+
+
       final response = await _dio.post(
         'http://127.0.0.1:8000/api/addcourse',
         data: {
@@ -97,18 +100,38 @@ class CourseService {
       );
 
       if (response.statusCode == 200) {
-
         String accessToken = await _tokenService.fetchAccessToken();
-
         String? managerFcmToken = await _tokenService.fetchFcmTokenByRole('manager');
+  //      String? SecetaryFcmToken = await _tokenService.fetchFcmTokenByRole('secretary');
+        final bool? manager_falge = await SharedPreferencesHelper.getCheckFlag();
 
-        if (managerFcmToken != null) {
+        print(managerFcmToken);
+  //      print(SecetaryFcmToken);
+        print(manager_falge);
+
+        if (managerFcmToken != null && manager_falge==true) {
+          // Send the notification
           await _notificationService.sendNotification(accessToken, managerFcmToken);
-          print('Notification has sent to Manager FCM token correctly');
+          print('Notification has been sent to Manager FCM token successfully');
+
         } else {
-          print('Manager FCM token is null');
+          print('Manager Device token is not turned on yet');
         }
-      } else {
+        if (managerFcmToken != null) {
+          // Store the notification
+          NotificationData notification = NotificationData(
+            fcmToken: managerFcmToken,
+            title: 'Course Request ',
+            body: 'Secertary Added a new Course',
+          );
+
+          await _tokenService.storeNotification(notification);}
+
+        print('Course added successfully.');
+
+      }
+
+      else {
         throw Exception('Failed to add course');
       }
     } catch (error) {

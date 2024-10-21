@@ -30,6 +30,7 @@ class PendingTrainerCubit extends Cubit<PendingTrainerState> {
     try {
       await _pendingTrainerService.rejectRequest(id);
       fetchPendingTrainers();
+
     } catch (e) {
       emit(PendingTrainerError(e.toString()));
     }

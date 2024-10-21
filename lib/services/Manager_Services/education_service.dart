@@ -7,11 +7,12 @@ class EducationService {
     try {
       final response = await _dio.get('http://127.0.0.1:8000/api/ratecompletedcourses');
       if (response.statusCode == 200) {
-        return response.data['RateCompletedCourses'];
+        return response.data['RateCompletedCourses'] ?? '0.00';
       } else {
         throw Exception('Failed to load rate of completed courses');
       }
-    } catch (error) {
+    } on DioError catch (error) {
+      print(error);
       throw Exception('Failed to load rate of completed courses: $error');
     }
   }
@@ -20,7 +21,7 @@ class EducationService {
     try {
       final response = await _dio.get('http://127.0.0.1:8000/api/ratecompletedbeneficiary');
       if (response.statusCode == 200) {
-        return response.data['RateCopmleted'];
+        return response.data['RateCopmleted'] ?? '0.00';
       } else {
         throw Exception('Failed to load rate of completed beneficiaries');
       }
@@ -33,7 +34,7 @@ class EducationService {
     try {
       final response = await _dio.get('http://127.0.0.1:8000/api/rateproceesingbeneficiary');
       if (response.statusCode == 200) {
-        return response.data['RateProceesing'];
+        return response.data['RateProceesing'] ?? '0.00';
       } else {
         throw Exception('Failed to load rate of processing beneficiaries');
       }
@@ -46,7 +47,7 @@ class EducationService {
     try {
       final response = await _dio.get('http://127.0.0.1:8000/api/getaverageage');
       if (response.statusCode == 200) {
-        return response.data['average_age'];
+        return response.data['average_age'] ?? 0;
       } else {
         throw Exception('Failed to load average age');
       }

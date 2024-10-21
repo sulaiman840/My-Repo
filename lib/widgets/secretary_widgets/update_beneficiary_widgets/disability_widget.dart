@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../models/Secertary Model/beneficiary_model.dart';
 
 class DisabilityWidget extends StatelessWidget {
@@ -33,15 +34,15 @@ class DisabilityWidget extends StatelessWidget {
                   children: [
                     TextFormField(
                       initialValue: disabilities[index].nameDisability,
-                      decoration: InputDecoration(labelText: 'Disability Name'),
+                      decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('disability_name')),
                       onSaved: (value) {
                         disabilities[index].nameDisability = value!;
                       },
                     ),
-                    if (title != "Family Member Disabilities")
+                    if (title != AppLocalizations.of(context).translate('family_member_disabilities'))
                       TextFormField(
                         initialValue: disabilities[index].rateDisability,
-                        decoration: InputDecoration(labelText: 'Disability Rate'),
+                        decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('disability_rate')),
                         onSaved: (value) {
                           disabilities[index].rateDisability = value!;
                         },
@@ -53,7 +54,7 @@ class DisabilityWidget extends StatelessWidget {
             ),
             if (disabilities.isEmpty)
               Text(
-                'No disabilities added.',
+                AppLocalizations.of(context).translate('no_disabilities_added'),
                 style: TextStyle(fontSize: 16),
               ),
           ],

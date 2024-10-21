@@ -1,10 +1,15 @@
 import 'package:dio/dio.dart';
 import '../../core/utils/shared_preferences_helper.dart';
 import '../../models/Pending Model/pending_beneficiary_request_model.dart';
+import '../../models/notification_data.dart';
 import '../dio_error.dart';
+import '../notification_service.dart';
+import '../token_service.dart';
 
 class PendingBeneficiaryService {
   final Dio _dio = Dio();
+  final TokenService _tokenService = TokenService();
+  final NotificationService _notificationService = NotificationService();
   static const int maxRetries = 3;
   static const int initialDelay = 1000;
 
@@ -60,8 +65,40 @@ class PendingBeneficiaryService {
           },
         ),
       );
-      if (response.statusCode != 200) {
-        throw Exception('Failed to approve request');
+      // if (response.statusCode != 200) {
+      //   throw Exception('Failed to approve request');
+      // }
+      if (response.statusCode == 200) {
+
+        String accessToken = await _tokenService.fetchAccessToken();
+        String? SecretaryFcmToken = await _tokenService.fetchFcmTokenByRole('secretary');
+        final bool? manager_falge = await SharedPreferencesHelper.getCheckFlag();
+        print(SecretaryFcmToken);
+
+        print(manager_falge);
+
+        if (SecretaryFcmToken != null && manager_falge==false) {
+          // Send the notification
+          await _notificationService.sendNotification(accessToken, SecretaryFcmToken);
+          print('Notification has been sent to Secretary FCM token successfully');
+
+        } else {
+      //    print('Secretary Device is not  turned on yet');
+          print('hhhhhhhh');
+        }
+        if (SecretaryFcmToken != null) {
+          // Store the notification
+          NotificationData notification = NotificationData(
+            fcmToken: SecretaryFcmToken,
+            title: 'Manager Approve a Beneficiary',
+            body: 'a new Beneficiary has been accepted in our center',
+          );
+
+          await _tokenService.storeNotification(notification);}
+
+        print('Beneficiary approved successfully.');
+
+
       }
     } catch (e) {
       throw Exception(DioErrorHandler.handleError(e));
@@ -147,7 +184,7 @@ class PendingBeneficiaryService {
         'numberline': numberLine,
         'numberPhone': numberPhone,
         'numberId': numberId,
-        'educationalAttainment': educationalAttainments.map((e) => e.toJson()).toList(),
+        'educational': educationalAttainments.map((e) => e.toJson()).toList(),
         'previousTrainingCourses': previousTrainingCourses.map((e) => e.toJson()).toList(),
         'foreignLanguages': foreignLanguages.map((e) => e.toJson()).toList(),
         'computerDriving': computerDriving,

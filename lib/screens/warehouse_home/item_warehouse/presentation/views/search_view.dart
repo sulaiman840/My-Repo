@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/localization/app_localizations.dart';
 import '../../../../../core/utils/service_locator.dart';
-import '../../../../../widgets/general_widgets/common_scaffold.dart';
+import '../../../home/widget/common_scaffold_wear_house.dart';
 import '../../data/repos/item_repo_impl.dart';
 import '../manager/delete_item_cubit/delete_item_cubit.dart';
 import '../manager/search_item_cubit/search_item_cubit.dart';
@@ -17,8 +18,8 @@ class SearchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CommonScaffold(
-      title: "WareHouse Manager",
+    return CommonScaffoldWearHouse(
+      title: AppLocalizations.of(context).translate('warehouse_home_title'),
       scaffoldKey: _keyScaffold,
       body: MultiBlocProvider(
         providers: [
@@ -37,9 +38,12 @@ class SearchView extends StatelessWidget {
             },
           ),
         ],
-        child: SearchViewBody(
-          typeId: typeId,
-          categoryId: categoryId,
+        child: Container(
+          color: Colors.white,
+          child: SearchViewBody(
+            typeId: typeId,
+            categoryId: categoryId,
+          ),
         ),
       ),
     );

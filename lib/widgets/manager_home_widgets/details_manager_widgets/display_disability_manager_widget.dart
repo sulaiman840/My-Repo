@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 import '../../../../core/utils/color_manager.dart';
 import '../../../../models/Secertary Model/beneficiary_model.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../models/Pending Model/pending_beneficiary_request_model.dart';
 
 class DisplayDisabilityManagerWidget extends StatelessWidget {
@@ -27,7 +28,7 @@ class DisplayDisabilityManagerWidget extends StatelessWidget {
         children: [
           Text(disability.nameDisability ?? '', style: TextStyle(fontSize: 16, color: ColorManager.bc4)),
           if (disability.rateDisability != null)
-            Text('Rate: ${disability.rateDisability}', style: TextStyle(fontSize: 16, color: ColorManager.bc4)),
+            Text('${AppLocalizations.of(context).translate('rate')}: ${disability.rateDisability}', style: TextStyle(fontSize: 16, color: ColorManager.bc4)),
         ],
       ),
     );

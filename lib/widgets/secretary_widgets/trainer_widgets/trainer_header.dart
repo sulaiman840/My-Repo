@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../../../core/utils/color_manager.dart';
+import '../../../core/localization/app_localizations.dart';
 
 class TrainerHeader extends StatelessWidget {
   const TrainerHeader({Key? key}) : super(key: key);
@@ -16,19 +17,19 @@ class TrainerHeader extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-              child: Text('ID',
+              child: Text(AppLocalizations.of(context).translate('ID'),
                   style: TextStyle(fontWeight: FontWeight.bold, color: ColorManager.bc5))),
           Expanded(
               flex: 3,
-              child: Text('Name',
+              child: Text(AppLocalizations.of(context).translate('name'),
                   style: TextStyle(fontWeight: FontWeight.bold, color: ColorManager.bc5))),
           Expanded(
               flex: 4,
-              child: Text('Email',
+              child: Text(AppLocalizations.of(context).translate('email'),
                   style: TextStyle(fontWeight: FontWeight.bold, color: ColorManager.bc5))),
           Expanded(
               flex: 4,
-              child: Text('Phone',
+              child: Text(AppLocalizations.of(context).translate('phone'),
                   textAlign: TextAlign.start,
                   style: TextStyle(fontWeight: FontWeight.bold, color: ColorManager.bc5))),
         ],

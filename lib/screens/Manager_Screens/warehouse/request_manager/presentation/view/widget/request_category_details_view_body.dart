@@ -1,14 +1,19 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../../../../core/localization/app_localizations.dart';
 import '../../../../../../../core/utils/app_manager.dart';
 import '../../../../../../../core/utils/color_manager.dart';
-import '../../../../../../warehouse_home/category_warehouse/data/models/all_request_category_model.dart';
-import '../../../../../../warehouse_home/category_warehouse/presentation/manager/accept_request_cubit/accept_request_cubit.dart';
-import '../../../../../../warehouse_home/category_warehouse/presentation/manager/accept_request_cubit/accept_request_state.dart';
-import '../../../../../../warehouse_home/category_warehouse/presentation/manager/reject_request_cubit/reject_request_cubit.dart';
-import '../../../../../../warehouse_home/category_warehouse/presentation/manager/reject_request_cubit/reject_request_state.dart';
-import '../../../../../../warehouse_home/category_warehouse/presentation/manager/request_category_cubit/request_category_cubit.dart';
+import '../../../../../../../widgets/custom_snack_bar.dart';
+import '../../../data/models/all_request_category_model.dart';
+import '../../manager/accept_request_cubit/accept_request_cubit.dart';
+import '../../manager/accept_request_cubit/accept_request_state.dart';
+import '../../manager/reject_request_cubit/reject_request_cubit.dart';
+import '../../manager/reject_request_cubit/reject_request_state.dart';
+import '../../manager/request_category_cubit/request_category_cubit.dart';
 
 class RequestCategoryDetailsViewBody extends StatelessWidget {
   const RequestCategoryDetailsViewBody({Key? key, required this.allRequestCategory}) : super(key: key);
@@ -23,33 +28,41 @@ class RequestCategoryDetailsViewBody extends StatelessWidget {
       listener: (context, state) {
         if (state is AcceptRequestSuccess) {
           context.read<RequestCategoryCubit>().fetchRequestCategories();
-          Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Accept successfully")),
-          );
+          context.go('/manager_home?tab=3');
+          //Navigator.pop(context);
+          CustomSnackBar.showSnackBar(context, msg: AppLocalizations.of(context).translate('accept_successfully'),);
+          /*ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(AppLocalizations.of(context).translate('accept_successfully'))),
+          );*/
         } else if (state is AcceptRequestFailure) {
           context.read<RequestCategoryCubit>().fetchRequestCategories();
-          Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Accept failed")),
-          );
+          context.go('/manager_home?tab=3');
+          //Navigator.pop(context);
+          CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('accept_failed'),);
+          /*ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(AppLocalizations.of(context).translate('accept_failed'))),
+          );*/
         }
       },
       builder: (context, state) {
         return BlocConsumer<RejectRequestCubit, RejectRequestState>(
           listener: (contextReject, stateReject) {
-            if (stateReject is AcceptRequestSuccess) {
+            if (stateReject is RejectRequestSuccess) {
               contextReject.read<RequestCategoryCubit>().fetchRequestCategories();
+              context.go('/manager_home?tab=3');
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Reject successfully")),
-              );
-            } else if (stateReject is AcceptRequestFailure) {
+              CustomSnackBar.showSnackBar(context, msg: AppLocalizations.of(context).translate('reject_successfully'),);
+              /*ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(AppLocalizations.of(context).translate('reject_successfully'))),
+              );*/
+            } else if (stateReject is RejectRequestFailure) {
               contextReject.read<RequestCategoryCubit>().fetchRequestCategories();
+              context.go('/manager_home?tab=3');
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Reject failed")),
-              );
+              CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('reject_failed'),);
+              /*ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(AppLocalizations.of(context).translate('reject_failed'))),
+              );*/
             }
           },
           builder: (contextReject, stateReject) {
@@ -72,10 +85,10 @@ class RequestCategoryDetailsViewBody extends StatelessWidget {
                               color: Colors.green,
                             ),
                             child: state is AcceptRequestLoading ? const Center(child: CircularProgressIndicator(color: ColorManager.blue,),)
-                                : const Center(
+                                : Center(
                               child: Text(
-                                'Approve',
-                                style: TextStyle(
+                                AppLocalizations.of(context).translate('approve'),
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: AppSize.s16,
                                 ),
@@ -97,10 +110,10 @@ class RequestCategoryDetailsViewBody extends StatelessWidget {
                               color: Colors.red,
                             ),
                             child: stateReject is RejectRequestLoading ? const Center(child: CircularProgressIndicator(color: ColorManager.blue,),)
-                                : const Center(
+                                : Center(
                               child: Text(
-                                'Reject',
-                                style: TextStyle(
+                                AppLocalizations.of(context).translate('reject'),
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: AppSize.s16,
                                 ),
@@ -143,16 +156,16 @@ class RequestCategoryDetailsViewBody extends StatelessWidget {
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          const Text(
-                                            "Category name",
-                                            style: TextStyle(
+                                          Text(
+                                            AppLocalizations.of(context).translate('category_name'),
+                                            style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 16.0,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
                                           Text(
-                                            allRequestCategory.status,
+                                            getName(allRequestCategory.requsetPending),
                                             style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 15.0,
@@ -181,9 +194,9 @@ class RequestCategoryDetailsViewBody extends StatelessWidget {
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          const Text(
-                                            "Created at",
-                                            style: TextStyle(
+                                          Text(
+                                            AppLocalizations.of(context).translate('created_at'),
+                                            style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 16.0,
                                               fontWeight: FontWeight.w600,
@@ -219,9 +232,9 @@ class RequestCategoryDetailsViewBody extends StatelessWidget {
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          const Text(
-                                            "Last Updated",
-                                            style: TextStyle(
+                                          Text(
+                                            AppLocalizations.of(context).translate('last_updated'),
+                                            style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 16.0,
                                               fontWeight: FontWeight.w600,
@@ -247,7 +260,7 @@ class RequestCategoryDetailsViewBody extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Icon(
-                                      Icons.assignment,
+                                      Icons.watch_later_outlined,
                                       color: ColorManager.blue,
                                     ),
                                     Padding(
@@ -257,9 +270,9 @@ class RequestCategoryDetailsViewBody extends StatelessWidget {
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          const Text(
-                                            "Request status",
-                                            style: TextStyle(
+                                          Text(
+                                            AppLocalizations.of(context).translate('request_status'),
+                                            style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 16.0,
                                               fontWeight: FontWeight.w600,
@@ -291,5 +304,20 @@ class RequestCategoryDetailsViewBody extends StatelessWidget {
           },
         );
       },
-    );  }
+    );
+  }
+  String getName(String list){
+    String name1 = "";
+    int i = 0;
+    for(i = 9; i < list.length /*list[i] == '"'*/ ; i++){
+      if(allRequestCategory.requsetPending[i] == '"') {
+        break;
+      }
+      name1 = name1 + allRequestCategory.requsetPending[i];
+      log("$name1**********");
+    }
+    log(i.toString());
+    log("$name1----------");
+    return name1;
+  }
 }

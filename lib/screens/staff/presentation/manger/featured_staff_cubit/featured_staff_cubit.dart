@@ -16,5 +16,5 @@ class FeaturedStaffCubit extends Cubit<FeaturedStaffState> {
         emit(FeaturedStaffSuccess(showStaff));
       }
     );
-}
+  }
 }

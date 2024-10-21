@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../models/Secertary Model/beneficiary_model.dart';
 
 class ForeignLanguageWidget extends StatelessWidget {
@@ -20,7 +21,7 @@ class ForeignLanguageWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Foreign Languages',
+              AppLocalizations.of(context).translate('foreign_languages'),
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             ListView.builder(
@@ -32,14 +33,14 @@ class ForeignLanguageWidget extends StatelessWidget {
                   children: [
                     TextFormField(
                       initialValue: foreignLanguages[index].nameLanguage,
-                      decoration: InputDecoration(labelText: 'Language'),
+                      decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('language')),
                       onSaved: (value) {
                         foreignLanguages[index].nameLanguage = value!;
                       },
                     ),
                     TextFormField(
                       initialValue: foreignLanguages[index].level,
-                      decoration: InputDecoration(labelText: 'Level'),
+                      decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('level')),
                       onSaved: (value) {
                         foreignLanguages[index].level = value!;
                       },

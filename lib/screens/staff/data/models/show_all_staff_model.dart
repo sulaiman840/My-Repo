@@ -14,7 +14,7 @@ class ShowAllStaffModel {
   late final String name;
   late final String role;
   late final String email;
-  late final int number;
+  late final String number;
   late final String? imagePath;
   late final String? emailVerifiedAt;
   late final String createdAt;

@@ -15,9 +15,9 @@ class SearchItemsModel {
     required this.total,
   });
   late final int currentPage;
-  late final List<DataSearch> dataSearch;
+  late final List<DataSearch>? dataSearch;
   late final String firstPageUrl;
-  late final int from;
+  late final int? from;
   late final int lastPage;
   late final String lastPageUrl;
   late final List<Links> links;
@@ -25,7 +25,7 @@ class SearchItemsModel {
   late final String path;
   late final int perPage;
   late final String? prevPageUrl;
-  late final int to;
+  late final int? to;
   late final int total;
 
   SearchItemsModel.fromJson(Map<String, dynamic> json){
@@ -47,7 +47,7 @@ class SearchItemsModel {
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['current_page'] = currentPage;
-    data['data'] = dataSearch.map((e)=>e.toJson()).toList();
+    data['data'] = dataSearch!.map((e)=>e.toJson()).toList();
     data['first_page_url'] = firstPageUrl;
     data['from'] = from;
     data['last_page'] = lastPage;
@@ -82,10 +82,10 @@ class DataSearch {
   late final String name;
   late final String description;
   late final int quantity;
-  late final int minimumQuantity;
+  late final int? minimumQuantity;
   late final int status;
   late final int? available;
-  late final String expiredDate;
+  late final String? expiredDate;
   late final int typeId;
   late final int categoryId;
   late final String createdAt;

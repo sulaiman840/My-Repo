@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../core/localization/app_localizations.dart';
 import '../../core/utils/color_manager.dart';
 import '../../widgets/manager_home_widgets/custom_app_bar.dart';
 import '../../widgets/manager_home_widgets/custom_tab_bar_view.dart';
-import '../../widgets/manager_home_widgets/main_nav_bar.dart';
-import '../../widgets/manager_home_widgets/search_bar.dart';
+import '../../widgets/general_widgets/main_nav_bar.dart';
+import '../../widgets/general_widgets/search_bar.dart';
 import '../../widgets/manager_home_widgets/tab_bar.dart';
 
-
 class ManagerHome extends StatefulWidget {
-  const ManagerHome({super.key});
+  final int tabIndex;
+
+  const ManagerHome({super.key, required this.tabIndex});
 
   @override
   _ManagerHomeState createState() => _ManagerHomeState();
@@ -21,7 +24,17 @@ class _ManagerHomeState extends State<ManagerHome> with SingleTickerProviderStat
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length:5, vsync: this);
+    _tabController = TabController(length: 4, vsync: this, initialIndex: widget.tabIndex);
+
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        final newIndex = _tabController.index;
+        context.go(context.namedLocation(
+          'manager_home',
+          queryParameters: {'tab': newIndex.toString()},
+        ));
+      }
+    });
   }
 
   @override
@@ -39,16 +52,14 @@ class _ManagerHomeState extends State<ManagerHome> with SingleTickerProviderStat
 
     return Scaffold(
       key: _scaffoldKey,
-      appBar: isMobile
-          ? CustomAppBar(scaffoldKey: _scaffoldKey)
-          : null,
+      appBar: isMobile ? CustomAppBar(scaffoldKey: _scaffoldKey) : null,
       drawer: isMobile ? MainNavBar() : null,
       body: Row(
         children: [
           if (!isMobile)
             Container(
               width: 200,
-              color:  ColorManager.bc5,
+              color: ColorManager.bc5,
               child: MainNavBar(),
             ),
           Expanded(
@@ -58,8 +69,9 @@ class _ManagerHomeState extends State<ManagerHome> with SingleTickerProviderStat
                   Container(
                     color: ColorManager.bc0,
                     child: Search_Bar(
-                      title: 'Manager Dashboard',
-                      searchIconColor:ColorManager.bc4,
+                      title: AppLocalizations.of(context).translate('Manager_Dashboard'),
+                //      title: 'Manager Dashboard',
+                      searchIconColor: ColorManager.bc4,
                       fillColor: ColorManager.bc1,
                     ),
                   ),

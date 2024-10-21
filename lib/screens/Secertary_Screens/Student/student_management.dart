@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project2/screens/Secertary_Screens/Student/pending_beneficiary_screen.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import '../../../Bloc/secertary/student/beneficiary_cubit.dart';
 import '../../../Bloc/secertary/student/beneficiary_state.dart';
+import '../../../Bloc/secertary/student/beneficiary_excel_cubit.dart';
+import '../../../Bloc/secertary/student/beneficiary_excel_state.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../models/Secertary Model/beneficiary_model.dart';
 import '../../../core/utils/color_manager.dart';
-import 'update_beneficiary_dialog.dart';
-import 'add_beneficiary_screen.dart';
-import 'beneficiary_details_screen.dart';
+import '../../../widgets/secretary_widgets/trainer_widgets/trainer_header.dart';
 
 class BeneficiaryManagementScreen extends StatefulWidget {
   const BeneficiaryManagementScreen({super.key});
+
   @override
   _BeneficiaryManagementScreenState createState() => _BeneficiaryManagementScreenState();
 }
@@ -25,24 +28,23 @@ class _BeneficiaryManagementScreenState extends State<BeneficiaryManagementScree
   void _fetchBeneficiaries() {
     Future.microtask(() => context.read<BeneficiaryCubit>().fetchBeneficiaries());
   }
-  int a=0;
 
   void _confirmDelete(BuildContext context, int beneficiaryId) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Confirm Delete"),
-          content: Text("Are you sure you want to delete this beneficiary?"),
+          title: Text(AppLocalizations.of(context).translate('confirm_delete')),
+          content: Text(AppLocalizations.of(context).translate('delete_sure_beneficiary')),
           actions: [
             TextButton(
-              child: Text("Cancel"),
+              child: Text(AppLocalizations.of(context).translate('cancel')),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text("Delete"),
+              child: Text(AppLocalizations.of(context).translate('delete')),
               onPressed: () {
                 context.read<BeneficiaryCubit>().deleteBeneficiary(beneficiaryId);
                 Navigator.of(context).pop();
@@ -56,14 +58,30 @@ class _BeneficiaryManagementScreenState extends State<BeneficiaryManagementScree
   }
 
   void _showUpdateScreen(BuildContext context, DataBeneficiary beneficiary) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BeneficiaryUpdateScreen(beneficiary: beneficiary),
-      ),
-    ).then((_) {
-      _fetchBeneficiaries();
+    context.go('/update_beneficiary', extra: {
+      'beneficiary': beneficiary,
+      'callback': () {
+        print("Returned from update screen");
+     //   _fetchBeneficiaries();
+      },
     });
+  }
+
+  void _exportBeneficiaries() {
+    context.read<BeneficiaryExcelCubit>().exportToExcel(filters: {"gender": "Male"});
+  }
+
+  void _importBeneficiaries() {
+    context.read<BeneficiaryExcelCubit>().importFromExcel();
+  }
+
+  void _showSnackbar(String message, Color color) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: color,
+      ),
+    );
   }
 
   @override
@@ -73,12 +91,41 @@ class _BeneficiaryManagementScreenState extends State<BeneficiaryManagementScree
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          'Beneficiary Management',
+          AppLocalizations.of(context).translate('beneficiary_title'),
           style: TextStyle(fontWeight: FontWeight.bold, color: ColorManager.bc5),
         ),
         centerTitle: true,
         backgroundColor: ColorManager.bc1,
         actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                // decoration: BoxDecoration(
+                //   color: ColorManager.blue,
+                //   shape: BoxShape.circle,
+                // ),
+                child: IconButton(
+                  icon: const Icon(FontAwesomeIcons.fileImport,color: ColorManager.blue2,size: 27,),
+                  onPressed: _importBeneficiaries,
+                  tooltip: AppLocalizations.of(context).translate('import'),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Container(
+                // decoration: BoxDecoration(
+                //   color: ColorManager.blue,
+                //   shape: BoxShape.circle,
+                // ),
+                child: IconButton(
+                  icon: const Icon(FontAwesomeIcons.fileExport,color: ColorManager.blue2,size: 27),
+                  onPressed: _exportBeneficiaries,
+                  tooltip: AppLocalizations.of(context).translate('export'),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(width: 20),
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: Container(
@@ -87,16 +134,14 @@ class _BeneficiaryManagementScreenState extends State<BeneficiaryManagementScree
                 shape: BoxShape.circle,
               ),
               child: IconButton(
-                icon: Icon(Icons.add, color: Colors.white),
+                icon: const Icon(Icons.add, color: Colors.white),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => PendingBeneficiaryScreen()),
-                  ).then((_) {
-                    _fetchBeneficiaries();
-                  });
+                  context.go('/pending_beneficiary');
+                  //     .then((_) {
+                  //   _fetchBeneficiaries();
+                  // });
                 },
-                tooltip: 'Add Beneficiary',
+                tooltip: AppLocalizations.of(context).translate('add_beneficiary_title'),
               ),
             ),
           ),
@@ -106,39 +151,36 @@ class _BeneficiaryManagementScreenState extends State<BeneficiaryManagementScree
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-              decoration: BoxDecoration(
-                color: ColorManager.bc2,
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: Text('ID',
-                          style: TextStyle(fontWeight: FontWeight.bold, color: ColorManager.bc5))),
-                  Expanded(
-                      flex: 3,
-                      child: Text('Name',
-                          style: TextStyle(fontWeight: FontWeight.bold, color: ColorManager.bc5))),
-                  Expanded(
-                      flex: 4,
-                      child: Text('Email',
-                          style: TextStyle(fontWeight: FontWeight.bold, color: ColorManager.bc5))),
-                  Expanded(
-                      flex: 4,
-                      child: Text('Phone',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(fontWeight: FontWeight.bold, color: ColorManager.bc5))),
-                ],
+
+            const TrainerHeader(),
+            const SizedBox(height: 10),
+            BlocListener<BeneficiaryExcelCubit, BeneficiaryExcelState>(
+              listener: (context, state) {
+                if (state is BeneficiaryExcelImportSuccess) {
+                  _showSnackbar(AppLocalizations.of(context).translate('import_successful'), Colors.green);
+                  _fetchBeneficiaries();
+                } else if (state is BeneficiaryExcelExportSuccesss) {
+                  _showSnackbar(AppLocalizations.of(context).translate('export_successful'), Colors.green);
+                  _fetchBeneficiaries();
+                } else if (state is BeneficiaryExcelError) {
+                  _showSnackbar(state.message, Colors.red);
+                }
+              },
+              child: BlocBuilder<BeneficiaryExcelCubit, BeneficiaryExcelState>(
+                builder: (context, state) {
+                  if (state is BeneficiaryExcelLoading) {
+                    return const LinearProgressIndicator();
+                  }
+                  return const SizedBox.shrink();
+                },
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Expanded(
               child: BlocBuilder<BeneficiaryCubit, BeneficiaryState>(
                 builder: (context, state) {
                   if (state is BeneficiaryLoading) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   } else if (state is BeneficiaryLoaded) {
                     return ListView.builder(
                       itemCount: state.beneficiaries.length,
@@ -152,27 +194,49 @@ class _BeneficiaryManagementScreenState extends State<BeneficiaryManagementScree
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           child: ListTile(
-                            contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                            contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
                             title: Row(
                               children: [
                                 Expanded(
-                                    child: Text(beneficiary.id?.toString() ?? '',
-                                        style: TextStyle(color: ColorManager.bc5, fontWeight: FontWeight.w500))),
+                                  child: Text(
+                                    beneficiary.id?.toString() ?? '',
+                                    style: TextStyle(
+                                      color: ColorManager.bc5,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
                                 Expanded(
-                                    flex: 3,
-                                    child: Text(beneficiary.name ?? '',
-                                        style: TextStyle(color: ColorManager.bc5, fontWeight: FontWeight.w500))),
+                                  flex: 3,
+                                  child: Text(
+                                    beneficiary.name ?? '',
+                                    style: TextStyle(
+                                      color: ColorManager.bc5,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
                                 Expanded(
-                                    flex: 4,
-                                    child: Text(beneficiary.email ?? '',
-                                        style: TextStyle(color: ColorManager.bc5, fontWeight: FontWeight.w500))),
+                                  flex: 4,
+                                  child: Text(
+                                    beneficiary.email ?? '',
+                                    style: TextStyle(
+                                      color: ColorManager.bc5,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
                                 Expanded(
-                                    flex: 3,
-                                    child: Text(beneficiary.numberPhone ?? '',
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(color: ColorManager.bc5, fontWeight: FontWeight.w500))),
-
-
+                                  flex: 3,
+                                  child: Text(
+                                    beneficiary.numberPhone ?? '',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      color: ColorManager.bc5,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                             trailing: Row(
@@ -185,7 +249,7 @@ class _BeneficiaryManagementScreenState extends State<BeneficiaryManagementScree
                                   },
                                 ),
                                 IconButton(
-                                  icon: Icon(Icons.delete, color: Colors.red),
+                                  icon: const Icon(Icons.delete, color: Colors.red),
                                   onPressed: () {
                                     _confirmDelete(context, beneficiary.id!);
                                   },
@@ -193,16 +257,7 @@ class _BeneficiaryManagementScreenState extends State<BeneficiaryManagementScree
                               ],
                             ),
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => BeneficiaryDetailsScreen(
-                                    beneficiaryId: beneficiary.id!,
-                                  ),
-                                ),
-                              ).then((_) {
-                                _fetchBeneficiaries();
-                              });
+                              context.go('/beneficiary_detail/${beneficiary.id}');
                             },
                           ),
                         );

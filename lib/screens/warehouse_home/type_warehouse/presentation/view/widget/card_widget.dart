@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../core/helper/size.dart';
+import '../../../../../../core/localization/app_localizations.dart';
 import '../../../../../../core/utils/app_manager.dart';
 import '../../../../../../../core/utils/color_manager.dart';
 import '../../../../../../../core/utils/style_manager.dart';
@@ -26,19 +27,19 @@ class CardWidget extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                     Text(
-                'Hi, your name',
+                AppLocalizations.of(context).translate('hi'),
                 style: StyleManager.h3Bold(color: ColorManager.bc0),
               ),
               const SizedBox(
                 height: AppSize.s2,
               ),
                    Text(
-                'We are delighted to have you here! \nOur goal is to provide you with the best inventory management experience.'
+                '${AppLocalizations.of(context).translate('we_are')} \n${AppLocalizations.of(context).translate('our_goal')}'
                  ,  style: StyleManager.h4Medium(color: ColorManager.bc0),
           
               ),
                Text(
-                ' Let\'s work together to enhance your operational efficiency!',
+                 AppLocalizations.of(context).translate('lets_work'),
                                   style: StyleManager.h4Medium(color: ColorManager.bc0),
           
               ),

@@ -23,7 +23,7 @@ class DisplayEducationalAttainmentWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(attainment.educationalAttainmentLevel ?? '', style: TextStyle(fontSize: 16, color: ColorManager.bc4)),
+      //    Text(attainment.educationalAttainmentLevel ?? '', style: TextStyle(fontSize: 16, color: ColorManager.bc4)),
           Text(attainment.specialization ?? '', style: TextStyle(fontSize: 16, color: ColorManager.bc4)),
           Text(attainment.certificate ?? '', style: TextStyle(fontSize: 16, color: ColorManager.bc4)),
           Text(attainment.graduationRate ?? '', style: TextStyle(fontSize: 16, color: ColorManager.bc4)),

@@ -4,7 +4,10 @@ import 'package:dartz/dartz.dart';
 
 import '../../../../../../core/errors/failures.dart';
 import '../models/all_items_model.dart';
+import '../models/consume_item_model.dart';
 import '../models/create_item_model.dart';
+import '../models/expired_items_model.dart';
+import '../models/expiring_soon_items_model.dart';
 import '../models/item_by_id_model.dart';
 import '../models/search_items_model.dart';
 import '../models/update_item_model.dart';
@@ -20,8 +23,8 @@ abstract class ItemRepo {
     required int categoryId,
     required int quantity,
     required String description,
-    required String expiredDate,
-    required int minimumQuantity,
+    required String? expiredDate,
+    required int? minimumQuantity,
   });
 
   Future<Either<Failure, dynamic>> fetchDeleteItem({
@@ -59,4 +62,19 @@ abstract class ItemRepo {
   Future<Either<Failure, dynamic>> fetchExportToExcel({
     required List<String> fields,
   });
+
+  Future<Either<Failure, ConsumeItemModel>> fetchConsumeItem({
+    required int id,
+    required int quantityConsume,
+  });
+
+  Future<Either<Failure, ExpiringSoonItemsModel>> fetchExpiringSoonItems({
+    required int paginate,
+  });
+
+  Future<Either<Failure, ExpiredItemsModel>> fetchExpiredItems({
+    required int paginate,
+  });
+
+  Future<Either<Failure, dynamic>> fetchCheckExpiring();
 }

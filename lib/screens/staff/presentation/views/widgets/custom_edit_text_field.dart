@@ -16,6 +16,7 @@ class CustomEditTextField extends StatelessWidget {
   final Function? onTap;
   final Function? onFieldSubmitted;
   final bool? enabled;
+  final bool? readOnly;
   final double? suffixSize;
   final TextCapitalization? textCapitalization;
 
@@ -37,11 +38,13 @@ class CustomEditTextField extends StatelessWidget {
     this.enabled,
     this.suffixSize,
     this.textCapitalization,
+    this.readOnly,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      readOnly: readOnly ?? false,
       textCapitalization: textCapitalization ?? TextCapitalization.none,
       enabled: enabled,
       textAlign: TextAlign.start,

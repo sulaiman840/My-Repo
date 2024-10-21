@@ -3,11 +3,14 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:go_router/go_router.dart';
 import 'dart:typed_data';
 
+import '../../../../../core/localization/app_localizations.dart';
 import '../../../../../core/utils/assets_manager.dart';
 import '../../../../../core/utils/color_manager.dart';
 import '../../../../../core/utils/style_manager.dart';
+import '../../../../../widgets/custom_snack_bar.dart';
 import '../../manger/create_staff_cubit/create_staff_cubit.dart';
 import '../../manger/create_staff_cubit/create_staff_state.dart';
 import '../../manger/featured_staff_cubit/featured_staff_cubit.dart';
@@ -86,32 +89,41 @@ class _CreateStaffViewBodyState extends State<CreateStaffViewBody> {
         imageBytes: selectedImage!,
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select an image.')),
-      );
+      CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('please_select_an_image'),);
+      /*ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${AppLocalizations.of(context).translate("please_select_an_image")}.')),
+      );*/
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations local = AppLocalizations.of(context);
     return BlocConsumer<CreateStaffCubit, CreateStaffState>(
       listener: (context, state) {
         if (state is CreateStaffFailure) {
+          //context.read<FeaturedStaffCubit>().fetchFeaturedStaff();
+          context.go('/manager_home?tab=1');
+          //Navigator.pop(context);
+          CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('staff_created_failed'),);
+          /*ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(local.translate("staff_created_failed"))),
+          );*/
           context.read<FeaturedStaffCubit>().fetchFeaturedStaff();
-          Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Staff created failed")),
-          );
         } else if (state is CreateStaffSuccess) {
+          //context.read<FeaturedStaffCubit>().fetchFeaturedStaff();
+          context.go('/manager_home?tab=1');
+          //Navigator.pop(context);
+          CustomSnackBar.showSnackBar(context, msg: AppLocalizations.of(context).translate('staff_created_successfully'),);
+          /*ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(local.translate("staff_created_successfully"))),
+          );*/
           context.read<FeaturedStaffCubit>().fetchFeaturedStaff();
-          Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Staff created successfully')),
-          );
         } else if (state is ImagePickedSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Image picked successfully')),
-          );
+          CustomSnackBar.showSnackBar(context, msg: AppLocalizations.of(context).translate('image_picked_successfully'),);
+          /*ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(local.translate("image_picked_successfully"))),
+          );*/
         }
       },
       builder: (context, state) =>  Center(
@@ -170,9 +182,9 @@ class _CreateStaffViewBodyState extends State<CreateStaffViewBody> {
                   ),
                   SizedBox(height: MediaQuery.of(context).size.width * .02),
                   CustomEditTextField(
-                    hintText: "Full name",
+                    hintText: local.translate("full_name"),
                     controller: userNameController,
-                    validator: (value) => value!.isEmpty ? 'Required*' : null,
+                    validator: (value) => value!.isEmpty ? local.translate("validate_required") : null,
                     textCapitalization: TextCapitalization.words,
                     enabled: true,
                     obscureText: false,
@@ -180,8 +192,8 @@ class _CreateStaffViewBodyState extends State<CreateStaffViewBody> {
                   SizedBox(height: MediaQuery.of(context).size.width * .02),
                   CustomEditTextField(
                     controller: emailController,
-                    hintText: 'Email',
-                    validator: (value) => value!.isEmpty ? 'Required*' : null,
+                    hintText: local.translate("email"),
+                    validator: (value) => value!.isEmpty ? local.translate("validate_required") : null,
                     textCapitalization: TextCapitalization.words,
                     enabled: true,
                     obscureText: false,
@@ -189,8 +201,8 @@ class _CreateStaffViewBodyState extends State<CreateStaffViewBody> {
                   SizedBox(height: MediaQuery.of(context).size.width * .02),
                   CustomEditTextField(
                     controller: passwordController,
-                    hintText: 'Password',
-                    validator: (value) => value!.isEmpty ? 'Required*' : null,
+                    hintText: local.translate("password"),
+                    validator: (value) => value!.isEmpty ? local.translate("validate_required") : null,
                     enabled: true,
                     obscureText: CreateStaffCubit.get(context).isPassShow,
                     suffixIcon: CreateStaffCubit.get(context).suffixIcon,
@@ -201,8 +213,8 @@ class _CreateStaffViewBodyState extends State<CreateStaffViewBody> {
                   SizedBox(height: MediaQuery.of(context).size.width * .02),
                   CustomEditTextField(
                     controller: numberController,
-                    hintText: 'Number',
-                    validator: (value) => value!.isEmpty ? 'Required*' : null,
+                    hintText: local.translate("number"),
+                    validator: (value) => value!.isEmpty ? local.translate("validate_required") : null,
                     textCapitalization: TextCapitalization.words,
                     enabled: true,
                     obscureText: false,
@@ -241,17 +253,17 @@ class _CreateStaffViewBodyState extends State<CreateStaffViewBody> {
                     onChanged: (value) {
                       setState(() {
                         selectedItem = value!;
-                        value == "Warehouse guard" ? roleController.text = "warehourseguard" : roleController.text = "secretary";
+                        value == "Warehouse guard" ? roleController.text = "warehouseguard" : roleController.text = "secretary";
                       });
                     },
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
-                        return 'Please select role!';
+                        return local.translate("please_select_role");
                       }
                       return null;
                     },
-                    hint: const Text(
-                      "Role"
+                    hint: Text(
+                        local.translate("role")
                     ),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.width * .02),
@@ -264,9 +276,10 @@ class _CreateStaffViewBodyState extends State<CreateStaffViewBody> {
                             backgroundColor: WidgetStateProperty.all(ColorManager.bluelight),
                           ),
                           onPressed: state is CreateStaffLoading ? () {} : (){
-                            Navigator.pop(context);
+                            context.go('/manager_home?tab=1');
+                            //Navigator.pop(context);
                           },
-                          child: Text('Cancel', style: StyleManager.h4Regular(color: ColorManager.bc0)),
+                          child: Text(local.translate("cancel"), style: StyleManager.h4Regular(color: ColorManager.bc0)),
                         ),
                         const Spacer(),
                         ElevatedButton(
@@ -274,7 +287,7 @@ class _CreateStaffViewBodyState extends State<CreateStaffViewBody> {
                             backgroundColor: WidgetStateProperty.all(ColorManager.bluelight),
                           ),
                           onPressed: register,
-                          child: state is CreateStaffLoading ? const Center(child: CircularProgressIndicator()) : Text('Create', style: StyleManager.h4Regular(color: ColorManager.bc0)),
+                          child: state is CreateStaffLoading ? const Center(child: CircularProgressIndicator()) : Text(local.translate("create"), style: StyleManager.h4Regular(color: ColorManager.bc0)),
                         ),
                       ],
                     ),

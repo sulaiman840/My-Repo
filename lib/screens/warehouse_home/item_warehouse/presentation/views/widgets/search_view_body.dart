@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../../core/localization/app_localizations.dart';
 import '../../../../../../core/utils/app_manager.dart';
 import '../../../../../../core/utils/color_manager.dart';
 import '../../../../../../core/utils/style_manager.dart';
 import '../../../../../staff/presentation/views/widgets/custom_edit_text_field.dart';
 import '../../manager/search_item_cubit/search_item_cubit.dart';
 import '../../manager/search_item_cubit/search_item_state.dart';
-import '../all_items_view.dart';
 import 'search_list_view.dart';
 
 class SearchViewBody extends StatelessWidget {
   SearchViewBody({Key? key, required this.typeId, required this.categoryId}) : super(key: key);
 
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController maxQuantityController = TextEditingController(text: "40");
+  final TextEditingController maxQuantityController = TextEditingController(text: "100");
   final TextEditingController minQuantityController = TextEditingController(text: "0");
   final int paginate = 50;
   final int typeId;
@@ -30,6 +30,7 @@ class SearchViewBody extends StatelessWidget {
         return Padding(
           padding: const EdgeInsetsDirectional.only(
             top: AppPadding.p16,
+            bottom: AppPadding.p16,
             start: AppPadding.p16,
             end: AppPadding.p16,
           ),
@@ -37,22 +38,6 @@ class SearchViewBody extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /*IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (_, __, ___) => AllItemsView(
-                          typeId: typeId,
-                          categoryId: categoryId,
-                        ),
-                        transitionDuration: Duration.zero,
-                        transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
-                      ),
-                    );
-                  },
-                ),*/
                 Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,12 +51,12 @@ class SearchViewBody extends StatelessWidget {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          const Text("Max: "),
+                          Text(AppLocalizations.of(context).translate('max')),
                           SizedBox(
                             width: MediaQuery.of(context).size.width * .1,
                             child: CustomEditTextField(
                               controller: maxQuantityController,
-                              hintText: 'Quantity',
+                              hintText: AppLocalizations.of(context).translate('quantity'),
                               //validator: (value) => value!.isEmpty ? 'Required*' : null,
                               textCapitalization: TextCapitalization.words,
                               enabled: true,
@@ -85,12 +70,12 @@ class SearchViewBody extends StatelessWidget {
                           const SizedBox(
                             width: AppSize.s8,
                           ),
-                          const Text("Max: "),
+                          Text(AppLocalizations.of(context).translate('min')),
                           SizedBox(
                             width: MediaQuery.of(context).size.width * .1,
                             child: CustomEditTextField(
                               controller: minQuantityController,
-                              hintText: 'Quantity',
+                              hintText: AppLocalizations.of(context).translate('quantity'),
                               //validator: (value) => value!.isEmpty ? 'Required*' : null,
                               textCapitalization: TextCapitalization.words,
                               enabled: true,
@@ -112,7 +97,7 @@ class SearchViewBody extends StatelessWidget {
                                 _onSearch(context);
                               },
                               decoration: InputDecoration(
-                                hintText: 'Search...',
+                                hintText: AppLocalizations.of(context).translate('search_hint_text'),
                                 prefixIcon: const Icon(Icons.search, color: ColorManager.bc5),
                                 contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal:AppSize.s20),
                                 border: OutlineInputBorder(
@@ -148,19 +133,19 @@ class SearchViewBody extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            "Rank",
+                            AppLocalizations.of(context).translate('rank'),
                             style: StyleManager.body1Regular(),
                           ),
                           const SizedBox(width: AppSize.s50,),
                           Center(
                             child: Text(
-                              "Name",
+                              AppLocalizations.of(context).translate('name'),
                               style: StyleManager.body1Regular(color: ColorManager.blackColor),
                             ),
                           ),
                           const Spacer(),
                           Text(
-                            "Quantity",
+                            AppLocalizations.of(context).translate('quantity'),
                             style: StyleManager.body1Regular(color: ColorManager.blackColor),
                           ),
                           const SizedBox(height: AppSize.s50,),

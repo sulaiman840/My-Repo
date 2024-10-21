@@ -30,7 +30,7 @@ class FirebaseMessagingService {
           action: SnackBarAction(
             label: 'View',
             onPressed: () {
-              Navigator.of(navigatorKey.currentContext!).pushNamed(AppRouter.notifications);
+              //    Navigator.of(navigatorKey.currentContext!).pushNamed(AppRouter.notifications);
             },
 
           ),
@@ -53,6 +53,14 @@ class FirebaseMessagingService {
       print("User granted provisional permission");
     } else {
       print("User declined or has not accepted permission");
+    }
+  }
+  static Future<void> clearFcmToken() async {
+    try {
+      await FirebaseMessaging.instance.deleteToken();
+      print("FCM token cleared");
+    } catch (e) {
+      print("Error clearing FCM token: $e");
     }
   }
 

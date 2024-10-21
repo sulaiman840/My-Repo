@@ -8,12 +8,12 @@ import '../../../Bloc/secertary/student/beneficiary_state.dart';
 import '../../../Bloc/secertary/student/document_cubit.dart';
 import '../../../Bloc/secertary/student/beneficiary_course_cubit.dart';
 import '../../../Bloc/secertary/student/beneficiary_course_state.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/utils/color_manager.dart';
 import '../../../core/utils/shared_preferences_helper.dart';
 import '../../../models/Secertary Model/beneficiary_model.dart';
 import '../../../models/Secertary Model/beneficiary_course_model.dart';
 import '../../../services/Secertary Services/beneficiary_service.dart';
-
 import '../../../widgets/general_widgets/common_scaffold.dart';
 import '../../../widgets/secretary_widgets/details_beneficiary_widgets/beneficiary_details.dart';
 import '../../../widgets/secretary_widgets/details_beneficiary_widgets/document_manager.dart';
@@ -25,8 +25,7 @@ class BeneficiaryDetailsScreen extends StatefulWidget {
   BeneficiaryDetailsScreen({required this.beneficiaryId});
 
   @override
-  _BeneficiaryDetailsScreenState createState() =>
-      _BeneficiaryDetailsScreenState();
+  _BeneficiaryDetailsScreenState createState() => _BeneficiaryDetailsScreenState();
 }
 
 class _BeneficiaryDetailsScreenState extends State<BeneficiaryDetailsScreen> {
@@ -54,7 +53,7 @@ class _BeneficiaryDetailsScreenState extends State<BeneficiaryDetailsScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Register Beneficiary in Course'),
+          title: Text(AppLocalizations.of(context).translate('register_beneficiary_course')),
           content: Form(
             key: _formKey,
             child: Column(
@@ -76,10 +75,10 @@ class _BeneficiaryDetailsScreenState extends State<BeneficiaryDetailsScreen> {
                         onChanged: (value) {
                           selectedCourseId = value;
                         },
-                        decoration: InputDecoration(labelText: 'Select Course'),
+                        decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('select_course')),
                         validator: (value) {
                           if (value == null) {
-                            return 'Please select a course';
+                            return AppLocalizations.of(context).translate('please_select_course');
                           }
                           return null;
                         },
@@ -96,13 +95,13 @@ class _BeneficiaryDetailsScreenState extends State<BeneficiaryDetailsScreen> {
           ),
           actions: [
             TextButton(
-              child: Text('Cancel'),
+              child: Text(AppLocalizations.of(context).translate('cancel')),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Register'),
+              child: Text(AppLocalizations.of(context).translate('register')),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
@@ -129,7 +128,7 @@ class _BeneficiaryDetailsScreenState extends State<BeneficiaryDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffold(
-      title: 'Beneficiary Details',
+      title: AppLocalizations.of(context).translate('beneficiary_details'),
       scaffoldKey: GlobalKey<ScaffoldState>(),
       body: FutureBuilder<String?>(
         future: _userRoleFuture,
@@ -156,7 +155,7 @@ class _BeneficiaryDetailsScreenState extends State<BeneficiaryDetailsScreen> {
                             children: [
                               ElevatedButton(
                                 onPressed: () => _showCourseRegistrationDialog(context, beneficiary),
-                                child: Text('Register in a Course',style: TextStyle(color: ColorManager.bc0),),
+                                child: Text(AppLocalizations.of(context).translate('register_in_course'),style: TextStyle(color: ColorManager.bc0),),
                                 style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(ColorManager.blue)),
                               ),
                             ],
@@ -176,7 +175,6 @@ class _BeneficiaryDetailsScreenState extends State<BeneficiaryDetailsScreen> {
                             ...courseState.courses.map((course) {
                               return _buildCourseDetailCard(course);
                             }).toList(),
-
                         ],
                       ),
                     );
@@ -185,7 +183,7 @@ class _BeneficiaryDetailsScreenState extends State<BeneficiaryDetailsScreen> {
               } else if (state is BeneficiaryError) {
                 return Center(child: Text(state.message));
               } else {
-                return Center(child: Text('Unknown error'));
+                return Center(child: Text(AppLocalizations.of(context).translate('unknown_error')));
               }
             },
           );
@@ -207,12 +205,11 @@ class _BeneficiaryDetailsScreenState extends State<BeneficiaryDetailsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Registered Course',
+              AppLocalizations.of(context).translate('registered_course'),
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            _buildDetailItem(Icons.book, 'Course Name', course.course.nameCourse),
-       //     _buildDetailItem(Icons.schedule, 'Course Period', course.course.coursePeriod),
-            _buildDetailItem(Icons.access_time, 'Status', course.status),
+            _buildDetailItem(Icons.book, AppLocalizations.of(context).translate('course_name'), course.course.nameCourse),
+            _buildDetailItem(Icons.access_time, AppLocalizations.of(context).translate('status'), course.status),
             SizedBox(height: 8),
             Center(
               child: ElevatedButton(
@@ -220,7 +217,7 @@ class _BeneficiaryDetailsScreenState extends State<BeneficiaryDetailsScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
                 ),
-                child: Text('Delet From Course', style: TextStyle(color: Colors.white)),
+                child: Text(AppLocalizations.of(context).translate('delete_from_course'), style: TextStyle(color: Colors.white)),
               ),
             ),
           ],

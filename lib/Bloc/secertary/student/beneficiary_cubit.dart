@@ -57,6 +57,7 @@ class BeneficiaryCubit extends Cubit<BeneficiaryState> {
         beneficiary.careerGuidanceCounselling!,
         beneficiary.generalNotes!,
       );
+
       final beneficiaries = await _beneficiaryService.fetchBeneficiaries();
       emit(BeneficiaryLoaded(beneficiaries));
     } catch (e) {

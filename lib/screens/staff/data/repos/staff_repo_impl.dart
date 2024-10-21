@@ -11,6 +11,7 @@ import 'package:project2/screens/staff/data/models/show_all_staff_model.dart';
 import 'package:project2/screens/staff/data/models/show_staff_details_model.dart';
 import 'package:project2/screens/staff/data/repos/staff_repo.dart';
 
+import '../../../../core/utils/shared_preferences_helper.dart';
 import '../models/delete_staff_model.dart';
 import '../models/update_staff_model.dart';
 
@@ -26,7 +27,7 @@ class StaffRepoImpl implements StaffRepo {
     try {
       var data = await (dioApiService.get(
           endPoint: 'showallstaff',
-        token: await Constants.token,
+        token: await SharedPreferencesHelper.getJwtToken(),
       ));
       log(data.toString());
       List<ShowAllStaffModel> showAllStaffModel = [];
@@ -34,6 +35,51 @@ class StaffRepoImpl implements StaffRepo {
         showAllStaffModel.add(ShowAllStaffModel.fromJson(item));
       }
       return right(showAllStaffModel);
+    } catch (e) {
+      if (e is DioError){
+        return left(ServerFailure.fromDioError(e),);
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, DeleteStaffModel>> fetchDeleteStaff({
+    required int id,
+  })  async {
+    try {
+      var data = await (dioApiService.post(
+          endPoint: 'destroystaff/$id',
+          data: {},
+          token: await SharedPreferencesHelper.getJwtToken(),
+      ));
+      log(data.toString());
+      DeleteStaffModel deleteStaffModel;
+      deleteStaffModel = DeleteStaffModel.fromJson(data);
+      return right(deleteStaffModel);
+    } catch (e) {
+      if (e is DioError){
+        return left(ServerFailure.fromDioError(e),);
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<ShowStaffDetailsModel>>> fetchShowStaffDetails({
+  required int id,
+})  async {
+    try {
+      var data = await (dioApiService.get(
+          endPoint: 'showstaff/$id',
+          token: await SharedPreferencesHelper.getJwtToken(),
+      ));
+      log(data.toString());
+      List<ShowStaffDetailsModel> showStaffDetailsModel = [];
+      for (var item in data) {
+        showStaffDetailsModel.add(ShowStaffDetailsModel.fromJson(item));
+      }
+      return right(showStaffDetailsModel);
     } catch (e) {
       if (e is DioError){
         return left(ServerFailure.fromDioError(e),);
@@ -64,7 +110,17 @@ class StaffRepoImpl implements StaffRepo {
     });
 
     try{
-      dio.options.headers = {
+      var data = await (dioApiService.postWithImage(
+        endPoint: 'createstaff',
+        data: formData,
+        token: await SharedPreferencesHelper.getJwtToken(),
+      ));
+      log(data.toString());
+      CreateStaffModel createStaffModel;
+      createStaffModel = CreateStaffModel.fromJson(data);
+
+      return right(createStaffModel);
+      /*dio.options.headers = {
         'Authorization': 'Bearer ${Constants.token}',
       };
       var response =
@@ -76,54 +132,9 @@ class StaffRepoImpl implements StaffRepo {
       } else {
         throw Exception(
             'Registration failed with status: ${response.statusCode}');
-      }
+      }*/
     } catch (e) {
-        //throw left(ServerFailure.fromDioError(e));
-      return left(ServerFailure(e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, DeleteStaffModel>> fetchDeleteStaff({
-    required int id,
-  })  async {
-    try {
-      var data = await (dioApiService.post(
-          endPoint: 'destroystaff/$id',
-          data: {},
-          token: await Constants.token,
-      ));
-      log(data.toString());
-      DeleteStaffModel deleteStaffModel;
-      deleteStaffModel = DeleteStaffModel.fromJson(data);
-      return right(deleteStaffModel);
-    } catch (e) {
-      if (e is DioError){
-        return left(ServerFailure.fromDioError(e),);
-      }
-      return left(ServerFailure(e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<ShowStaffDetailsModel>>> fetchShowStaffDetails({
-  required int id,
-})  async {
-    try {
-      var data = await (dioApiService.get(
-          endPoint: 'showstaff/$id',
-          token: await Constants.token,
-      ));
-      log(data.toString());
-      List<ShowStaffDetailsModel> showStaffDetailsModel = [];
-      for (var item in data) {
-        showStaffDetailsModel.add(ShowStaffDetailsModel.fromJson(item));
-      }
-      return right(showStaffDetailsModel);
-    } catch (e) {
-      if (e is DioError){
-        return left(ServerFailure.fromDioError(e),);
-      }
+      //throw left(ServerFailure.fromDioError(e));
       return left(ServerFailure(e.toString()));
     }
   }
@@ -149,25 +160,20 @@ class StaffRepoImpl implements StaffRepo {
       ),
       "role": role,
     });
-
     try{
-      dio.options.headers = {
-        'Authorization': 'Bearer ${Constants.token}',
-      };
-      var response =
-      await dio.post("http://127.0.0.1:8000/api/updatestaff/$id", data: formData);
+      var data = await (dioApiService.postWithImage(
+        endPoint: 'updatestaff/$id',
+        data: formData,
+        token: await SharedPreferencesHelper.getJwtToken(),
+      ));
+      log(data.toString());
+      UpdateStaffModel updateStaffModel;
+      updateStaffModel = UpdateStaffModel.fromJson(data);
 
-      if (response.statusCode != null && response.statusCode! >= 200 &&
-          response.statusCode! < 300) {
-        return right(UpdateStaffModel.fromJson(response.data));
-      } else {
-        throw Exception(
-            'Update failed with status: ${response.statusCode}');
-      }
+      return right(updateStaffModel);
     } catch (e) {
       //throw left(ServerFailure.fromDioError(e));
       return left(ServerFailure(e.toString()));
     }
   }
-
 }

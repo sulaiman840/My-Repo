@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/utils/service_locator.dart';
 import '../../../../widgets/general_widgets/common_scaffold.dart';
+import '../../../warehouse_home/home/widget/common_scaffold_wear_house.dart';
 import '../../data/models/show_all_staff_model.dart';
 import '../../data/repos/staff_repo_impl.dart';
 import '../manger/update_staff_cubit/update_staff_cubit.dart';
@@ -16,8 +18,9 @@ class UpdateStaffView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CommonScaffold(
-      title: "Update staff",
+    AppLocalizations local = AppLocalizations.of(context);
+    return CommonScaffoldWearHouse(
+      title: local.translate("update_staff"),
       scaffoldKey: _keyScaffold,
       body: BlocProvider(
         create: (context) {

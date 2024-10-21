@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:project2/screens/Secertary_Screens/Student/add_beneficiary_screen.dart';
 import '../../../Bloc/manager/pending_beneficiary_cubit.dart';
 import '../../../Bloc/manager/pending_beneficiary_state.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/utils/color_manager.dart';
 import '../../../widgets/general_widgets/common_scaffold.dart';
 
@@ -27,18 +29,28 @@ class _PendingBeneficiaryScreenState extends State<PendingBeneficiaryScreen> {
   }
 
   void _navigateToCreateBeneficiaryScreen() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => BeneficiaryCreateScreen(onBeneficiaryAdded: _fetchPendingRequests)),
-    ).then((_) {
-      _fetchPendingRequests();
+    context.go('/add_beneficiary', extra: {
+      'callback': () {
+        print("Returned from add screen");
+        //   _fetchBeneficiaries();
+      },
     });
+
   }
+  // void _navigateToCreateBeneficiaryScreen() {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => BeneficiaryCreateScreen(onBeneficiaryAdded: _fetchPendingRequests)),
+  //   ).then((_) {
+  //     _fetchPendingRequests();
+  //   });
+  // }
+
 
   @override
   Widget build(BuildContext context) {
     return CommonScaffold(
-      title: 'Pending Beneficiary Requests',
+      title: AppLocalizations.of(context).translate('pending_beneficiary_requests'),
       scaffoldKey: _scaffoldKey,
       body: Column(
         children: [
@@ -47,10 +59,10 @@ class _PendingBeneficiaryScreenState extends State<PendingBeneficiaryScreen> {
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.all(10),
             child: ElevatedButton(
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.blue)),
               onPressed: _navigateToCreateBeneficiaryScreen,
               child: Text(
-                'Create a New Beneficiary',
+                AppLocalizations.of(context).translate('create_new_beneficiary'),
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -88,11 +100,11 @@ class _PendingBeneficiaryScreenState extends State<PendingBeneficiaryScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Email: ${beneficiary.email}',
+                                  '${AppLocalizations.of(context).translate('email')}: ${beneficiary.email}',
                                   style: TextStyle(color: ColorManager.bc4),
                                 ),
                                 Text(
-                                  'Status: ${pendingRequest.status}',
+                                  '${AppLocalizations.of(context).translate('status')}: ${pendingRequest.status}',
                                   style: TextStyle(color: ColorManager.bc3),
                                 ),
                               ],

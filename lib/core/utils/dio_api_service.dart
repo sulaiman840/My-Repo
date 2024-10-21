@@ -68,9 +68,9 @@ class DioApiService
     return response.data;
   }
 
-  Future<List<dynamic>> postH({
+  Future<dynamic> postWithImage({
     required String endPoint,
-    required Map<String, dynamic>? data,
+    required FormData? data,
     String? token,
   }) async {
     _dio.options.headers = {

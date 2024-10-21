@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:project2/screens/Secertary_Screens/Course/pending_course_sreen.dart';
 import '../../../Bloc/secertary/course/course_cubit.dart';
 import '../../../Bloc/secertary/course/course_state.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/utils/color_manager.dart';
 import '../../../models/Secertary Model/course_model.dart';
-import 'course_detail_screen.dart';
-import '../../../services/Secertary Services/course_service.dart';
 
 class CourseManagementScreen extends StatefulWidget {
   const CourseManagementScreen({super.key});
@@ -27,17 +27,17 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Confirm Delete"),
-          content: Text("Are you sure you want to delete this course?"),
+          title: Text(AppLocalizations.of(context).translate('confirm_delete')),
+          content: Text(AppLocalizations.of(context).translate('sure_delete_course')),
           actions: [
             TextButton(
-              child: Text("Cancel"),
+              child: Text(AppLocalizations.of(context).translate('cancel')),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text("Delete"),
+              child: Text(AppLocalizations.of(context).translate('delete')),
               onPressed: () {
                 context.read<CourseCubit>().deleteCourse(courseId);
                 Navigator.of(context).pop();
@@ -52,21 +52,18 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
   void _showUpdateDialog(BuildContext context, Course course) {
     final _formKey = GlobalKey<FormState>();
     late String _nameCourse = course.nameCourse;
-    late int _coursePeriod = course.coursePeriod ;
+    late int _coursePeriod = course.coursePeriod;
     late String _sessionDuration = course.sessionDuration;
-  //  late String _sessionsGiven = course.sessionsGiven;
     late String _type = course.type;
     late String _courseStatus = course.courseStatus;
     late String _specialty = course.specialty;
     late String _description = course.description;
 
-
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Update Course"),
+          title: Text(AppLocalizations.of(context).translate('update_course')),
           content: Form(
             key: _formKey,
             child: SingleChildScrollView(
@@ -74,10 +71,10 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
                 children: <Widget>[
                   TextFormField(
                     initialValue: _nameCourse,
-                    decoration: InputDecoration(labelText: 'Course Name'),
+                    decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('course_name')),
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter the course name';
+                        return AppLocalizations.of(context).translate('please_enter_course_name');
                       }
                       return null;
                     },
@@ -87,13 +84,13 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
                   ),
                   TextFormField(
                     initialValue: _coursePeriod.toString(),
-                    decoration: InputDecoration(labelText: 'Course Period'),
+                    decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('course_period')),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter the course period';
+                        return AppLocalizations.of(context).translate('please_enter_course_period');
                       } else if (int.tryParse(value) == null) {
-                        return 'Please enter a valid number';
+                        return AppLocalizations.of(context).translate('please_enter_valid_number');
                       }
                       return null;
                     },
@@ -103,10 +100,10 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
                   ),
                   TextFormField(
                     initialValue: _type,
-                    decoration: InputDecoration(labelText: 'Type'),
+                    decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('type')),
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter the course type';
+                        return AppLocalizations.of(context).translate('please_enter_course_type');
                       }
                       return null;
                     },
@@ -116,10 +113,10 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
                   ),
                   TextFormField(
                     initialValue: _sessionDuration,
-                    decoration: InputDecoration(labelText: 'Session Duration'),
+                    decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('session_duration')),
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter the Session Duration';
+                        return AppLocalizations.of(context).translate('please_enter_session_duration');
                       }
                       return null;
                     },
@@ -127,23 +124,10 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
                       _sessionDuration = value!;
                     },
                   ),
-                  // TextFormField(
-                  //   initialValue: _sessionsGiven,
-                  //   decoration: InputDecoration(labelText: 'Session Is Given'),
-                  //   validator: (value) {
-                  //     if (value!.isEmpty) {
-                  //       return 'Please enter the Session Is Given';
-                  //     }
-                  //     return null;
-                  //   },
-                  //   onSaved: (value) {
-                  //     _sessionsGiven = value!;
-                  //   },
-                  // ),
                   DropdownButtonFormField<String>(
                     value: _courseStatus,
-                    decoration: InputDecoration(labelText: 'Status'),
-                    items: ['Inactive', 'Active']
+                    decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('status')),
+                    items: [AppLocalizations.of(context).translate('active'), AppLocalizations.of(context).translate('inactive')]
                         .map((status) => DropdownMenuItem(
                       value: status,
                       child: Text(status),
@@ -160,10 +144,10 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
                   ),
                   TextFormField(
                     initialValue: _specialty,
-                    decoration: InputDecoration(labelText: 'Specialty'),
+                    decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('specialty')),
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter the course specialty';
+                        return AppLocalizations.of(context).translate('please_enter_course_specialty');
                       }
                       return null;
                     },
@@ -173,10 +157,10 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
                   ),
                   TextFormField(
                     initialValue: _description,
-                    decoration: InputDecoration(labelText: 'Description'),
+                    decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('description')),
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter the course description';
+                        return AppLocalizations.of(context).translate('please_enter_course_description');
                       }
                       return null;
                     },
@@ -190,13 +174,13 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
           ),
           actions: [
             TextButton(
-              child: Text("Cancel"),
+              child: Text(AppLocalizations.of(context).translate('cancel')),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop();  // This can remain as-is since it's just closing a dialog
               },
             ),
             TextButton(
-              child: Text("Update"),
+              child: Text(AppLocalizations.of(context).translate('update')),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
@@ -204,8 +188,7 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
                     id: course.id,
                     nameCourse: _nameCourse,
                     coursePeriod: _coursePeriod,
-                    sessionDuration:_sessionDuration ,
-              //      sessionsGiven: _sessionsGiven,
+                    sessionDuration: _sessionDuration,
                     type: _type,
                     courseStatus: _courseStatus,
                     specialty: _specialty,
@@ -231,7 +214,7 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
       backgroundColor: ColorManager.bc1,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('Course Management', style: TextStyle(fontWeight: FontWeight.bold, color: ColorManager.bc5)),
+        title: Text(AppLocalizations.of(context).translate('course_management'), style: TextStyle(fontWeight: FontWeight.bold, color: ColorManager.bc5)),
         centerTitle: true,
         backgroundColor: ColorManager.bc1,
         actions: [
@@ -245,9 +228,9 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
               child: IconButton(
                 icon: Icon(Icons.add, color: Colors.white),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => PendingCourseScreen()));
+                  context.go('/pending_course');
                 },
-                tooltip: 'Add Course',
+                tooltip: AppLocalizations.of(context).translate('add_course'),
               ),
             ),
           ),
@@ -280,12 +263,11 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                         // Text('Period: ${course.sessionsGiven} Hours from ${course.coursePeriod} Hours', style: TextStyle(color: ColorManager.bc4)),
                           Text(
-                            'Period: ${course.coursePeriod}',
+                            '${AppLocalizations.of(context).translate('period')}: ${course.coursePeriod}',
                             style: TextStyle(color: ColorManager.bc4),
                           ),
-                          Text('Status: ${course.courseStatus}', style: TextStyle(color: ColorManager.bc3)),
+                          Text('${AppLocalizations.of(context).translate('status')}: ${course.courseStatus}', style: TextStyle(color: ColorManager.bc3)),
                         ],
                       ),
                       trailing: Row(
@@ -293,7 +275,7 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
                         children: [
                           Icon(
                             Icons.circle,
-                            color: course.courseStatus == 'Active' ? Colors.green : Colors.red,
+                            color: course.courseStatus == "Active" ? Colors.green : Colors.red,
                             size: 12,
                           ),
                           SizedBox(width: 8),
@@ -312,7 +294,7 @@ class _CourseManagementScreenState extends State<CourseManagementScreen> {
                         ],
                       ),
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => CourseDetailScreen(courseId: course.id,)));
+                        context.go('/course_detail/${course.id}');  // Replace Navigator.push with context.push and pass the course ID in the URL
                       },
                     ),
                   );

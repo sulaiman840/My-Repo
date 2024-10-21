@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../../../core/utils/app_manager.dart';
-import '../../../../../../../core/utils/color_manager.dart';
 import '../../../../../../../core/utils/service_locator.dart';
-import '../../../../../../../core/utils/style_manager.dart';
 
 import '../../../../../../warehouse_home/category_warehouse/data/repos/category_repo_impl.dart';
 import '../../../../../../warehouse_home/category_warehouse/presentation/manager/delete_category_cubit/delete_category_cubit.dart';
@@ -21,22 +19,13 @@ class AllCategoryViewBodyManager extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<GetAllCategoryCubit, GetAllCategoryState>(
-      listener: (context, state) {
-        /*if (state is GetAllCategorySuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Category created successfully")),
-          );
-        } else if (state is GetAllCategoryFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Category created failed")),
-          );
-        }*/
-      },
+      listener: (context, state) {  },
       builder: (context, state) {
         if (state is GetAllCategorySuccess) {
           return Padding(
             padding: const EdgeInsetsDirectional.only(
               top: AppPadding.p16,
+              bottom: AppPadding.p16,
               start: AppPadding.p16,
               end: AppPadding.p16,
             ),

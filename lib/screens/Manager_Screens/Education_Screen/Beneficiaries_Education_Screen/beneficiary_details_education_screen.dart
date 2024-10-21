@@ -9,6 +9,7 @@ import '../../../../Bloc/secertary/student/beneficiary_course_state.dart';
 import '../../../../Bloc/secertary/student/beneficiary_cubit.dart';
 import '../../../../Bloc/secertary/student/beneficiary_state.dart';
 import '../../../../Bloc/secertary/student/document_cubit.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/utils/color_manager.dart';
 import '../../../../core/utils/shared_preferences_helper.dart';
 import '../../../../models/Secertary Model/beneficiary_course_model.dart';
@@ -49,7 +50,7 @@ class _BeneficiaryDetailsEducationScreenState extends State<BeneficiaryDetailsEd
   @override
   Widget build(BuildContext context) {
     return CommonScaffold(
-      title: 'Beneficiary Details',
+      title: AppLocalizations.of(context).translate('beneficiary_details'),
       scaffoldKey: GlobalKey<ScaffoldState>(),
       body: FutureBuilder<String?>(
         future: _userRoleFuture,
@@ -96,7 +97,7 @@ class _BeneficiaryDetailsEducationScreenState extends State<BeneficiaryDetailsEd
               } else if (state is BeneficiaryError) {
                 return Center(child: Text(state.message));
               } else {
-                return Center(child: Text('Unknown error'));
+                return Center(child: Text(AppLocalizations.of(context).translate('unknown_error')));
               }
             },
           );
@@ -118,12 +119,12 @@ class _BeneficiaryDetailsEducationScreenState extends State<BeneficiaryDetailsEd
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Registered Course',
+              AppLocalizations.of(context).translate('registered_course'),
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            _buildDetailItem(Icons.book, 'Course Name', course.course.nameCourse),
+            _buildDetailItem(Icons.book, AppLocalizations.of(context).translate('course_name'), course.course.nameCourse),
          //   _buildDetailItem(Icons.schedule, 'Course Period', course.course.coursePeriod),
-            _buildDetailItem(Icons.access_time, 'Status', course.status),
+            _buildDetailItem(Icons.access_time, AppLocalizations.of(context).translate('status'), course.status),
           ],
         ),
       ),

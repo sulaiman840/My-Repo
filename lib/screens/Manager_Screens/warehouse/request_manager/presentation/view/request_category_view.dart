@@ -7,6 +7,6 @@ class RequestCategoryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RequestCategoryViewBody();
+    return const RequestCategoryViewBody();
   }
 }

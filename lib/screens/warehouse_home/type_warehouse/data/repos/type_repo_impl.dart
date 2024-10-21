@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:project2/core/errors/failures.dart';
 import 'package:project2/core/utils/dio_api_service.dart';
+import 'package:project2/core/utils/shared_preferences_helper.dart';
 
 import '../../../../../constants.dart';
 import '../models/create_type_model.dart';
@@ -23,7 +24,7 @@ class TypeRepoImpl implements TypeRepo {
     try {
       var data = await (dioApiService.get(
           endPoint: 'types',
-          token: await Constants.token,
+          token: await SharedPreferencesHelper.getJwtToken(),
       ));
       log(data.toString());
       List<GetAllTypeModel> getAllTypeModel = [];
@@ -47,7 +48,7 @@ class TypeRepoImpl implements TypeRepo {
           data: {
             "name": name,
           },
-          token: await Constants.token,
+          token: await SharedPreferencesHelper.getJwtToken(),
       ));
       log(data.toString());
       CreateTypeModel createTypeModel;
@@ -67,7 +68,7 @@ class TypeRepoImpl implements TypeRepo {
       var data = await (dioApiService.delete(
           endPoint: 'types/$id',
           data: {},
-          token: await Constants.token,
+          token: await SharedPreferencesHelper.getJwtToken(),
       ));
       log(data.toString());
       return right(data);
@@ -84,7 +85,7 @@ class TypeRepoImpl implements TypeRepo {
     try {
       var data = await (dioApiService.get(
           endPoint: 'types/$id',
-          token: await Constants.token,
+          token: await SharedPreferencesHelper.getJwtToken(),
       ));
       log(data.toString());
       GetTypeIdModel getTypeIdModel;

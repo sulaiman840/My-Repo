@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:go_router/go_router.dart';
 import '../../../../Bloc/secertary/course/course_detail_cubit.dart';
 import '../../../../Bloc/secertary/course/course_detail_state.dart';
 import '../../../../Bloc/secertary/student/beneficiary_course_cubit.dart';
 import '../../../../Bloc/secertary/student/beneficiary_course_state.dart';
 import '../../../../Bloc/secertary/trainer/trainer_course_cubit.dart';
 import '../../../../Bloc/secertary/trainer/trainer_course_state.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/utils/color_manager.dart';
 import '../../../../widgets/general_widgets/common_scaffold.dart';
-import '../../../Secertary_Screens/Student/beneficiary_details_screen.dart';
-import '../../../Secertary_Screens/Trainer/trainer_details.dart';
-import '../Beneficiaries_Education_Screen/beneficiary_details_education_screen.dart';
-import '../Trainer_Manager_Education/trainer_details_education_screen.dart';
-
 
 class CourseDetailEducation extends StatefulWidget {
   final int courseId;
@@ -34,12 +30,6 @@ class _CourseDetailEducationState extends State<CourseDetailEducation> with Sing
     _fetchData();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _fetchData();
-  }
-
   void _fetchData() {
     context.read<CourseDetailCubit>().fetchCourseDetail(widget.courseId);
     context.read<BeneficiaryCourseCubit>().fetchBeneficiariesByCourse(widget.courseId);
@@ -55,46 +45,15 @@ class _CourseDetailEducationState extends State<CourseDetailEducation> with Sing
         } else if (state is CourseDetailLoaded) {
           final course = state.course;
           return CommonScaffold(
-            title: 'Course Detail',
+            title: AppLocalizations.of(context).translate('course_detail'),
             scaffoldKey: GlobalKey<ScaffoldState>(),
             body: NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) => [
                 SliverList(
                   delegate: SliverChildListDelegate([
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      elevation: 4,
-                      margin: const EdgeInsets.all(16.0),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildDetailItem(Icons.book, 'Course Name', course.nameCourse ?? 'N/A'),
-                            _buildDetailItem(Icons.schedule, 'Period', course.coursePeriod.toString()),
-                            _buildDetailItem(Icons.category, 'Type', course.type ?? 'N/A'),
-                            _buildDetailItem(Icons.timeline, 'Session Duration', course.sessionDuration?.toString() ?? 'N/A'),
-                            _buildDetailItem(Icons.timer, 'Sessions Given', course.sessionsGiven?.toString() ?? 'N/A'),
-                            _buildDetailItem(Icons.info_outline, 'Status', course.courseStatus ?? 'N/A'),
-                            _buildDetailItem(Icons.star, 'Specialty', course.specialty ?? 'N/A'),
-                            _buildDetailItem(Icons.description, 'Description', course.description ?? 'N/A'),
-                          ],
-                        ),
-                      ),
-                    ),
+                    _buildCourseDetailCard(course),
                     SizedBox(height: 16.0),
-                    TabBar(
-                      indicatorColor: ColorManager.bc4,
-                      labelColor: ColorManager.bc4,
-                      unselectedLabelColor: ColorManager.bc5,
-                      controller: _tabController,
-                      tabs: [
-                        Tab(text: 'Beneficiaries'),
-                        Tab(text: 'Trainers'),
-                      ],
-                    ),
+                    _buildTabBar(),
                   ]),
                 ),
               ],
@@ -116,6 +75,45 @@ class _CourseDetailEducationState extends State<CourseDetailEducation> with Sing
     );
   }
 
+  Widget _buildCourseDetailCard(course) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      elevation: 4,
+      margin: const EdgeInsets.all(16.0),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildDetailItem(Icons.book, AppLocalizations.of(context).translate('course_name'), course.nameCourse ?? 'N/A'),
+            _buildDetailItem(Icons.schedule, AppLocalizations.of(context).translate('period'), course.coursePeriod.toString()),
+            _buildDetailItem(Icons.category, AppLocalizations.of(context).translate('type'), course.type ?? 'N/A'),
+            _buildDetailItem(Icons.timeline, AppLocalizations.of(context).translate('session_duration'), course.sessionDuration?.toString() ?? 'N/A'),
+            _buildDetailItem(Icons.timer, AppLocalizations.of(context).translate('sessions_given'), course.sessionsGiven?.toString() ?? 'N/A'),
+            _buildDetailItem(Icons.info_outline, AppLocalizations.of(context).translate('status'), course.courseStatus ?? 'N/A'),
+            _buildDetailItem(Icons.star, AppLocalizations.of(context).translate('specialty'), course.specialty ?? 'N/A'),
+            _buildDetailItem(Icons.description, AppLocalizations.of(context).translate('description'), course.description ?? 'N/A'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTabBar() {
+    return TabBar(
+      indicatorColor: ColorManager.bc4,
+      labelColor: ColorManager.bc4,
+      unselectedLabelColor: ColorManager.bc5,
+      controller: _tabController,
+      tabs: [
+        Tab(text: AppLocalizations.of(context).translate('beneficiaries')),
+        Tab(text: AppLocalizations.of(context).translate('trainers')),
+      ],
+    );
+  }
+
   Widget _buildBeneficiariesTab() {
     return BlocBuilder<BeneficiaryCourseCubit, BeneficiaryCourseState>(
       builder: (context, state) {
@@ -123,7 +121,7 @@ class _CourseDetailEducationState extends State<CourseDetailEducation> with Sing
           return Center(child: CircularProgressIndicator());
         } else if (state is BeneficiaryByCourseLoaded) {
           if (state.beneficiary.isEmpty) {
-            return Center(child: Text('No beneficiaries registered in this course.'));
+            return Center(child: Text(AppLocalizations.of(context).translate('no_beneficiaries_registered_in_course')));
           }
           return ListView.builder(
             padding: EdgeInsets.all(8),
@@ -144,18 +142,13 @@ class _CourseDetailEducationState extends State<CourseDetailEducation> with Sing
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 4),
-                      Text('Email: ${beneficiary?.email ?? 'N/A'}', style: TextStyle(color: Colors.grey[700])),
-                      Text('Phone: ${beneficiaryCourse.beneficiary.phone}', style: TextStyle(color: Colors.grey[700])),
+                      Text('${AppLocalizations.of(context).translate('email')}: ${beneficiary?.email ?? 'N/A'}', style: TextStyle(color: Colors.grey[700])),
                     ],
                   ),
                   trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BeneficiaryDetailsEducationScreen(beneficiaryId: beneficiary.id),
-                      ),
-                    ).then((_) => _fetchData());
+                    // Use GoRouter to navigate and pass beneficiaryId
+                    context.go('/beneficiary_detail_education/${beneficiary?.id}');
                   },
                 ),
               );
@@ -177,7 +170,7 @@ class _CourseDetailEducationState extends State<CourseDetailEducation> with Sing
           return Center(child: CircularProgressIndicator());
         } else if (state is TrainerByCourseLoaded) {
           if (state.trainerCourses.isEmpty) {
-            return Center(child: Text('No trainers assigned to this course.'));
+            return Center(child: Text(AppLocalizations.of(context).translate('no_trainers_assigned_to_course')));
           }
           return ListView.builder(
             padding: EdgeInsets.all(8),
@@ -204,12 +197,8 @@ class _CourseDetailEducationState extends State<CourseDetailEducation> with Sing
                   ),
                   trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TrainerDetailsEducationScreen(trainerId: trainer.id),
-                      ),
-                    ).then((_) => _fetchData());
+                    // Use GoRouter to navigate and pass trainerId
+                    context.go('/trainer_detail_education/${trainer?.id}');
                   },
                 ),
               );

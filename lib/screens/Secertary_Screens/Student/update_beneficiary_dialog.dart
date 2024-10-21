@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../Bloc/secertary/student/beneficiary_cubit.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/utils/color_manager.dart';
 import '../../../models/Secertary Model/beneficiary_model.dart';
 import '../../../widgets/general_widgets/common_scaffold.dart';
-
 import '../../../widgets/secretary_widgets/update_beneficiary_widgets/disability_widget.dart';
 import '../../../widgets/secretary_widgets/update_beneficiary_widgets/educational_attainment_widget.dart';
 import '../../../widgets/secretary_widgets/update_beneficiary_widgets/foreign_language_widget .dart';
@@ -13,8 +14,9 @@ import '../../../widgets/secretary_widgets/update_beneficiary_widgets/profession
 
 class BeneficiaryUpdateScreen extends StatelessWidget {
   final DataBeneficiary beneficiary;
+  final VoidCallback onPop;
 
-  BeneficiaryUpdateScreen({required this.beneficiary});
+  BeneficiaryUpdateScreen({required this.beneficiary, required this.onPop});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,7 @@ class BeneficiaryUpdateScreen extends StatelessWidget {
     late String _createdAt = beneficiary.createdAt ?? '';
 
     return CommonScaffold(
-      title: 'Update Beneficiary',
+      title: AppLocalizations.of(context).translate('update_beneficiary'),
       scaffoldKey: GlobalKey<ScaffoldState>(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -67,68 +69,66 @@ class BeneficiaryUpdateScreen extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   _buildRow([
-                    _buildTextFormField('Serial Number', _serialNumber.toString(), (value) => _serialNumber = int.parse(value!)),
-                    _buildTextFormField('Date', _date, (value) => _date = value!)
+                    _buildTextFormField(AppLocalizations.of(context).translate('serial_number'), _serialNumber.toString(), (value) => _serialNumber = int.parse(value!)),
+                    _buildTextFormField(AppLocalizations.of(context).translate('date'), _date, (value) => _date = value!)
                   ]),
                   _buildRow([
-                    _buildTextFormField('Province', _province, (value) => _province = value!),
-                    _buildTextFormField('Name', _name, (value) => _name = value!)
+                    _buildTextFormField(AppLocalizations.of(context).translate('province'), _province, (value) => _province = value!),
+                    _buildTextFormField(AppLocalizations.of(context).translate('name'), _name, (value) => _name = value!)
                   ]),
                   _buildRow([
-                    _buildTextFormField('Father Name', _fatherName, (value) => _fatherName = value!),
-                    _buildTextFormField('Mother Name', _motherName, (value) => _motherName = value!)
+                    _buildTextFormField(AppLocalizations.of(context).translate('father_name'), _fatherName, (value) => _fatherName = value!),
+                    _buildTextFormField(AppLocalizations.of(context).translate('mother_name'), _motherName, (value) => _motherName = value!)
                   ]),
                   _buildRow([
-                    _buildTextFormField('Gender', _gender, (value) => _gender = value!),
-                    _buildTextFormField('Date of Birth', _dateOfBirth, (value) => _dateOfBirth = value!)
+                    _buildTextFormField(AppLocalizations.of(context).translate('gender'), _gender, (value) => _gender = value!),
+                    _buildTextFormField(AppLocalizations.of(context).translate('date_of_birth'), _dateOfBirth, (value) => _dateOfBirth = value!)
                   ]),
                   _buildRow([
-                    _buildTextFormField('Notes', _nots, (value) => _nots = value!),
-                    _buildTextFormField('Marital Status', _maritalStatus, (value) => _maritalStatus = value!)
+                    _buildTextFormField(AppLocalizations.of(context).translate('notes'), _nots, (value) => _nots = value!),
+                    _buildTextFormField(AppLocalizations.of(context).translate('marital_status'), _maritalStatus, (value) => _maritalStatus = value!)
                   ]),
                   _buildRow([
-                    _buildTextFormField('Need Attendant', _needAttendant, (value) => _needAttendant = value!),
-                    _buildTextFormField('Number of Family Members', _numberFamilyMember.toString(), (value) => _numberFamilyMember = int.parse(value!))
+                    _buildTextFormField(AppLocalizations.of(context).translate('need_attendant'), _needAttendant, (value) => _needAttendant = value!),
+                    _buildTextFormField(AppLocalizations.of(context).translate('number_family_members'), _numberFamilyMember.toString(), (value) => _numberFamilyMember = int.parse(value!))
                   ]),
                   _buildRow([
-                    _buildTextFormField('Losing Breadwinner', _losingBreadwinner, (value) => _losingBreadwinner = value!),
-                    _buildTextFormField('Governorate', _governorate, (value) => _governorate = value!)
+                    _buildTextFormField(AppLocalizations.of(context).translate('losing_breadwinner'), _losingBreadwinner, (value) => _losingBreadwinner = value!),
+                    _buildTextFormField(AppLocalizations.of(context).translate('governorate'), _governorate, (value) => _governorate = value!)
                   ]),
                   _buildRow([
-                    _buildTextFormField('Address', _address, (value) => _address = value!),
-                    _buildTextFormField('Email', _email, (value) => _email = value!)
+                    _buildTextFormField(AppLocalizations.of(context).translate('address'), _address, (value) => _address = value!),
+                    _buildEmailTextFormField(AppLocalizations.of(context).translate('email'), _email, (value) => _email = value!)
                   ]),
                   _buildRow([
-                    _buildTextFormField('Number Line', _numberLine, (value) => _numberLine = value!),
-                   _buildTextFormField('Number Phone', _numberPhone, (value) => _numberPhone = value!)
-                //    _buildTextFormField('Number Phone', _numberPhone.toString(), (value) => _numberPhone = int.parse(value!))
-
+                    _buildLineTextFormField(AppLocalizations.of(context).translate('number_line'), _numberLine, (value) => _numberLine = value!),
+                    _buildPhoneTextFormField(AppLocalizations.of(context).translate('phone_number'), _numberPhone, (value) => _numberPhone = value!)
                   ]),
                   _buildRow([
-                    _buildTextFormField('Number ID', _numberId, (value) => _numberId = value!),
-                    _buildTextFormField('Computer Driving', _computerDriving, (value) => _computerDriving = value!)
+                    _buildTextFormField(AppLocalizations.of(context).translate('number_ID'), _numberId, (value) => _numberId = value!),
+                    _buildTextFormField(AppLocalizations.of(context).translate('computer_driving'), _computerDriving, (value) => _computerDriving = value!)
                   ]),
                   _buildRow([
-                    _buildTextFormField('Computer Skills', _computerSkills, (value) => _computerSkills = value!),
-                    _buildTextFormField('Sector Preferences', _sectorPreferences, (value) => _sectorPreferences = value!)
+                    _buildTextFormField(AppLocalizations.of(context).translate('computer_skills'), _computerSkills, (value) => _computerSkills = value!),
+                    _buildTextFormField(AppLocalizations.of(context).translate('sector_preferences'), _sectorPreferences, (value) => _sectorPreferences = value!)
                   ]),
                   _buildRow([
-                    _buildTextFormField('Employment', _employment, (value) => _employment = value!),
-                    _buildTextFormField('Support Required for Training & Learning', _supportRequiredTrainingLearning, (value) => _supportRequiredTrainingLearning = value!)
+                    _buildTextFormField(AppLocalizations.of(context).translate('employment'), _employment, (value) => _employment = value!),
+                    _buildTextFormField(AppLocalizations.of(context).translate('support_required_for_training_learning'), _supportRequiredTrainingLearning, (value) => _supportRequiredTrainingLearning = value!)
                   ]),
                   _buildRow([
-                    _buildTextFormField('Support Required for Entrepreneurship', _supportRequiredEntrepreneurship, (value) => _supportRequiredEntrepreneurship = value!),
-                    _buildTextFormField('Career Guidance & Counselling', _careerGuidanceCounselling, (value) => _careerGuidanceCounselling = value!)
+                    _buildTextFormField(AppLocalizations.of(context).translate('support_required_for_entrepreneurship'), _supportRequiredEntrepreneurship, (value) => _supportRequiredEntrepreneurship = value!),
+                    _buildTextFormField(AppLocalizations.of(context).translate('career_guidance_counselling'), _careerGuidanceCounselling, (value) => _careerGuidanceCounselling = value!)
                   ]),
-                  _buildTextFormField('General Notes', _generalNotes, (value) => _generalNotes = value!),
+                  _buildTextFormField(AppLocalizations.of(context).translate('general_notes'), _generalNotes, (value) => _generalNotes = value!),
                   SizedBox(height: 20),
                   DisabilityWidget(
-                    title: 'Personal Disabilities',
-                    disabilities: beneficiary.thereIsDisbility?? [],
+                    title: AppLocalizations.of(context).translate('personal_disabilities'),
+                    disabilities: beneficiary.thereIsDisbility ?? [],
                   ),
                   DisabilityWidget(
-                    title: 'Family Member Disabilities',
-                    disabilities: beneficiary.thereIsDisbilityFamilyMember?? [],
+                    title: AppLocalizations.of(context).translate('family_member_disabilities'),
+                    disabilities: beneficiary.thereIsDisbilityFamilyMember ?? [],
                   ),
                   EducationalAttainmentWidget(
                     educationalAttainments: beneficiary.educationalAttainments ?? [],
@@ -144,7 +144,7 @@ class BeneficiaryUpdateScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 20),
                   ElevatedButton(
-                    child: Text('Update'),
+                    child: Text(AppLocalizations.of(context).translate('update')),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
@@ -188,10 +188,12 @@ class BeneficiaryUpdateScreen extends StatelessWidget {
                           educationalAttainment: beneficiary.educationalAttainment,
                         );
                         context.read<BeneficiaryCubit>().updateBeneficiary(updatedBeneficiary);
-                        Navigator.of(context).pop();
+                        onPop();
+                        context.go('/secretary_home?tab=1');
                       }
                     },
                   ),
+
                 ],
               ),
             ),
@@ -225,4 +227,53 @@ class BeneficiaryUpdateScreen extends StatelessWidget {
       onSaved: onSaved,
     );
   }
+  Widget _buildEmailTextFormField(String label, String initialValue, FormFieldSetter<String> onSaved) {
+    return TextFormField(
+      initialValue: initialValue,
+      decoration: InputDecoration(labelText: label),
+      validator: (value) {
+        if (value!.isEmpty) {
+          return 'Please enter $label';
+        }
+        else if (!value.contains('@') || !value.endsWith('.com')) {
+          return 'Please enter a valid email address';
+        }
+        return null;
+      },
+      onSaved: onSaved,
+    );
+  }
+  Widget _buildPhoneTextFormField(String label, String initialValue, FormFieldSetter<String> onSaved) {
+    return TextFormField(
+      initialValue: initialValue,
+      decoration: InputDecoration(labelText: label),
+      validator: (value) {
+        if (value!.isEmpty) {
+          return 'Please enter $label';
+        }
+        else if (value.length != 10) {
+          return 'Phone number must be exactly 10 digits';
+        }
+        return null;
+      },
+      onSaved: onSaved,
+    );
+  }
+  Widget _buildLineTextFormField(String label, String initialValue, FormFieldSetter<String> onSaved) {
+    return TextFormField(
+      initialValue: initialValue,
+      decoration: InputDecoration(labelText: label),
+      validator: (value) {
+        if (value!.isEmpty) {
+          return 'Please enter $label';
+        }
+        else if (value.length <= 7) {
+          return 'Phone number must be at least 8 digits';
+        }
+        return null;
+      },
+      onSaved: onSaved,
+    );
+  }
+
 }

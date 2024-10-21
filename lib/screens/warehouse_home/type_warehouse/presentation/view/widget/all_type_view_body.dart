@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../../app.dart';
+import '../../../../../../core/localization/app_localizations.dart';
 import '../../../../../../core/utils/app_manager.dart';
 import '../../../../../../core/utils/color_manager.dart';
 import '../../../../../../core/utils/service_locator.dart';
 import '../../../../../../core/utils/style_manager.dart';
+import '../../../../../../widgets/custom_snack_bar.dart';
 import '../../../../widget/circular_icon_widget.dart';
 import '../../../../widget/custom_dialog_widget.dart';
 import '../../../../widget/elevated_btn_widget.dart';
@@ -26,24 +29,30 @@ class AllTypeViewBody extends StatelessWidget {
     return BlocConsumer<CreateTypeCubit, CreateTypeState>(
       listener: (context, state) {
         if (state is CreateTypeFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Type created failed")),
-          );
+          typeController.clear();
+          CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('type_snack_bar_f'),);
+          /*ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(AppLocalizations.of(context).translate('type_snack_bar_f'))),
+          );*/
         } else if (state is CreateTypeSuccess) {
+          typeController.clear();
           context.read<GetAllTypeCubit>().fetchAllTypes();
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Type created successfully')),
-          );
+          CustomSnackBar.showSnackBar(context, msg: AppLocalizations.of(context).translate('type_snack_bar_s'),);
+          /*ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(AppLocalizations.of(context).translate('type_snack_bar_s'))),
+          );*/
         }
       },
       builder: (context, state) {
         return Padding(
           padding: const EdgeInsetsDirectional.only(
             top: AppPadding.p16,
+            bottom: AppPadding.p16,
             start: AppPadding.p16,
             end: AppPadding.p16,
           ),
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,15 +73,15 @@ class AllTypeViewBody extends StatelessWidget {
                           backgroundColor: ColorManager.orange,
                           color: ColorManager.bc0,
                         ),
-                        text: 'Add New Type',
+                        text: AppLocalizations.of(context).translate('add_new_type'),
                         style: StyleManager.labelMedium(color: ColorManager.bc4),
                         onPressed: () {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return CustomDialogWidget(
-                                title: 'Add new type',
-                                hintText: 'Enter name',
+                              return CustomDialogFieldWidget(
+                                title: AppLocalizations.of(context).translate('add_new_type'),
+                                hintText: AppLocalizations.of(context).translate('enter_name'),
                                 controller: typeController,
                                 onPressed: () {
                                   final createTypeCubit = context.read<CreateTypeCubit>();
@@ -115,13 +124,6 @@ class AllTypeViewBody extends StatelessWidget {
                 ),
                 const SizedBox(
                   height: AppSize.s20,
-                ),
-                Text(
-                  'Types',
-                  style: StyleManager.h3Bold(color: ColorManager.blackColor),
-                ),
-                const SizedBox(
-                  height: AppSize.s24,
                 ),
                 BlocProvider(
                   create: (context) {

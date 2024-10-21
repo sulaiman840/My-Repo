@@ -6,6 +6,7 @@ import 'package:project2/screens/staff/presentation/manger/staff_details_cubit/s
 import 'package:project2/screens/staff/presentation/manger/staff_details_cubit/staff_details_state.dart';
 import 'package:project2/screens/staff/presentation/views/widgets/custom_image_network.dart';
 
+import '../../../../../core/localization/app_localizations.dart';
 import 'custom_text_info.dart';
 
 class StaffDetailsViewBody extends StatelessWidget {
@@ -13,6 +14,7 @@ class StaffDetailsViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations local = AppLocalizations.of(context);
     return BlocConsumer<StaffDetailsCubit, StaffDetailsState>(
       listener: (context, state) {},
       builder: (BuildContext context, StaffDetailsState state) {
@@ -20,7 +22,7 @@ class StaffDetailsViewBody extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.only(
                 top: 100.0,
-                bottom: 0.0,
+                bottom: 100.0,
                 left: 100.0,
                 right: 100.0,
             ),
@@ -32,7 +34,13 @@ class StaffDetailsViewBody extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      const CustomImageNetwork(
+                      state.staffDetails[0].imagePath != null ? CustomImageNetwork(
+                        imageHeight: 160.0,
+                        imageWidth: 160.0,
+                        borderRadius: 90.0,
+                        image: state.staffDetails[0].imagePath?.replaceRange(0, 11, ''),
+                      )
+                          : const CustomImageAsset(
                         imageHeight: 160.0,
                         imageWidth: 160.0,
                         borderRadius: 90.0,
@@ -51,7 +59,7 @@ class StaffDetailsViewBody extends StatelessWidget {
                             height: MediaQuery.of(context).size.height * .02,
                           ),
                           Text(
-                            "Last update: ${(state.staffDetails[0].updatedAt).replaceRange(10, 27, " ")}",
+                            "${local.translate("last_updated")}: ${(state.staffDetails[0].updatedAt).replaceRange(10, 27, " ")}",
                             style: StyleManager.labelMedium(),
                           ),
                         ],
@@ -63,11 +71,11 @@ class StaffDetailsViewBody extends StatelessWidget {
                   ),
                   RichText(
                     text: TextSpan(
-                      text: "This is ",
+                      text: "${local.translate("this_is")} ",
                       style: StyleManager.body1Medium(),
                       children: <TextSpan>[
                         TextSpan(text: state.staffDetails[0].role, style: const TextStyle(color: ColorManager.orangeLight)),
-                        const TextSpan(text: " account!"),
+                        TextSpan(text: " ${local.translate("account")}!"),
                       ],
                     ),
                   ),
@@ -75,14 +83,14 @@ class StaffDetailsViewBody extends StatelessWidget {
                     height: MediaQuery.of(context).size.height * .015,
                   ),
                   Text(
-                    "Join at: ${(state.staffDetails[0].createdAt).replaceRange(10, 27, " ")}",
+                    "${local.translate("join_at")}: ${(state.staffDetails[0].createdAt).replaceRange(10, 27, " ")}",
                     style: StyleManager.body1Medium(),
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .015,
                   ),
                   Text(
-                    "Contact information:",
+                    "${local.translate("contact_information")}:",
                     style: StyleManager.body2Medium(
                       color: Colors.grey.shade500,
                     ),
@@ -91,14 +99,14 @@ class StaffDetailsViewBody extends StatelessWidget {
                     height: MediaQuery.of(context).size.height * .015,
                   ),
                   CustomTextInfo(
-                    textAddress: "Email address",
+                    textAddress: local.translate("email_address"),
                     text: state.staffDetails[0].email,
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .02,
                   ),
                   CustomTextInfo(
-                    textAddress: "Phone number",
+                    textAddress: local.translate("phone_number"),
                     text: state.staffDetails[0].number.toString(),
                   ),
                 ],

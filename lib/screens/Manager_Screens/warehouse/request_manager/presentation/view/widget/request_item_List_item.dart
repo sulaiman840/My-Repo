@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
+import '../../../../../../../core/localization/app_localizations.dart';
 import '../../../../../../../core/utils/app_manager.dart';
 import '../../../../../../../core/utils/color_manager.dart';
-import '../../../../../../warehouse_home/category_warehouse/data/models/all_request_item_model.dart';
+import '../../../data/models/all_request_item_model.dart';
 
 class RequestItemListItem extends StatelessWidget {
   RequestItemListItem({Key? key, required this.allRequestItem}) : super(key: key);
@@ -34,6 +37,7 @@ class RequestItemListItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: AppSize.s16),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         getName(allRequestItem.requsetPending),
@@ -43,15 +47,16 @@ class RequestItemListItem extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
-                      Text(
-                        "Expired date: ${getExpiredDate(allRequestItem.requsetPending)}",
+                      allRequestItem.requsetPending.contains("expired_date") ? Text(
+                        "${AppLocalizations.of(context).translate('expired_date')}: ${getExpiredDate(allRequestItem.requsetPending)}",
                         style: TextStyle(
                             color: Colors.grey.shade600,
                             fontSize: 14.0
                         ),
-                      ),
+                      )
+                          : const SizedBox(height: 0, width: 0),
                       Text(
-                        "Status: ${allRequestItem.status}",
+                        "${AppLocalizations.of(context).translate('status')} ${allRequestItem.status}",
                         style: TextStyle(
                             color: Colors.grey.shade600,
                             fontSize: 14.0
@@ -71,19 +76,37 @@ class RequestItemListItem extends StatelessWidget {
   }
   int j = -1;
   String getName(String list){
-    String name = '';
-    int i;
-    for(i = 9; list[i] == '\\' ; i++){
-      name = name + allRequestItem.requsetPending[i];
+    String name = '';/*allRequestCategory.requsetPending[9] + allRequestCategory.requsetPending[10] + allRequestCategory.requsetPending[11] +
+        allRequestCategory.requsetPending[12] +
+        allRequestCategory.requsetPending[13] + allRequestCategory.requsetPending[14] + allRequestCategory.requsetPending[15] + allRequestCategory.requsetPending[16];*/
+    String name1 = "";
+    int i = 0;
+    for(i = 9; i < list.length /*list[i] == '"'*/ ; i++){
+      if(allRequestItem.requsetPending[i] == '"') {
+        break;
+      }
+      name1 = name1 + allRequestItem.requsetPending[i];
+      log("$name1**********");
     }
-    j = i;
-    return name;
+    j=i;
+    log(i.toString());
+    log("$name1----------");
+    log(name);
+    return name1;
   }
   String getExpiredDate(String list){
-    String expiredDate = '';
-    for(j + 18; list[2] == '\\' ; j++){
-      expiredDate = expiredDate + allRequestItem.requsetPending[j];
+    String name1 = "";
+    int i = 0;
+    for(i = j+18; i < list.length /*list[i] == '"'*/ ; i++){
+      if(allRequestItem.requsetPending[i] == '"') {
+        break;
+      }
+      name1 = name1 + allRequestItem.requsetPending[i];
+      //log("$name1**********");
     }
-    return expiredDate;
+    //log(i.toString());
+    //log("$name1----------");
+    //log(name);
+    return name1;
   }
 }

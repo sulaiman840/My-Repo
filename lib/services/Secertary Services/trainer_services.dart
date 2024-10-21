@@ -2,10 +2,14 @@ import 'package:dio/dio.dart';
 import '../../core/utils/shared_preferences_helper.dart';
 import '../../models/Secertary Model/trainer_course_registration.dart';
 import '../../models/Secertary Model/trainer_model.dart';
+import '../../models/notification_data.dart';
+import '../notification_service.dart';
+import '../token_service.dart';
 
 class TrainerService {
   final Dio _dio = Dio();
-
+  final TokenService _tokenService = TokenService();
+  final NotificationService _notificationService = NotificationService();
   Future<List<Trainer>> fetchTrainers() async {
     try {
       final response = await _dio.get(
@@ -74,7 +78,7 @@ class TrainerService {
   Future<void> updateTrainer(int id, Trainer trainer) async {
     try {
       final response = await _dio.post(
-        'http://127.0.0.1:8000/api/updatetrainer/$id',
+        'http://127.0.0.1:8000/api/updateTrainer/$id',
         data: trainer.toJson(),
         options: Options(
           headers: {
@@ -86,7 +90,7 @@ class TrainerService {
       if (response.statusCode != 200) {
         throw Exception('Failed to update trainer');
       }
-    } catch (error) {
+    } on DioError catch (error) {
       throw Exception('Failed to update trainer: $error');
     }
   }
@@ -102,8 +106,34 @@ class TrainerService {
         ),
       );
 
-      if (response.statusCode != 200) {
-        throw Exception('Failed to add trainer');
+      if (response.statusCode == 200) {
+        String accessToken = await _tokenService.fetchAccessToken();
+        String? managerFcmToken = await _tokenService.fetchFcmTokenByRole('manager');
+        final bool? manager_falge = await SharedPreferencesHelper.getCheckFlag();
+        print(managerFcmToken);
+
+        print(manager_falge);
+
+        if (managerFcmToken != null && manager_falge==true) {
+          // Send the notification
+          await _notificationService.sendNotification(accessToken, managerFcmToken);
+          print('Notification has been sent to Manager FCM token successfully');
+
+        } else {
+          print('Manager Device is not  turned on yet');
+        }
+        if (managerFcmToken != null) {
+          // Store the notification
+          NotificationData notification = NotificationData(
+            fcmToken: managerFcmToken,
+            title: 'Trainer Request ',
+            body: 'Secertary Added a new Trainer',
+          );
+
+          await _tokenService.storeNotification(notification);}
+
+        print('Trainer added successfully.');
+
       }
     } catch (error) {
       throw Exception('Failed to add trainer: $error');

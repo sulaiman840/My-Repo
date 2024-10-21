@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../../core/localization/app_localizations.dart';
 import '../../../../../core/utils/app_manager.dart';
 import '../../../../../core/utils/color_manager.dart';
 import '../../../../../core/utils/style_manager.dart';
@@ -12,9 +14,11 @@ class StaffsViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //AppLocalizations local = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsetsDirectional.only(
         top: AppPadding.p16,
+        bottom: AppPadding.p16,
         start: AppPadding.p16,
         end: AppPadding.p16,
       ),
@@ -30,10 +34,11 @@ class StaffsViewBody extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
+                    context.go('/CreateStaffView');
+                    /*Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => CreateStaffView(),)
-                    );
+                    );*/
                   },
                   child: circleIconWidget(
                     icon: Icons.add,
@@ -63,24 +68,24 @@ class StaffsViewBody extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "Rank",
+                        AppLocalizations.of(context).translate("rank"),
                         style: StyleManager.body1Regular(),
                       ),
                       const SizedBox(width: AppSize.s50,),
                       Center(
                         child: Text(
-                          "Name",
+                          AppLocalizations.of(context).translate("name"),
                           style: StyleManager.body1Regular(color: ColorManager.blackColor),
                         ),
                       ),
                       const Spacer(),
                       Text(
-                        "Role",
+                        AppLocalizations.of(context).translate("role"),
                         style: StyleManager.body1Regular(color: ColorManager.blackColor),
                       ),
                       const Spacer(),
                       Text(
-                        "Date of join",
+                        AppLocalizations.of(context).translate("date_of_join"),
                         style: StyleManager.body1Regular(color: ColorManager.blackColor),
                       ),
                       const SizedBox(height: AppSize.s50,),

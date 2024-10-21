@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/utils/color_manager.dart';
 import '../../../models/Secertary Model/beneficiary_model.dart';
 
@@ -24,8 +25,8 @@ class DisplayProfessionalSkillWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(skill.jobTitle ?? '', style: TextStyle(fontSize: 16, color: ColorManager.bc4)),
-          Text('Start: ${skill.start}', style: TextStyle(fontSize: 16, color: ColorManager.bc4)),
-          Text('End: ${skill.end}', style: TextStyle(fontSize: 16, color: ColorManager.bc4)),
+          Text('${AppLocalizations.of(context).translate('start')}: ${skill.start}', style: TextStyle(fontSize: 16, color: ColorManager.bc4)),
+          Text('${AppLocalizations.of(context).translate('end')}: ${skill.end}', style: TextStyle(fontSize: 16, color: ColorManager.bc4)),
           Text(skill.jobTasks ?? '', style: TextStyle(fontSize: 16, color: ColorManager.bc4)),
         ],
       ),

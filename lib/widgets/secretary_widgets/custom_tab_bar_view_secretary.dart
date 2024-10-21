@@ -18,7 +18,7 @@ class CustomTabBarViewSecertary extends StatelessWidget {
     return TabBarView(
       controller: tabController,
       children: [
-        DashboardOverview(),
+ //       DashboardOverview(),
         CourseManagementScreen(),
         BeneficiaryManagementScreen(),
         TrainerManagementScreen(),

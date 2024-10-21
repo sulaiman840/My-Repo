@@ -15,12 +15,12 @@ class CreateCategoryCubit extends Cubit<CreateCategoryState> {
 
   Future<void> fetchCreateCategory({
     required String name,
-    required int? parentId,
+    required int parentId,
   }) async {
     emit(CreateCategoryLoading());
     var result = await categoryRepo.fetchCreateCategory(
       name: name,
-      parentId: parentId!,
+      parentId: parentId,
     );
 
     result.fold((failure) {

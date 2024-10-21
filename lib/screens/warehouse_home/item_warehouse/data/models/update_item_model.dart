@@ -17,10 +17,10 @@ class UpdateItemModel {
   late final String name;
   late final String description;
   late final int quantity;
-  late final int minimumQuantity;
+  late final int? minimumQuantity;
   late final int status;
-  late final int available;
-  late final String expiredDate;
+  late final int? available;
+  late final String? expiredDate;
   late final int typeId;
   late final int categoryId;
   late final String createdAt;

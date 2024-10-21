@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../Bloc/manager/education_cubit.dart';
 import '../../../Bloc/manager/education_state.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/utils/color_manager.dart';
 import 'Beneficiaries_Education_Screen/beneficiaries_education_screen.dart';
 import 'Courses_Education_Screen/courses_education_screen.dart';
@@ -11,24 +13,19 @@ class EducationScreen extends StatelessWidget {
   const EducationScreen({super.key});
 
   void _navigateTo(BuildContext context, String category) {
-    Widget targetScreen;
     switch (category) {
       case 'Courses':
-        targetScreen = CoursesEducationScreen();
+        GoRouter.of(context).go('/courses_education');
         break;
       case 'Beneficiaries':
-        targetScreen = BeneficiariesEducationScreen();
+        GoRouter.of(context).go('/beneficiaries_education');
         break;
       case 'Trainers':
-        targetScreen = TrainersEducationScreen();
+        GoRouter.of(context).go('/trainers_education');
         break;
       default:
-        targetScreen = CoursesEducationScreen();
+        GoRouter.of(context).go('/courses_education');
     }
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => targetScreen),
-    );
   }
 
   @override
@@ -40,7 +37,7 @@ class EducationScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Education Dashboard',
+          AppLocalizations.of(context).translate('education_dashboard'),
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: ColorManager.bc4,
@@ -122,10 +119,10 @@ class EducationScreen extends StatelessWidget {
           runSpacing: 8,
           alignment: WrapAlignment.spaceBetween,
           children: [
-            _buildMetricCard('Completed Courses', '$rateCompletedCourses%', Icons.school, ColorManager.blue, itemWidth, fixedHeight, Colors.white),
-            _buildMetricCard('Completed Beneficiaries', '$rateCompletedBeneficiary%', Icons.group, ColorManager.orange, itemWidth, fixedHeight, Colors.white),
-            _buildMetricCard('Processing Beneficiaries', '$rateProcessingBeneficiary%', Icons.hourglass_empty, ColorManager.blue, itemWidth, fixedHeight, Colors.white),
-            _buildMetricCard('Average Age', '$averageAge years', Icons.calendar_today,ColorManager.orange, itemWidth, fixedHeight, Colors.white),
+            _buildMetricCard(AppLocalizations.of(context).translate('completed_courses'), '$rateCompletedCourses%', Icons.school, ColorManager.blue, itemWidth, fixedHeight, Colors.white),
+            _buildMetricCard(AppLocalizations.of(context).translate('completed_beneficiaries'), '$rateCompletedBeneficiary%', Icons.group, ColorManager.orange, itemWidth, fixedHeight, Colors.white),
+            _buildMetricCard(AppLocalizations.of(context).translate('processing_beneficiaries'), '$rateProcessingBeneficiary%', Icons.hourglass_empty, ColorManager.blue, itemWidth, fixedHeight, Colors.white),
+            _buildMetricCard(AppLocalizations.of(context).translate('processing_beneficiaries'), '$averageAge ${AppLocalizations.of(context).translate('years')}', Icons.calendar_today,ColorManager.orange, itemWidth, fixedHeight, Colors.white),
           ],
         );
       },

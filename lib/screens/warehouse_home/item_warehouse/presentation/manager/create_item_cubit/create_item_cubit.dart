@@ -19,8 +19,8 @@ class CreateItemCubit extends Cubit<CreateItemState> {
     required int categoryId,
     required int quantity,
     required String description,
-    required String expiredDate,
-    required int minimumQuantity,
+    required String? expiredDate,
+    required int? minimumQuantity,
   }) async {
     emit(CreateItemLoading());
     var result = await itemRepo.fetchCreateItem(

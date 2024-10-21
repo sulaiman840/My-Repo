@@ -9,6 +9,9 @@ class AllTypeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AllTypeViewBody();
+    return Container(
+      color: Colors.white,
+      child: AllTypeViewBody(),
+    );
   }
 }

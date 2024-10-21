@@ -6,13 +6,24 @@ import '../../../../../../../core/utils/style_manager.dart';
 import '../../../../../../warehouse_home/item_warehouse/data/models/search_items_model.dart';
 
 class SearchListViewItemManager extends StatelessWidget {
-  const SearchListViewItemManager({Key? key, required this.rank, required this.allSearchItems}) : super(key: key);
+  SearchListViewItemManager({Key? key, required this.rank, required this.allSearchItems}) : super(key: key);
 
   final DataSearch allSearchItems;
   final int rank;
+  DateTime today = DateTime.now();
+  DateTime? inputDate;
+  DateTime? todayOnlyDate;
+  DateTime? inputOnlyDate;
+  DateTime? oneWeekLater;
 
   @override
   Widget build(BuildContext context) {
+    if(allSearchItems.expiredDate != null) {
+      inputDate = DateTime.parse(allSearchItems.expiredDate!);
+      todayOnlyDate = DateTime(today.year, today.month, today.day);
+      inputOnlyDate = DateTime(inputDate!.year, inputDate!.month, inputDate!.day);
+      oneWeekLater = todayOnlyDate!.add(Duration(days: 7));
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -40,7 +51,14 @@ class SearchListViewItemManager extends StatelessWidget {
               Center(
                 child: Text(
                   allSearchItems.name,
-                  style: StyleManager.body1Regular(color: ColorManager.blackColor),
+                  style: StyleManager.body1Regular(
+                    color: allSearchItems.expiredDate == null ? ColorManager.blackColor
+                        : inputOnlyDate!.isBefore(todayOnlyDate!) ? Colors.red
+                        : inputOnlyDate!.isAfter(oneWeekLater!) ? Colors.green
+                        : inputOnlyDate!.isAtSameMomentAs(todayOnlyDate!) ? Colors.orange
+                        : inputOnlyDate!.isAfter(todayOnlyDate!) ? Colors.orange
+                        : ColorManager.blackColor,
+                  ),
                 ),
               ),
               const Spacer(),

@@ -4,6 +4,7 @@ import '../../../Bloc/secertary/course/course_cubit.dart';
 import '../../../Bloc/secertary/course/course_state.dart';
 import '../../../Bloc/manager/pending_course_cubit.dart';
 import '../../../Bloc/manager/pending_course_state.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/utils/color_manager.dart';
 import '../../../models/Secertary Model/course_model.dart';
 import '../../../widgets/general_widgets/common_scaffold.dart';
@@ -33,7 +34,7 @@ class _PendingCourseScreenState extends State<PendingCourseScreen> {
     String nameCourse = '';
     int coursePeriod = 0;
     String type = '';
-    String courseStatus = 'Active';
+    String courseStatus = AppLocalizations.of(context).translate('active');
     String specialty = '';
     String description = '';
     String sessionDuration = '';
@@ -50,24 +51,23 @@ class _PendingCourseScreenState extends State<PendingCourseScreen> {
                 Navigator.of(context).pop();
                 _fetchPendingRequests();
               } else if (state is CourseError) {
-
-                print("Error With Creating New Course");
+                print(AppLocalizations.of(context).translate('error_with_creating_course'));
               }
             },
             builder: (context, state) {
               bool isLoading = state is CourseLoading;
               return AlertDialog(
-                title: Text('Create a New Course'),
+                title: Text(AppLocalizations.of(context).translate('create_new_course')),
                 content: Form(
                   key: _formKey,
                   child: SingleChildScrollView(
                     child: Column(
                       children: <Widget>[
                         TextFormField(
-                          decoration: InputDecoration(labelText: 'Course Name'),
+                          decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('course_name')),
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'Please enter the course name';
+                              return AppLocalizations.of(context).translate('please_enter_course_name');
                             }
                             return null;
                           },
@@ -76,13 +76,13 @@ class _PendingCourseScreenState extends State<PendingCourseScreen> {
                           },
                         ),
                         TextFormField(
-                          decoration: InputDecoration(labelText: 'Course Period'),
+                          decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('course_period')),
                           keyboardType: TextInputType.number,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'Please enter the course period';
+                              return AppLocalizations.of(context).translate('please_enter_course_period');
                             } else if (int.tryParse(value) == null) {
-                              return 'Please enter a valid number';
+                              return AppLocalizations.of(context).translate('please_enter_valid_number');
                             }
                             return null;
                           },
@@ -91,10 +91,10 @@ class _PendingCourseScreenState extends State<PendingCourseScreen> {
                           },
                         ),
                         TextFormField(
-                          decoration: InputDecoration(labelText: 'Type'),
+                          decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('type')),
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'Please enter the course type';
+                              return AppLocalizations.of(context).translate('please_enter_course_type');
                             }
                             return null;
                           },
@@ -103,10 +103,10 @@ class _PendingCourseScreenState extends State<PendingCourseScreen> {
                           },
                         ),
                         TextFormField(
-                          decoration: InputDecoration(labelText: 'Session Duration'),
+                          decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('session_duration')),
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'Please enter the Session Duration';
+                              return AppLocalizations.of(context).translate('please_enter_session_duration');
                             }
                             return null;
                           },
@@ -116,28 +116,28 @@ class _PendingCourseScreenState extends State<PendingCourseScreen> {
                         ),
                         DropdownButtonFormField<String>(
                           value: courseStatus,
-                          items: ['Active', 'Inactive'].map((String value) {
+                          items: [AppLocalizations.of(context).translate('active'), AppLocalizations.of(context).translate('inactive')].map((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(value),
                             );
                           }).toList(),
-                          decoration: InputDecoration(labelText: 'Course Status'),
+                          decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('course_status')),
                           onChanged: (value) {
                             courseStatus = value!;
                           },
                           validator: (value) {
                             if (value == null) {
-                              return 'Please select the course status';
+                              return AppLocalizations.of(context).translate('please_select_course_status');
                             }
                             return null;
                           },
                         ),
                         TextFormField(
-                          decoration: InputDecoration(labelText: 'Specialty'),
+                          decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('specialty')),
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'Please enter the specialty';
+                              return AppLocalizations.of(context).translate('please_enter_specialty');
                             }
                             return null;
                           },
@@ -146,10 +146,10 @@ class _PendingCourseScreenState extends State<PendingCourseScreen> {
                           },
                         ),
                         TextFormField(
-                          decoration: InputDecoration(labelText: 'Description'),
+                          decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('description')),
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'Please enter the description';
+                              return AppLocalizations.of(context).translate('please_enter_description');
                             }
                             return null;
                           },
@@ -163,7 +163,7 @@ class _PendingCourseScreenState extends State<PendingCourseScreen> {
                 ),
                 actions: [
                   TextButton(
-                    child: Text('Cancel'),
+                    child: Text(AppLocalizations.of(context).translate('cancel')),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -171,7 +171,7 @@ class _PendingCourseScreenState extends State<PendingCourseScreen> {
                   TextButton(
                     child: isLoading
                         ? CircularProgressIndicator()
-                        : Text('Create'),
+                        : Text(AppLocalizations.of(context).translate('create')),
                     onPressed: isLoading
                         ? null
                         : () {
@@ -181,7 +181,7 @@ class _PendingCourseScreenState extends State<PendingCourseScreen> {
                           id: 0,
                           nameCourse: nameCourse,
                           coursePeriod: coursePeriod,
-                          sessionDuration:sessionDuration ,
+                          sessionDuration: sessionDuration,
                           sessionsGiven: sessionsGiven,
                           type: type,
                           courseStatus: courseStatus,
@@ -212,7 +212,7 @@ class _PendingCourseScreenState extends State<PendingCourseScreen> {
         }
       },
       child: CommonScaffold(
-        title: 'Pending Course Requests',
+        title: AppLocalizations.of(context).translate('pending_course_requests'),
         scaffoldKey: _scaffoldKey,
         body: Column(
           children: [
@@ -226,7 +226,7 @@ class _PendingCourseScreenState extends State<PendingCourseScreen> {
                 ),
                 onPressed: () => _showAddCourseDialog(context),
                 child: Text(
-                  'Create a New Course',
+                  AppLocalizations.of(context).translate('create_new_course'),
                   style: TextStyle(color: Colors.black),
                 ),
               ),
@@ -264,11 +264,11 @@ class _PendingCourseScreenState extends State<PendingCourseScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Period: ${course.coursePeriod}',
+                                    '${AppLocalizations.of(context).translate('period')}: ${course.coursePeriod}',
                                     style: TextStyle(color: ColorManager.bc4),
                                   ),
                                   Text(
-                                    'Status: ${pendingRequest.status}',
+                                    '${AppLocalizations.of(context).translate('status')}: ${pendingRequest.status}',
                                     style: TextStyle(color: ColorManager.bc3),
                                   ),
                                 ],
@@ -279,7 +279,7 @@ class _PendingCourseScreenState extends State<PendingCourseScreen> {
                                 size: 12,
                               ),
                               onTap: () {
-
+                                // Handle onTap if necessary
                               },
                             ),
                           );

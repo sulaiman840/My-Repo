@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../models/Pending Model/pending_course_model.dart';
 import '../../../core/utils/color_manager.dart';
 import '../../../widgets/general_widgets/common_scaffold.dart';
@@ -32,7 +34,7 @@ class CourseDetailManagerScreen extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
-                  child: Text('Approve', style: TextStyle(fontSize: 16, color: Colors.white)),
+                  child: Text(AppLocalizations.of(context).translate('approve'), style: TextStyle(fontSize: 16, color: Colors.white)),
                 ),
                 SizedBox(width: 20,),
                 ElevatedButton(
@@ -42,7 +44,7 @@ class CourseDetailManagerScreen extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
-                  child: Text('Reject', style: TextStyle(fontSize: 16, color: Colors.white)),
+                  child: Text(AppLocalizations.of(context).translate('reject'), style: TextStyle(fontSize: 16, color: Colors.white)),
                 ),
               ],
             ),
@@ -57,16 +59,16 @@ class CourseDetailManagerScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildDetailItem(Icons.book, 'Course Name', course.nameCourse),
-                    _buildDetailItem(Icons.schedule, 'Period', course.coursePeriod.toString()),
-                    _buildDetailItem(Icons.category, 'Type', course.type),
+                    _buildDetailItem(Icons.book, AppLocalizations.of(context).translate('course_name'), course.nameCourse),
+                    _buildDetailItem(Icons.schedule, AppLocalizations.of(context).translate('period'), course.coursePeriod.toString()),
+                    _buildDetailItem(Icons.category, AppLocalizations.of(context).translate('type'), course.type),
                     // _buildDetailItem(Icons.timeline, 'Session Duration', course.sessionDuration?.toString() ?? 'N/A'),
           //          _buildDetailItem(Icons.timeline, 'Session Duration', course.sessionDuration.toString()),
 
-                    _buildDetailItem(Icons.info_outline, 'Status', course.courseStatus),
-                    _buildDetailItem(Icons.star, 'Specialty', course.specialty),
-                    _buildDetailItem(Icons.description, 'Description', course.description),
-                    _buildDetailItem(Icons.assignment, 'Request Status', pendingRequest.status),
+                    _buildDetailItem(Icons.info_outline, AppLocalizations.of(context).translate('status'), course.courseStatus),
+                    _buildDetailItem(Icons.star, AppLocalizations.of(context).translate('specialty'), course.specialty),
+                    _buildDetailItem(Icons.description, AppLocalizations.of(context).translate('description'), course.description),
+                    _buildDetailItem(Icons.assignment, AppLocalizations.of(context).translate('request_status'), pendingRequest.status),
                   ],
                 ),
               ),
@@ -79,12 +81,12 @@ class CourseDetailManagerScreen extends StatelessWidget {
 
   void _approveRequest(BuildContext context) {
     context.read<PendingRequestCubit>().approveRequest(pendingRequest.id);
-    Navigator.pop(context);
+    context.go('/manager_home?tab=3');
   }
 
   void _rejectRequest(BuildContext context) {
     context.read<PendingRequestCubit>().rejectRequest(pendingRequest.id);
-    Navigator.pop(context);
+    context.go('/manager_home?tab=3');
   }
 
   Widget _buildDetailItem(IconData icon, String label, String value) {

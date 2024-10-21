@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../models/Secertary Model/beneficiary_model.dart';
 
 class PreviousTrainingCourseWidget extends StatelessWidget {
@@ -20,7 +21,7 @@ class PreviousTrainingCourseWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Previous Training Courses',
+              AppLocalizations.of(context).translate('previous_training_courses'),
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             ListView.builder(
@@ -32,21 +33,21 @@ class PreviousTrainingCourseWidget extends StatelessWidget {
                   children: [
                     TextFormField(
                       initialValue: previousTrainingCourses[index].certificateAndType,
-                      decoration: InputDecoration(labelText: 'Certificate and Type'),
+                      decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('certificate_and_type')),
                       onSaved: (value) {
                         previousTrainingCourses[index].certificateAndType = value!;
                       },
                     ),
                     TextFormField(
                       initialValue: previousTrainingCourses[index].executingAgency,
-                      decoration: InputDecoration(labelText: 'Executing Agency'),
+                      decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('executing_agency')),
                       onSaved: (value) {
                         previousTrainingCourses[index].executingAgency = value!;
                       },
                     ),
                     TextFormField(
                       initialValue: previousTrainingCourses[index].dateExecute,
-                      decoration: InputDecoration(labelText: 'Date of Execution'),
+                      decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('date_of_execution')),
                       onSaved: (value) {
                         previousTrainingCourses[index].dateExecute = value!;
                       },

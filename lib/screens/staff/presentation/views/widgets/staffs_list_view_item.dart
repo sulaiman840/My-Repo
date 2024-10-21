@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:project2/core/utils/assets_manager.dart';
+import 'package:go_router/go_router.dart';
 import 'package:project2/screens/staff/data/models/show_all_staff_model.dart';
 import 'package:project2/screens/staff/presentation/manger/delete_staff_cubit/delete_staff_cubit.dart';
 import 'package:project2/screens/staff/presentation/views/update_staff_view.dart';
 
+import '../../../../../core/localization/app_localizations.dart';
 import '../../../../../core/utils/app_manager.dart';
 import '../../../../../core/utils/color_manager.dart';
 import '../../../../../core/utils/style_manager.dart';
@@ -45,7 +48,7 @@ class StaffsListViewItem extends StatelessWidget {
                 style: StyleManager.body1Regular(),
               ),
               const SizedBox(width: AppSize.s50,),
-              const CustomImageNetwork(image: AssetsManager.testImage,),
+              allStaff.imagePath != null ? CustomImageNetwork(image: allStaff.imagePath?.replaceRange(0, 11, ''),) : const CustomImageAsset(),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.007,
               ),
@@ -69,12 +72,14 @@ class StaffsListViewItem extends StatelessWidget {
               IconBtnWidget(
                 onPressed: ()
                 {
-                  Navigator.push(
+                  context.replace('/UpdateStaffView', extra: allStaff);
+                  log(allStaff.id.toString());
+                  /*Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => UpdateStaffView(
                       allStaff: allStaff,
                     ),),
-                  );
+                  );*/
                 },
                 icon: Icons.edit,
                 color: ColorManager.blue2,
@@ -82,7 +87,30 @@ class StaffsListViewItem extends StatelessWidget {
               IconBtnWidget(
                 onPressed: ()
                 {
-                  DeleteStaffCubit.get(context).fetchDeleteStaff(id: allStaff.id);
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext contextD) {
+                      return AlertDialog(
+                        content: Text(AppLocalizations.of(context).translate('make_sure_delete')),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(AppLocalizations.of(context).translate('cancel')),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              DeleteStaffCubit.get(context).fetchDeleteStaff(id: allStaff.id);
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(AppLocalizations.of(context).translate('delete')),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                  //DeleteStaffCubit.get(context).fetchDeleteStaff(id: allStaff.id);
                 },
                 icon: Icons.delete,
                 color: ColorManager.orange,

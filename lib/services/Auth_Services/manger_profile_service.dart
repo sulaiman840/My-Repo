@@ -1,21 +1,23 @@
 import 'package:dio/dio.dart';
 import 'package:project2/models/Auth%20Model/user_profile.dart';
+import '../../core/utils/shared_preferences_helper.dart';
 
 class MangerProfileService {
   final Dio _dio = Dio();
-  final String _baseUrl = 'http://127.0.0.1:8000/api';
-  final String _token =
-'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzE5Nzk0OTQwLCJleHAiOjE3MzcwNzQ5NDAsIm5iZiI6MTcxOTc5NDk0MCwianRpIjoicnR5RWUyZEJ3aGx3czZjZyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.J4aAWZCv5VQJvLzJgs-HeLIkhXdpLY9G6LnA8Oz5qWU';
+  final String _baseUrl = 'http://127.0.0.1:8000/api/userProfile';
+
   Future<UserProfile> fetchUserProfile() async {
     try {
+      final token = await SharedPreferencesHelper.getJwtToken();
       final response = await _dio.get(
-        '$_baseUrl/userProfile',
+        '$_baseUrl',
         options: Options(
           headers: {
-            'Authorization': 'Bearer $_token',
+            'Authorization': 'Bearer $token',
           },
         ),
       );
+
       if (response.statusCode == 200) {
         print('Response data: ${response.data}');
         return UserProfile.fromJson(response.data[0]);

@@ -54,7 +54,7 @@ class TextIconButton extends StatelessWidget {
                 size: textSize ?? 14.5,
               ),
             ),
-            icon == null ? SizedBox(height: 0,width: 0,) : Icon(
+            icon == null ? const SizedBox(height: 0,width: 0,) : Icon(
               icon,
               color: iconColor ?? Colors.white,
               size: iconSize ?? 23,

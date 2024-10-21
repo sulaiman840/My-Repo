@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 
+import '../models/notification_message_model.dart';
+
 class NotificationService {
   final Dio _dio = Dio();
 
@@ -26,10 +28,27 @@ class NotificationService {
       );
 
       if (response.statusCode != 200) {
-        throw Exception('Failed to send notification');
+        throw Exception('Failed to send notificationnnnnnnnnn');
       }
     } catch (error) {
       throw Exception('Failed to send notification: $error');
+    }
+  }
+  Future<List<NotificationItem>> fetchNotificationsById(int userId) async {
+    try {
+      final response = await _dio.get(
+        'http://127.0.0.1:8000/api/shownotification/$userId',
+      );
+
+      if (response.statusCode == 200) {
+        NotificationResponse notificationResponse =
+        NotificationResponse.fromJson(response.data);
+        return notificationResponse.notifications;
+      } else {
+        throw Exception('Failed to fetch notifications');
+      }
+    } catch (error) {
+      throw Exception('Failed to fetch notifications: $error');
     }
   }
 }

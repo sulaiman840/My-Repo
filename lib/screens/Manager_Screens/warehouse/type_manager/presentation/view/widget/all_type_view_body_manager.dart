@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../../core/utils/app_manager.dart';
-import '../../../../../../../core/utils/color_manager.dart';
-import '../../../../../../../core/utils/style_manager.dart';
 import 'type_grid_view_manager.dart';
 
 class AllTypeViewBodyManager extends StatelessWidget {
@@ -12,9 +10,10 @@ class AllTypeViewBodyManager extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(
+    return const Padding(
+      padding: EdgeInsetsDirectional.only(
         top: AppPadding.p16,
+        bottom: AppPadding.p16,
         start: AppPadding.p16,
         end: AppPadding.p16,
       ),
@@ -23,10 +22,10 @@ class AllTypeViewBodyManager extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(
+            SizedBox(
               height: AppSize.s24,
             ),
-            const TypeGridViewManager(),
+            TypeGridViewManager(),
           ],
         ),
       ),

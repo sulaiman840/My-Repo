@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../models/Secertary Model/beneficiary_model.dart';
 
 class EducationalAttainmentWidget extends StatelessWidget {
@@ -20,7 +21,7 @@ class EducationalAttainmentWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Educational Attainments',
+              AppLocalizations.of(context).translate('educational_attainments'),
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             ListView.builder(
@@ -32,28 +33,28 @@ class EducationalAttainmentWidget extends StatelessWidget {
                   children: [
                     TextFormField(
                       initialValue: educationalAttainments[index].specialization,
-                      decoration: InputDecoration(labelText: 'Specialization'),
+                      decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('specialization')),
                       onSaved: (value) {
                         educationalAttainments[index].specialization = value!;
                       },
                     ),
                     TextFormField(
                       initialValue: educationalAttainments[index].certificate,
-                      decoration: InputDecoration(labelText: 'Certificate'),
+                      decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('certificate')),
                       onSaved: (value) {
                         educationalAttainments[index].certificate = value!;
                       },
                     ),
                     TextFormField(
                       initialValue: educationalAttainments[index].graduationRate,
-                      decoration: InputDecoration(labelText: 'Graduation Rate'),
+                      decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('graduation_rate')),
                       onSaved: (value) {
                         educationalAttainments[index].graduationRate = value!;
                       },
                     ),
                     TextFormField(
                       initialValue: educationalAttainments[index].academicYear,
-                      decoration: InputDecoration(labelText: 'Academic Year'),
+                      decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('academic_year')),
                       onSaved: (value) {
                         educationalAttainments[index].academicYear = value!;
                       },

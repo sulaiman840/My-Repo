@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../Bloc/secertary/course/course_cubit.dart';
 import '../../../../Bloc/secertary/course/course_state.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/utils/color_manager.dart';
 import '../../../../widgets/general_widgets/common_scaffold.dart';
-import '../../../Secertary_Screens/Course/course_detail_screen.dart';
-import 'course_detail_education.dart';
-
 
 class CoursesEducationScreen extends StatefulWidget {
   const CoursesEducationScreen({super.key});
@@ -25,7 +24,7 @@ class _CoursesEducationScreenState extends State<CoursesEducationScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffold(
-      title: 'Course Education',
+      title: AppLocalizations.of(context).translate('course_education'),
       scaffoldKey: GlobalKey<ScaffoldState>(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -54,23 +53,17 @@ class _CoursesEducationScreenState extends State<CoursesEducationScreen> {
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Period: ${course.coursePeriod}', style: TextStyle(color: ColorManager.bc4)),
-                          Text('Status: ${course.courseStatus}', style: TextStyle(color: ColorManager.bc3)),
+                          Text('${AppLocalizations.of(context).translate('period')}: ${course.coursePeriod}', style: TextStyle(color: ColorManager.bc4)),
+                          Text('${AppLocalizations.of(context).translate('status')}: ${course.courseStatus}', style: TextStyle(color: ColorManager.bc3)),
                         ],
                       ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.circle,
-                            color: course.courseStatus == 'Active' ? Colors.green : Colors.red,
-                            size: 12,
-                          ),
-
-                        ],
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        color: ColorManager.bc4,
                       ),
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => CourseDetailEducation(courseId: course.id)));
+                        // Pass courseId in the path
+                        context.go('/course_detail_education/${course.id}');
                       },
                     ),
                   );

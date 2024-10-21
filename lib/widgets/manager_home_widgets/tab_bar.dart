@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/utils/color_manager.dart';
+import '../../core/localization/app_localizations.dart';
 
 class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
   final TabController tabController;
@@ -7,21 +8,23 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
   CustomTabBar({required this.tabController});
 
   @override
-  Size get preferredSize => Size.fromHeight(50.0);
+  Size get preferredSize => const Size.fromHeight(50.0);
 
   @override
   Widget build(BuildContext context) {
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+
     return Container(
-      margin: EdgeInsets.all(15.0),
-      alignment: Alignment.centerLeft,
+      margin: const EdgeInsets.all(15.0),
+      alignment: isRtl ? Alignment.centerRight : Alignment.centerLeft,
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: 750),
+        constraints: const BoxConstraints(maxWidth: 750),
         child: Container(
-          height: 50,
+          height: 53,
           decoration: BoxDecoration(
             color: ColorManager.bc2,
             borderRadius: BorderRadius.circular(6),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 color: Colors.black26,
                 blurRadius: 3,
@@ -30,7 +33,7 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
             ],
           ),
           child: TabBar(
-            padding: EdgeInsetsDirectional.all(4),
+            padding: const EdgeInsetsDirectional.all(4),
             controller: tabController,
             indicatorSize: TabBarIndicatorSize.tab,
             indicator: BoxDecoration(
@@ -39,13 +42,24 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             labelColor: Colors.white,
             unselectedLabelColor: ColorManager.bc3,
-            labelStyle: TextStyle(fontSize: 12),
+            labelStyle: const TextStyle(fontSize: 12),
             tabs: [
-              Tab(icon: Icon(Icons.home, size: 16), text: 'Overview'),
-              Tab(icon: Icon(Icons.group, size: 16), text: 'Staff Management'),
-              Tab(icon: Icon(Icons.school, size: 16), text: 'Beneficiary Education'),
-              Tab(icon: Icon(Icons.store, size: 16), text: 'Warehouse'),
-              Tab(icon: Icon(Icons.manage_accounts, size: 16), text: 'Request Managment'),
+              Tab(
+                icon: const Icon(Icons.school, size: 16),
+                text: AppLocalizations.of(context).translate('beneficiary_education'),
+              ),
+              Tab(
+                icon: const Icon(Icons.group, size: 16),
+                text: AppLocalizations.of(context).translate('staff_management'),
+              ),
+              Tab(
+                icon: const Icon(Icons.store, size: 16),
+                text: AppLocalizations.of(context).translate('warehouse'),
+              ),
+              Tab(
+                icon: const Icon(Icons.manage_accounts, size: 16),
+                text: AppLocalizations.of(context).translate('request_management'),
+              ),
             ],
           ),
         ),

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../Bloc/secertary/trainer/trainer_cubit.dart';
 import '../../../../models/Secertary Model/trainer_model.dart';
+import '../../../core/localization/app_localizations.dart';
 
 class UpdateTrainerDialog extends StatelessWidget {
   final Trainer trainer;
@@ -21,7 +22,7 @@ class UpdateTrainerDialog extends StatelessWidget {
     late String _description = trainer.description ?? '';
 
     return AlertDialog(
-      title: Text("Update Trainer"),
+      title: Text(AppLocalizations.of(context).translate('update_trainer')),
       content: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -29,10 +30,10 @@ class UpdateTrainerDialog extends StatelessWidget {
             children: <Widget>[
               TextFormField(
                 initialValue: _name,
-                decoration: InputDecoration(labelText: 'Name'),
+                decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('name')),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter the trainer name';
+                    return AppLocalizations.of(context).translate('please_enter_trainer_name');
                   }
                   return null;
                 },
@@ -42,10 +43,12 @@ class UpdateTrainerDialog extends StatelessWidget {
               ),
               TextFormField(
                 initialValue: _email,
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('email')),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter the trainer email';
+                    return AppLocalizations.of(context).translate('please_enter_trainer_email');
+                  } else if (!value.contains('@') || !value.endsWith('.com')) {
+                    return AppLocalizations.of(context).translate('please_enter_valid_email_address');
                   }
                   return null;
                 },
@@ -55,10 +58,12 @@ class UpdateTrainerDialog extends StatelessWidget {
               ),
               TextFormField(
                 initialValue: _phone,
-                decoration: InputDecoration(labelText: 'Phone'),
+                decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('phone')),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter the trainer phone number';
+                    return AppLocalizations.of(context).translate('please_enter_trainer_phone_number');
+                  } else if (value.length != 10) {
+                    return AppLocalizations.of(context).translate('phone_number_exactly_digits');
                   }
                   return null;
                 },
@@ -68,10 +73,10 @@ class UpdateTrainerDialog extends StatelessWidget {
               ),
               TextFormField(
                 initialValue: _address,
-                decoration: InputDecoration(labelText: 'Address'),
+                decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('address')),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter the trainer address';
+                    return AppLocalizations.of(context).translate('please_enter_trainer_address');
                   }
                   return null;
                 },
@@ -81,10 +86,10 @@ class UpdateTrainerDialog extends StatelessWidget {
               ),
               TextFormField(
                 initialValue: _specialty,
-                decoration: InputDecoration(labelText: 'Specialty'),
+                decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('specialty')),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter the trainer specialty';
+                    return AppLocalizations.of(context).translate('please_enter_the_trainer_specialty');
                   }
                   return null;
                 },
@@ -94,10 +99,10 @@ class UpdateTrainerDialog extends StatelessWidget {
               ),
               TextFormField(
                 initialValue: _description,
-                decoration: InputDecoration(labelText: 'Description'),
+                decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('description')),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter the trainer description';
+                    return AppLocalizations.of(context).translate('please_enter_the_trainer_description');
                   }
                   return null;
                 },
@@ -111,13 +116,13 @@ class UpdateTrainerDialog extends StatelessWidget {
       ),
       actions: [
         TextButton(
-          child: Text("Cancel"),
+          child: Text(AppLocalizations.of(context).translate('cancel')),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: Text("Update"),
+          child: Text(AppLocalizations.of(context).translate('update')),
           onPressed: () {
             if (_formKey.currentState!.validate()) {
               _formKey.currentState!.save();

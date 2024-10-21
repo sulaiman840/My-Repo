@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../Bloc/secertary/student/document_cubit.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/utils/color_manager.dart';
 
 class DocumentManagerSection extends StatelessWidget {
@@ -26,7 +27,7 @@ class DocumentManagerSection extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Text(
-                'Documents',
+                AppLocalizations.of(context).translate('documents'),
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: ColorManager.bc5),
               ),
             ),
@@ -39,7 +40,7 @@ class DocumentManagerSection extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.only(top: 16.0),
                       child: Center(
-                        child: Text('No documents available.', style: TextStyle(fontSize: 16, color: Colors.grey)),
+                        child: Text(AppLocalizations.of(context).translate('no_documents_available'), style: TextStyle(fontSize: 16, color: Colors.grey)),
                       ),
                     );
                   } else {
@@ -56,10 +57,10 @@ class DocumentManagerSection extends StatelessWidget {
                                     if (await canLaunchUrl(imageUrl)) {
                                       await launchUrl(imageUrl);
                                     } else {
-                                      throw 'Could not launch $imageUrl';
+                                      throw '${AppLocalizations.of(context).translate('could_not_launch')} $imageUrl';
                                     }
                                   },
-                                  child: Text('View ID Image',style: TextStyle(color: ColorManager.blue)),
+                                  child: Text(AppLocalizations.of(context).translate('view_ID_mage'),style: TextStyle(color: ColorManager.blue)),
                                 ),
                               if (document.filePdf.isNotEmpty)
                                 TextButton(
@@ -68,10 +69,10 @@ class DocumentManagerSection extends StatelessWidget {
                                     if (await canLaunchUrl(pdfUrl)) {
                                       await launchUrl(pdfUrl);
                                     } else {
-                                      throw 'Could not launch $pdfUrl';
+                                      throw '${AppLocalizations.of(context).translate('could_not_launch')} $pdfUrl';
                                     }
                                   },
-                                  child: Text('View CV',style: TextStyle(color: ColorManager.blue)),
+                                  child: Text(AppLocalizations.of(context).translate('view_CV'),style: TextStyle(color: ColorManager.blue)),
                                 ),
                             ],
                           ),
@@ -82,7 +83,7 @@ class DocumentManagerSection extends StatelessWidget {
                 } else if (state is DocumentFailure) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 16.0),
-                    child: Text('Error: ${state.message}', style: TextStyle(color: Colors.red)),
+                    child: Text('${AppLocalizations.of(context).translate('error')}: ${state.message}', style: TextStyle(color: Colors.red)),
                   );
                 } else {
                   return Container();

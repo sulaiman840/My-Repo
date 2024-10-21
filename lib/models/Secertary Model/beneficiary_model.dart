@@ -151,8 +151,8 @@ class DataBeneficiary {
       updatedAt: json['updated_at'],
       thereIsDisbility: personalDisabilities,
       thereIsDisbilityFamilyMember: familyDisabilities,
-      educationalAttainments: json['educational_attainment'] != null
-          ? (json['educational_attainment'] as List)
+      educationalAttainments: json['educational'] != null
+          ? (json['educational'] as List)
           .map((item) => EducationalAttainment.fromJson(item))
           .toList()
           : [],
@@ -209,13 +209,13 @@ class DataBeneficiary {
       'updated_at': updatedAt,
       'thereIsDisbility': thereIsDisbility?.map((item) => item.toJson()).toList(),
       'thereIsDisbilityFamilyMember': thereIsDisbilityFamilyMember?.map((item) => item.toJson()).toList(),
-      'educational_attainment': educationalAttainments?.map((item) => item.toJson()).toList(),
+      'educational': educationalAttainments?.map((item) => item.toJson()).toList(),
       'previoustrainingcourses': previousTrainingCourses?.map((item) => item.toJson()).toList(),
       'foreignlanguages': foreignLanguages?.map((item) => item.toJson()).toList(),
       'professional_skills': professionalSkills?.map((item) => item.toJson()).toList(),
     };
 
-    // Remove keys with null values
+
     data.removeWhere((key, value) => value == null);
 
     return data;
@@ -254,7 +254,7 @@ class EducationalAttainment {
   String? academicYear;
 
   EducationalAttainment({
-    this.educationalAttainmentLevel,
+   this.educationalAttainmentLevel,
     this.specialization,
     this.certificate,
     this.graduationRate,
@@ -263,7 +263,7 @@ class EducationalAttainment {
 
   factory EducationalAttainment.fromJson(Map<String, dynamic> json) {
     return EducationalAttainment(
-      educationalAttainmentLevel: json['educationalAttainmentLevel'] ?? '',
+    educationalAttainmentLevel: json['educationalAttainmentLevel'] ?? '',
       specialization: json['specialization'] ?? '',
       certificate: json['certificate'] ?? '',
       graduationRate: json['graduationRate'] ?? '',
@@ -273,7 +273,7 @@ class EducationalAttainment {
 
   Map<String, dynamic> toJson() {
     return {
-      'educationalAttainmentLevel': educationalAttainmentLevel,
+    'educationalAttainmentLevel': educationalAttainmentLevel,
       'specialization': specialization,
       'certificate': certificate,
       'graduationRate': graduationRate,
@@ -282,14 +282,14 @@ class EducationalAttainment {
   }
 
   EducationalAttainment copyWith({
-    String? educationalAttainmentLevel,
+   String? educationalAttainmentLevel,
     String? specialization,
     String? certificate,
     String? graduationRate,
     String? academicYear,
   }) {
     return EducationalAttainment(
-      educationalAttainmentLevel: educationalAttainmentLevel ?? this.educationalAttainmentLevel,
+     educationalAttainmentLevel: educationalAttainmentLevel ?? this.educationalAttainmentLevel,
       specialization: specialization ?? this.specialization,
       certificate: certificate ?? this.certificate,
       graduationRate: graduationRate ?? this.graduationRate,

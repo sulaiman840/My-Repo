@@ -2,9 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
+import '../../../../../../../core/localization/app_localizations.dart';
 import '../../../../../../../core/utils/app_manager.dart';
 import '../../../../../../../core/utils/color_manager.dart';
-import '../../../../../../warehouse_home/category_warehouse/data/models/all_request_category_model.dart';
+import '../../../data/models/all_request_category_model.dart';
 
 class RequestCategoryListItem extends StatelessWidget {
   const RequestCategoryListItem({Key? key, required this.allRequestCategory}) : super(key: key);
@@ -49,14 +50,14 @@ class RequestCategoryListItem extends StatelessWidget {
                       ),
                       const Spacer(),
                       Text(
-                        "Created at: ${allRequestCategory.createdAt.replaceRange(10, 27, '')}",
+                        "${AppLocalizations.of(context).translate('created_at')} ${allRequestCategory.createdAt.replaceRange(10, 27, '')}",
                         style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: 14.0
+                            color: Colors.grey.shade600,
+                            fontSize: 14.0
                         ),
                       ),
                       Text(
-                        "Status: ${allRequestCategory.status}",
+                        "${AppLocalizations.of(context).translate('status')} ${allRequestCategory.status}",
                         style: TextStyle(
                             color: Colors.grey.shade600,
                             fontSize: 14.0
@@ -75,16 +76,17 @@ class RequestCategoryListItem extends StatelessWidget {
     );
   }
   String getName(String list){
-    String name = allRequestCategory.requsetPending[0] + allRequestCategory.requsetPending[1] + allRequestCategory.requsetPending[2] + allRequestCategory.requsetPending[3] +
-        allRequestCategory.requsetPending[4] + allRequestCategory.requsetPending[5] + allRequestCategory.requsetPending[6] + allRequestCategory.requsetPending[7] +
-        allRequestCategory.requsetPending[8] + allRequestCategory.requsetPending[9] + allRequestCategory.requsetPending[10] + allRequestCategory.requsetPending[11] +
-        allRequestCategory.requsetPending[12] +
-        allRequestCategory.requsetPending[13] + allRequestCategory.requsetPending[14] + allRequestCategory.requsetPending[15] + allRequestCategory.requsetPending[16];
-    for(int i = 12; list[i] == '\\' ; i++){
-      name = name + allRequestCategory.requsetPending[i];
-      log(name);
+    String name1 = "";
+    int i = 0;
+    for(i = 9; i < list.length /*list[i] == '"'*/ ; i++){
+      if(allRequestCategory.requsetPending[i] == '"') {
+        break;
+      }
+      name1 = name1 + allRequestCategory.requsetPending[i];
+      //log("$name1**********");
     }
-    log(name);
-    return name;
+    //log(i.toString());
+    log("$name1----------");
+    return name1;
   }
 }

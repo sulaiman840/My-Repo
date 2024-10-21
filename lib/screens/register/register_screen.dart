@@ -7,6 +7,7 @@ import 'dart:typed_data';
 
 import '../../Bloc/auth/register_cubit.dart';
 import '../../Bloc/auth/register_state.dart';
+import '../../core/localization/app_localizations.dart';
 import '../../services/Auth_Services/auth_services.dart';
 import '../../widgets/general_widgets/custom_text_form_field.dart';
 import '../../core/utils/app_manager.dart';
@@ -86,7 +87,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select an image.')),
+        SnackBar(content: Text(AppLocalizations.of(context).translate('please_select_image'))),
       );
     }
   }
@@ -113,7 +114,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     listener: (context, state) {
                       if (state is RegisterSuccess) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Registration successful')),
+                          SnackBar(content: Text(AppLocalizations.of(context).translate('registration_successful'))),
                         );
                       } else if (state is RegisterFailure) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -134,7 +135,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
-                              Text('Register', style: StyleManager.h1Bold(color: ColorManager.bluelight)),
+                              Text(AppLocalizations.of(context).translate('register'), style: StyleManager.h1Bold(color: ColorManager.bluelight)),
                               if (selectedImage != null)
                                 Container(
                                   height: 150,
@@ -150,38 +151,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ),
                               OutlinedButton(
                                 onPressed: pickImage,
-                                child: Text('Select Image'),
+                                child: Text(AppLocalizations.of(context).translate('select_image')),
                               ),
                               SizedBox(height: 20),
                               CustomTextFormField(
                                 controller: userNameController,
-                                labelText: 'Name',
-                                validator: (value) => value!.isEmpty ? 'Required*' : null,
+                                labelText: AppLocalizations.of(context).translate('name'),
+                                validator: (value) => value!.isEmpty ? AppLocalizations.of(context).translate('validate_required') : null,
                               ),
                               SizedBox(height: 10),
                               CustomTextFormField(
                                 controller: emailController,
-                                labelText: 'Email',
-                                validator: (value) => value!.isEmpty ? 'Required*' : null,
+                                labelText: AppLocalizations.of(context).translate('email'),
+                                validator: (value) => value!.isEmpty ? AppLocalizations.of(context).translate('validate_required') : null,
                               ),
                               SizedBox(height: 10),
                               CustomTextFormField(
                                 controller: passwordController,
-                                labelText: 'Password',
-                                validator: (value) => value!.isEmpty ? 'Required*' : null,
+                                labelText: AppLocalizations.of(context).translate('password'),
+                                validator: (value) => value!.isEmpty ? AppLocalizations.of(context).translate('validate_required') : null,
                                 obscureText: true,
                               ),
                               SizedBox(height: 10),
                               CustomTextFormField(
                                 controller: numberController,
-                                labelText: 'Number',
-                                validator: (value) => value!.isEmpty ? 'Required*' : null,
+                                labelText: AppLocalizations.of(context).translate('number'),
+                                validator: (value) => value!.isEmpty ? AppLocalizations.of(context).translate('validate_required') : null,
                               ),
                               SizedBox(height: 10),
                               CustomTextFormField(
                                 controller: roleController,
-                                labelText: 'Role',
-                                validator: (value) => value!.isEmpty ? 'Required*' : null,
+                                labelText: AppLocalizations.of(context).translate('role'),
+                                validator: (value) => value!.isEmpty ? AppLocalizations.of(context).translate('validate_required') : null,
                               ),
                               SizedBox(height: 20),
                               ElevatedButton(
@@ -189,14 +190,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   backgroundColor: WidgetStateProperty.all(ColorManager.bluelight),
                                 ),
                                 onPressed: register,
-                                child: Text('Register', style: StyleManager.h4Regular(color: ColorManager.bc0)),
+                                child: Text(AppLocalizations.of(context).translate('register'), style: StyleManager.h4Regular(color: ColorManager.bc0)),
                               ),
                               TextButton(
                                 onPressed: () {
                                   Navigator.pushReplacement(
                                       context, MaterialPageRoute(builder: (_) => LoginScreen()));
                                 },
-                                child: Text('Login', style: StyleManager.labelMedium(color: ColorManager.bluelight)),
+                                child: Text(AppLocalizations.of(context).translate('login'), style: StyleManager.labelMedium(color: ColorManager.bluelight)),
                               ),
                             ],
                           ),

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import '../../core/localization/app_localizations.dart';
 import '../../core/utils/color_manager.dart';
 import '../../widgets/manager_home_widgets/custom_app_bar.dart';
-import '../../widgets/manager_home_widgets/main_nav_bar.dart';
-import '../../widgets/manager_home_widgets/search_bar.dart';
-import '../manager_home_widgets/search_bar_scaffold.dart';
+import 'main_nav_bar.dart';
+import 'search_bar.dart';
+import 'search_bar_scaffold.dart';
 
 class CommonScaffold extends StatelessWidget {
   final String title;
@@ -34,7 +35,7 @@ class CommonScaffold extends StatelessWidget {
             Expanded(
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: 'Search...',
+                  hintText: AppLocalizations.of(context).translate('search_hint_text'),
                   prefixIcon: Icon(Icons.search, color: ColorManager.bc0),
                   contentPadding:
                   EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),

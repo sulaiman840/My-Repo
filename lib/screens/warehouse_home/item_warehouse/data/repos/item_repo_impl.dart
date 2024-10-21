@@ -9,8 +9,14 @@ import '../../../../../../constants.dart';
 import '../../../../../../core/errors/failures.dart';
 import '../../../../../../core/utils/dio_api_service.dart';
 import '../../../../../core/utils/shared_preferences_helper.dart';
+import '../../../../../models/notification_data.dart';
+import '../../../../../services/notification_service.dart';
+import '../../../../../services/token_service.dart';
 import '../models/all_items_model.dart';
+import '../models/consume_item_model.dart';
 import '../models/create_item_model.dart';
+import '../models/expired_items_model.dart';
+import '../models/expiring_soon_items_model.dart';
 import '../models/item_by_id_model.dart';
 import '../models/search_items_model.dart';
 import '../models/update_item_model.dart';
@@ -19,6 +25,8 @@ import 'item_repo.dart';
 class ItemRepoImpl implements ItemRepo {
   final DioApiService dioApiService;
   static var dio = Dio();
+  final TokenService _tokenService = TokenService();
+  final NotificationService _notificationService = NotificationService();
 
   ItemRepoImpl(this.dioApiService);
 
@@ -29,13 +37,13 @@ class ItemRepoImpl implements ItemRepo {
     try {
       var data = await (dioApiService.get(
           endPoint: 'items?paginate=$paginate',
-          token: await Constants.token
+          token: await SharedPreferencesHelper.getJwtToken()
       ));
       log(data.toString());
       AllItemsModel allItemsModel;
       allItemsModel = AllItemsModel.fromJson(data);
       List<DataView> allItems = [];
-      for (var item in allItemsModel.dataView) {
+      for (var item in allItemsModel.dataView!) {
         allItems.add(item);
       }
       return right(allItemsModel);
@@ -54,13 +62,13 @@ class ItemRepoImpl implements ItemRepo {
     required int categoryId,
     required int quantity,
     required String description,
-    required String expiredDate,
-    required int minimumQuantity
+    required String? expiredDate,
+    required int? minimumQuantity
   }) async {
     try{
       var data = await (dioApiService.post(
           endPoint: 'items',
-          data: {
+          data: minimumQuantity != null ? {
             "name": name,
             "type_id": typeId,
             "category_id": categoryId,
@@ -68,12 +76,64 @@ class ItemRepoImpl implements ItemRepo {
             "description": description,
             "expired_date": expiredDate,
             "minimum_quantity": minimumQuantity,
+          }
+              : expiredDate != null ? {
+            "name": name,
+            "type_id": typeId,
+            "category_id": categoryId,
+            "quantity": quantity,
+            "description": description,
+            "expired_date": expiredDate,
+            "minimum_quantity": minimumQuantity,
+          }
+              : {
+            "name": name,
+            "type_id": typeId,
+            "category_id": categoryId,
+            "quantity": quantity,
+            "description": description,
           },
-          token: await Constants.token
+          token: await SharedPreferencesHelper.getJwtToken()
       ));
       log(data.toString());
       CreateItemModel createItemModel;
+
+      //tttttttttttttt
+      String accessToken = await _tokenService.fetchAccessToken();
+      String? managerFcmToken = await _tokenService.fetchFcmTokenByRole('manager');
+
+      final bool? manager_falge = await SharedPreferencesHelper.getCheckFlag();
+
+      print(managerFcmToken);
+      //     print(SecetaryFcmToken);
+      print(manager_falge);
+
+      if (managerFcmToken != null && manager_falge==true) {
+        // Send the notification
+        await _notificationService.sendNotification(accessToken, managerFcmToken);
+        print('Notification has been sent to Manager FCM token successfully');
+
+      } else {
+        // print('Manager Device is not turned on yet');
+        print('hhhhhhhh');
+      }
+      if (managerFcmToken != null) {
+        // Store the notification
+        NotificationData notification = NotificationData(
+          fcmToken: managerFcmToken,
+          title: 'New Item Request',
+          body: 'Warehouse guard Added a new Item',
+        );
+
+        await _tokenService.storeNotification(notification);}
+
+
+      print('a new Item added successfully.');
+
+
+      //tttttttttttttt
       createItemModel = CreateItemModel.fromJson(data);
+
       return right(createItemModel);
     } catch (e) {
       if (e is DioError){
@@ -89,7 +149,7 @@ class ItemRepoImpl implements ItemRepo {
       var data = await (dioApiService.delete(
           endPoint: 'items/$id',
           data: {},
-          token: await Constants.token
+          token: await SharedPreferencesHelper.getJwtToken()
       ));
       log(data.toString());
       return right(data);
@@ -106,7 +166,7 @@ class ItemRepoImpl implements ItemRepo {
     try {
       var data = await (dioApiService.get(
           endPoint: 'items/$id',
-          token: await Constants.token
+          token: await SharedPreferencesHelper.getJwtToken()
       ));
       log(data.toString());
       ItemByIdModel itemByIdModel;
@@ -124,7 +184,7 @@ class ItemRepoImpl implements ItemRepo {
   Future<Either<Failure, UpdateItemModel>> fetchUpdateItem({
     required int id,
     required String name,
-    required String expiredDate,
+    required String? expiredDate,
     required int quantity,
     required String description,
     required int typeId,
@@ -133,18 +193,61 @@ class ItemRepoImpl implements ItemRepo {
     try{
       var data = await (dioApiService.put(
           endPoint: 'items/$id',
-          data: {
+          data: expiredDate != null ? {
             "name": name,
             "expired_date": expiredDate,
             "quantity": quantity,
             "description": description,
             "type_id": typeId,
-            "category_id": categoryId,          },
-          token: await Constants.token
+            "category_id": categoryId,
+          }
+              : {
+            "name": name,
+            "quantity": quantity,
+            "description": description,
+            "type_id": typeId,
+            "category_id": categoryId,
+          },
+          token: await SharedPreferencesHelper.getJwtToken()
       ));
       log(data.toString());
       UpdateItemModel updateItemModel;
       updateItemModel = UpdateItemModel.fromJson(data);
+
+      //tttttttttttttt
+      String accessToken = await _tokenService.fetchAccessToken();
+      String? managerFcmToken = await _tokenService.fetchFcmTokenByRole('manager');
+
+      final bool? manager_falge = await SharedPreferencesHelper.getCheckFlag();
+
+      print(managerFcmToken);
+      //     print(SecetaryFcmToken);
+      print(manager_falge);
+
+      if (managerFcmToken != null && manager_falge==true) {
+        // Send the notification
+        await _notificationService.sendNotification(accessToken, managerFcmToken);
+        print('Notification has been sent to Manager FCM token successfully');
+
+      } else {
+        // print('Manager Device is not turned on yet');
+        print('hhhhhhhh');
+      }
+      if (managerFcmToken != null) {
+        // Store the notification
+        NotificationData notification = NotificationData(
+          fcmToken: managerFcmToken,
+          title: 'New Update Item Request',
+          body: 'Warehouse guard request to Update an Item',
+        );
+
+        await _tokenService.storeNotification(notification);}
+
+
+      print('a new Item updated successfully.');
+
+
+      //tttttttttttttt
       return right(updateItemModel);
     } catch (e) {
       if (e is DioError){
@@ -176,13 +279,13 @@ class ItemRepoImpl implements ItemRepo {
             "max_quantity": maxQuantity,
             "paginate": paginate,
           },
-          token: await Constants.token
+          token: await SharedPreferencesHelper.getJwtToken()
       ));
       log(data.toString());
       SearchItemsModel searchItemsModel;
       searchItemsModel = SearchItemsModel.fromJson(data);
       List<DataSearch> searchItems = [];
-      for (var item in searchItemsModel.dataSearch) {
+      for (var item in searchItemsModel.dataSearch!) {
         searchItems.add(item);
       }
       return right(searchItemsModel);
@@ -262,13 +365,146 @@ class ItemRepoImpl implements ItemRepo {
         log('File saved successfully: $filename');
         return right("r");
       } else {
-        print("HELLO");
+        log("HELLO");
         throw Exception('Export failed with status: ${response.statusCode}');
       }
     } catch (e) {
-      print("HELLO1");
-      print(e);
+      log("HELLO1");
+      log(e.toString());
       //throw left(ServerFailure.fromDioError(e));
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ConsumeItemModel>> fetchConsumeItem({
+    required int id,
+    required int quantityConsume,
+  }) async {
+    try{
+      var data = await (dioApiService.post(
+          endPoint: 'items/cunsumeItem/$id',
+          data: {
+            "quantityCunsume": quantityConsume,
+          },
+          token: await SharedPreferencesHelper.getJwtToken()
+      ));
+      log(data.toString());
+      ConsumeItemModel consumeItemModel;
+      consumeItemModel = ConsumeItemModel.fromJson(data);
+      return right(consumeItemModel);
+    } catch (e) {
+      if (e is DioError){
+        return left(ServerFailure.fromDioError(e),);
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ExpiringSoonItemsModel>> fetchExpiringSoonItems({
+    required int paginate,
+  }) async {
+    try {
+      var data = await (dioApiService.get(
+          endPoint: 'items/expiring-soon?paginate=$paginate',
+          token: await SharedPreferencesHelper.getJwtToken()
+      ));
+      log(data.toString());
+      ExpiringSoonItemsModel expiringSoonItemsModel;
+      expiringSoonItemsModel = ExpiringSoonItemsModel.fromJson(data);
+      List<DataExpiring> expiringSoonItems = [];
+      for (var item in expiringSoonItemsModel.dataExpiring!) {
+        expiringSoonItems.add(item);
+      }
+      return right(expiringSoonItemsModel);
+    } catch (e) {
+      if (e is DioError){
+        return left(ServerFailure.fromDioError(e),);
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ExpiredItemsModel>> fetchExpiredItems({
+    required int paginate,
+  }) async {
+    try {
+      var data = await (dioApiService.get(
+          endPoint: 'items/expired?paginate=$paginate',
+          token: await SharedPreferencesHelper.getJwtToken()
+      ));
+      log(data.toString());
+      ExpiredItemsModel expiredItemsModel;
+      expiredItemsModel = ExpiredItemsModel.fromJson(data);
+      List<DataExpired> expiredItems = [];
+      for (var item in expiredItemsModel.dataExpired!) {
+        expiredItems.add(item);
+      }
+
+      return right(expiredItemsModel);
+    } catch (e) {
+      if (e is DioError){
+        return left(ServerFailure.fromDioError(e),);
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, dynamic>> fetchCheckExpiring() async {
+    try {
+      var data = await (dioApiService.get(
+          endPoint: 'items/check-expiring',
+          token: await SharedPreferencesHelper.getJwtToken()
+      ));
+      log(data.toString());
+      //ExpiredItemsModel expiredItemsModel;
+      //expiredItemsModel = ExpiredItemsModel.fromJson(data);
+
+      //tttttttttttttt
+      String accessToken = await _tokenService.fetchAccessToken();
+      String? managerFcmToken = await _tokenService.fetchFcmTokenByRole('manager');
+
+      final bool? manager_falge = await SharedPreferencesHelper.getCheckFlag();
+
+      print(managerFcmToken);
+      //     print(SecetaryFcmToken);
+      print(manager_falge);
+
+      if (managerFcmToken != null && manager_falge==true) {
+        // Send the notification
+        await _notificationService.sendNotification(accessToken, managerFcmToken);
+        print('Notification has been sent to Manager FCM token successfully');
+
+      } else {
+        // print('Manager Device is not turned on yet');
+        print('hhhhhhhh');
+      }
+      if (managerFcmToken != null) {
+        // Store the notification
+        NotificationData notification = NotificationData(
+          fcmToken: managerFcmToken,
+          title: 'Alert About Warehouse',
+          body: 'There are items that are expired or close to it.',
+        );
+
+        await _tokenService.storeNotification(notification);}
+
+
+      print('Alarm sent successfully.');
+
+
+      //tttttttttttttt
+
+
+
+      return right("expiredItemsModel");
+    } catch (e) {
+      if (e is DioError){
+        return left(ServerFailure.fromDioError(e),);
+      }
       return left(ServerFailure(e.toString()));
     }
   }

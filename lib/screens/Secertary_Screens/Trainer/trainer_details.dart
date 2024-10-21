@@ -6,6 +6,7 @@ import '../../../Bloc/secertary/trainer/trainer_course_cubit.dart';
 import '../../../Bloc/secertary/trainer/trainer_course_state.dart';
 import '../../../Bloc/secertary/trainer/trainer_cubit.dart';
 import '../../../Bloc/secertary/trainer/trainer_state.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/utils/color_manager.dart';
 import '../../../models/Secertary Model/trainer_course _model.dart';
 
@@ -27,6 +28,10 @@ class _TrainerDetailsScreenState extends State<TrainerDetailsScreen> {
   @override
   void initState() {
     super.initState();
+    _fetchTrainerData();
+  }
+
+  void _fetchTrainerData() {
     context.read<TrainerCubit>().fetchTrainerDetail(widget.trainerId);
     context.read<CourseCubit>().fetchCourses();
     context.read<TrainerCourseCubit>().fetchTrainerCourseDetail(widget.trainerId);
@@ -41,18 +46,18 @@ class _TrainerDetailsScreenState extends State<TrainerDetailsScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Register Trainer in Course'),
+          title: Text(AppLocalizations.of(context).translate('register_trainer_course')),
           content: Form(
             key: _formKey,
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
                   TextFormField(
-                    decoration: InputDecoration(labelText: 'Count Hours'),
+                    decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('count_hours')),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value!.isEmpty || int.tryParse(value) == null) {
-                        return 'Please enter valid hours';
+                        return AppLocalizations.of(context).translate('enter_valid_hours');
                       }
                       return null;
                     },
@@ -63,7 +68,7 @@ class _TrainerDetailsScreenState extends State<TrainerDetailsScreen> {
                   BlocBuilder<CourseCubit, CourseState>(
                     builder: (context, state) {
                       if (state is CourseLoading) {
-                        return CircularProgressIndicator();
+                        return const CircularProgressIndicator();
                       } else if (state is CourseLoaded) {
                         return DropdownButtonFormField<int>(
                           value: selectedCourseId,
@@ -76,10 +81,10 @@ class _TrainerDetailsScreenState extends State<TrainerDetailsScreen> {
                           onChanged: (value) {
                             selectedCourseId = value;
                           },
-                          decoration: InputDecoration(labelText: 'Select Course'),
+                          decoration: InputDecoration(labelText: AppLocalizations.of(context).translate('select_course')),
                           validator: (value) {
                             if (value == null) {
-                              return 'Please select a course';
+                              return AppLocalizations.of(context).translate('please_select_course');
                             }
                             return null;
                           },
@@ -97,13 +102,13 @@ class _TrainerDetailsScreenState extends State<TrainerDetailsScreen> {
           ),
           actions: [
             TextButton(
-              child: Text('Cancel'),
+              child: Text(AppLocalizations.of(context).translate('cancel')),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Register'),
+              child: Text(AppLocalizations.of(context).translate('register')),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
@@ -133,8 +138,7 @@ class _TrainerDetailsScreenState extends State<TrainerDetailsScreen> {
     return BlocListener<TrainerCubit, TrainerState>(
       listener: (context, state) {
         if (state is TrainerRegisteredInCourse) {
-          context.read<TrainerCubit>().fetchTrainerDetail(widget.trainerId);
-          context.read<TrainerCourseCubit>().fetchTrainerCourseDetail(widget.trainerId);
+          _fetchTrainerData();
         }
       },
       child: BlocBuilder<TrainerCubit, TrainerState>(
@@ -142,11 +146,11 @@ class _TrainerDetailsScreenState extends State<TrainerDetailsScreen> {
           return BlocBuilder<TrainerCourseCubit, TrainerCourseState>(
             builder: (context, trainerCourseState) {
               if (trainerState is TrainerLoading || trainerCourseState is TrainerCourseLoading) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               } else if (trainerState is TrainerDetailLoaded) {
                 final trainer = trainerState.trainer;
                 return CommonScaffold(
-                  title: 'Trainer Detail',
+                  title: AppLocalizations.of(context).translate('trainer_detail'),
                   scaffoldKey: _scaffoldKey,
                   body: SingleChildScrollView(
                     padding: const EdgeInsets.all(16.0),
@@ -158,8 +162,8 @@ class _TrainerDetailsScreenState extends State<TrainerDetailsScreen> {
                           children: [
                             ElevatedButton(
                               onPressed: () => _showCourseRegistrationDialog(context, trainer),
-                              child: Text('Register in a Course',style: TextStyle(color: ColorManager.bc0),),
-                              style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(ColorManager.blue)),
+                              child: Text(AppLocalizations.of(context).translate('register_in_course'), style: TextStyle(color: ColorManager.bc0)),
+                              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(ColorManager.blue)),
                             ),
                           ],
                         ),
@@ -173,12 +177,12 @@ class _TrainerDetailsScreenState extends State<TrainerDetailsScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                _buildDetailItem(Icons.person, 'Name', trainer.name ?? ''),
-                                _buildDetailItem(Icons.email, 'Email', trainer.email ?? ''),
-                                _buildDetailItem(Icons.phone, 'Phone', trainer.phone ?? ''),
-                                _buildDetailItem(Icons.home, 'Address', trainer.address ?? ''),
-                                _buildDetailItem(Icons.star, 'Specialty', trainer.specialty ?? ''),
-                                _buildDetailItem(Icons.description, 'Description', trainer.description ?? ''),
+                                _buildDetailItem(Icons.person, AppLocalizations.of(context).translate('name'), trainer.name ?? ''),
+                                _buildDetailItem(Icons.email, AppLocalizations.of(context).translate('email'), trainer.email ?? ''),
+                                _buildDetailItem(Icons.phone, AppLocalizations.of(context).translate('phone'), trainer.phone ?? ''),
+                                _buildDetailItem(Icons.home, AppLocalizations.of(context).translate('address'), trainer.address ?? ''),
+                                _buildDetailItem(Icons.star, AppLocalizations.of(context).translate('specialty'), trainer.specialty ?? ''),
+                                _buildDetailItem(Icons.description, AppLocalizations.of(context).translate('description'), trainer.description ?? ''),
                               ],
                             ),
                           ),
@@ -216,20 +220,19 @@ class _TrainerDetailsScreenState extends State<TrainerDetailsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Registered Course',
+              AppLocalizations.of(context).translate('registered_course'),
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            _buildDetailItem(Icons.book, 'Course Name', trainerCourse.course.nameCourse),
-      //      _buildDetailItem(Icons.schedule, 'Course Period', trainerCourse.course.coursePeriod),
-            _buildDetailItem(Icons.access_time, 'Count Hours', trainerCourse.countHours.toString()),
-            SizedBox(height: 8),
+            _buildDetailItem(Icons.book, AppLocalizations.of(context).translate('course_name'), trainerCourse.course.nameCourse),
+            _buildDetailItem(Icons.access_time, AppLocalizations.of(context).translate('count_hours'), trainerCourse.countHours.toString()),
+            const SizedBox(height: 8),
             Center(
               child: ElevatedButton(
                 onPressed: () => _deleteCourseRegistration(trainerCourse.trainerId, trainerCourse.courseId),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
                 ),
-                child: Text('Delete From Course', style: TextStyle(color: Colors.white)),
+                child: Text(AppLocalizations.of(context).translate('delete_from_course'), style: TextStyle(color: Colors.white)),
               ),
             ),
           ],
@@ -245,14 +248,14 @@ class _TrainerDetailsScreenState extends State<TrainerDetailsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, color: ColorManager.blue, size: 24),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: ColorManager.bc5)),
-                SizedBox(height: 4),
-                Text(value, style: TextStyle(fontSize: 16, color: ColorManager.bc4)),
+                Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: ColorManager.bc5)),
+                const SizedBox(height: 4),
+                Text(value, style: const TextStyle(fontSize: 16, color: ColorManager.bc4)),
               ],
             ),
           ),

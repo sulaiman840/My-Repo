@@ -1,5 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import '../../Bloc/secertary/course/course_state.dart';
+import '../../Bloc/secertary/student/beneficiary_cubit.dart';
+import '../../Bloc/secertary/course/course_cubit.dart';
+import '../../Bloc/secertary/student/beneficiary_state.dart';
+import '../../Bloc/secertary/trainer/trainer_cubit.dart';
+import '../../Bloc/secertary/trainer/trainer_state.dart';
+import '../../core/localization/app_localizations.dart';
+import '../../services/Secertary Services/beneficiary_service.dart';
+import '../../services/Secertary Services/course_service.dart';
+import '../../services/Secertary Services/trainer_services.dart';
+import '../../core/utils/color_manager.dart';
+import '../../core/utils/shared_preferences_helper.dart';
+import '../../widgets/general_widgets/common_scaffold.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../Bloc/secertary/course/course_state.dart';
 import '../../Bloc/secertary/student/beneficiary_cubit.dart';
 import '../../Bloc/secertary/course/course_cubit.dart';
@@ -10,16 +27,13 @@ import '../../services/Secertary Services/beneficiary_service.dart';
 import '../../services/Secertary Services/course_service.dart';
 import '../../services/Secertary Services/trainer_services.dart';
 import '../../core/utils/color_manager.dart';
-import '../../core/utils/shared_preferences_helper.dart';
 import '../../widgets/general_widgets/common_scaffold.dart';
-import '../Manager_Screens/Education_Screen/Beneficiaries_Education_Screen/beneficiary_details_education_screen.dart';
-import '../Manager_Screens/Education_Screen/Courses_Education_Screen/course_detail_education.dart';
-import '../Manager_Screens/Education_Screen/Trainer_Manager_Education/trainer_details_education_screen.dart';
-import '../Secertary_Screens/Student/beneficiary_details_screen.dart';
-import '../Secertary_Screens/Course/course_detail_screen.dart';
-import '../Secertary_Screens/Trainer/trainer_details.dart';
 
 class SearchScreen extends StatefulWidget {
+  final String query;
+
+  const SearchScreen({required this.query, Key? key}) : super(key: key);
+
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
@@ -27,24 +41,27 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late Future<String?> _userRoleFuture;
-  String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     _userRoleFuture = SharedPreferencesHelper.getUserRole();
+    _performSearch(widget.query);
   }
 
-  void _onSearch(String query) {
-    setState(() {
-      _searchQuery = query.trim();
-    });
+  @override
+  void didUpdateWidget(SearchScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.query != widget.query) {
+      _performSearch(widget.query);
+    }
+  }
 
-    // Trigger the search in each Bloc
-    context.read<BeneficiaryCubit>().searchBeneficiaries(_searchQuery);
-    context.read<TrainerCubit>().searchTrainers(_searchQuery);
-    context.read<CourseCubit>().searchCourses(_searchQuery);
+  void _performSearch(String query) {
+    context.read<BeneficiaryCubit>().searchBeneficiaries(query);
+    context.read<TrainerCubit>().searchTrainers(query);
+    context.read<CourseCubit>().searchCourses(query);
   }
 
   @override
@@ -59,7 +76,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
 
         return CommonScaffold(
           scaffoldKey: GlobalKey<ScaffoldState>(),
-          title: 'Search',
+          title: AppLocalizations.of(context).translate('search'),
           body: Column(
             children: [
               SizedBox(height: 20),
@@ -69,9 +86,9 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
                 labelColor: ColorManager.bc5,
                 unselectedLabelColor: ColorManager.bc5,
                 tabs: [
-                  Tab(text: 'Beneficiaries'),
-                  Tab(text: 'Trainers'),
-                  Tab(text: 'Courses'),
+                  Tab(text: AppLocalizations.of(context).translate('beneficiaries')),
+                  Tab(text: AppLocalizations.of(context).translate('trainers')),
+                  Tab(text: AppLocalizations.of(context).translate('courses')),
                 ],
               ),
               Expanded(
@@ -98,7 +115,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
           return Center(child: CircularProgressIndicator());
         } else if (state is BeneficiaryLoaded) {
           if (state.beneficiaries.isEmpty) {
-            return Center(child: Text('No beneficiaries found.'));
+            return Center(child: Text(AppLocalizations.of(context).translate('no_beneficiaries_found')));
           }
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -111,23 +128,9 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
                   subtitle: beneficiary.email ?? '',
                   onTap: () {
                     if (userRole == 'manager') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BeneficiaryDetailsEducationScreen(
-                            beneficiaryId: beneficiary.id!,
-                          ),
-                        ),
-                      );
+                      context.go('/beneficiary_detail_education/${beneficiary.id}');
                     } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BeneficiaryDetailsScreen(
-                            beneficiaryId: beneficiary.id!,
-                          ),
-                        ),
-                      );
+                      context.go('/beneficiary_detail/${beneficiary.id}');
                     }
                   },
                 );
@@ -137,7 +140,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
         } else if (state is BeneficiaryError) {
           return Center(child: Text(state.message));
         } else {
-          return Center(child: Text('No beneficiaries found.'));
+          return Center(child: Text(AppLocalizations.of(context).translate('no_beneficiaries_found')));
         }
       },
     );
@@ -150,7 +153,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
           return Center(child: CircularProgressIndicator());
         } else if (state is TrainerLoaded) {
           if (state.trainers.isEmpty) {
-            return Center(child: Text('No trainers found.'));
+            return Center(child: Text(AppLocalizations.of(context).translate('no_trainers_found')));
           }
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -163,23 +166,9 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
                   subtitle: trainer.specialty ?? '',
                   onTap: () {
                     if (userRole == 'manager') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TrainerDetailsEducationScreen(
-                            trainerId: trainer.id!,
-                          ),
-                        ),
-                      );
+                      context.go('/trainer_detail_education/${trainer.id}');
                     } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TrainerDetailsScreen(
-                            trainerId: trainer.id!,
-                          ),
-                        ),
-                      );
+                      context.go('/trainer_detail/${trainer.id}');
                     }
                   },
                 );
@@ -189,7 +178,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
         } else if (state is TrainerError) {
           return Center(child: Text(state.message));
         } else {
-          return Center(child: Text('No trainers found.'));
+          return Center(child: Text(AppLocalizations.of(context).translate('no_trainers_found')));
         }
       },
     );
@@ -202,7 +191,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
           return Center(child: CircularProgressIndicator());
         } else if (state is CourseLoaded) {
           if (state.courses.isEmpty) {
-            return Center(child: Text('No courses found.'));
+            return Center(child: Text(AppLocalizations.of(context).translate('no_courses_found')));
           }
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -215,23 +204,9 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
                   subtitle: course.description ?? '',
                   onTap: () {
                     if (userRole == 'manager') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CourseDetailEducation(
-                            courseId: course.id!,
-                          ),
-                        ),
-                      );
+                      context.go('/course_detail_education/${course.id}');
                     } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CourseDetailScreen(
-                            courseId: course.id!,
-                          ),
-                        ),
-                      );
+                      context.go('/course_detail/${course.id}');
                     }
                   },
                 );
@@ -241,7 +216,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
         } else if (state is CourseError) {
           return Center(child: Text(state.message));
         } else {
-          return Center(child: Text('No courses found.'));
+          return Center(child: Text(AppLocalizations.of(context).translate('no_courses_found')));
         }
       },
     );

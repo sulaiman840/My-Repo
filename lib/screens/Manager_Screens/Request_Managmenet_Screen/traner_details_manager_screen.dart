@@ -1,9 +1,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../Bloc/manager/pending_beneficiary_state.dart';
 import '../../../Bloc/manager/pending_trainer_cubit.dart';
 import '../../../Bloc/manager/pending_trainer_state.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../models/Pending Model/pending_beneficiary_request_model.dart';
 import '../../../models/Pending Model/pending_trainer.dart';
 import '../../../widgets/manager_home_widgets/pending_trainer_widgets/detail_card_trainer_manger.dart';
@@ -47,7 +49,7 @@ class _TranerDetailsManagerScreenState extends State<TranerDetailsManagerScreen>
         }
 
         return CommonScaffold(
-          title: currentRequest?.name ?? 'Trainer Details',
+          title: currentRequest?.name ?? AppLocalizations.of(context).translate('trainer_details'),
           scaffoldKey: GlobalKey<ScaffoldState>(),
           body: LayoutBuilder(
             builder: (context, constraints) {
@@ -67,7 +69,7 @@ class _TranerDetailsManagerScreenState extends State<TranerDetailsManagerScreen>
                     else if (currentRequest != null)
                       DetailCardTrainerManger(trainer: currentRequest)
                     else
-                      Center(child: Text('No data available')),
+                      Center(child: Text(AppLocalizations.of(context).translate('no_data_available'))),
                   ],
                 ),
               );
@@ -79,17 +81,28 @@ class _TranerDetailsManagerScreenState extends State<TranerDetailsManagerScreen>
   }
 
   void _approveRequest(BuildContext context, PendingTrainer? currentRequest) {
+    // if (currentRequest != null) {
+    //   context.read<PendingTrainerCubit>().approveRequest(currentRequest.id!).then((_) {
+    //     context.go('/manager_home?tab=3');
+    //   });
+
     if (currentRequest != null) {
       context.read<PendingTrainerCubit>().approveRequest(currentRequest.id!);
-      Navigator.pop(context);
+      context.go('/manager_home?tab=3');
     }
   }
 
   void _rejectRequest(BuildContext context, PendingTrainer? currentRequest) {
+    // if (currentRequest != null) {
+    //   context.read<PendingTrainerCubit>().rejectRequest(currentRequest.id!).then((_) {
+    //     context.go('/manager_home?tab=3');
+    //   });
+    // }
     if (currentRequest != null) {
       context.read<PendingTrainerCubit>().rejectRequest(currentRequest.id!);
-      Navigator.pop(context);
+      context.go('/manager_home?tab=3');
     }
   }
+
 
 }

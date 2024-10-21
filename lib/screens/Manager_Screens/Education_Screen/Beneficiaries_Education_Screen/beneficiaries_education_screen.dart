@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart'; // Import GoRouter
 import '../../../../Bloc/secertary/student/beneficiary_cubit.dart';
 import '../../../../Bloc/secertary/student/beneficiary_state.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/utils/color_manager.dart';
 import '../../../../models/Secertary Model/beneficiary_model.dart';
 import '../../../../widgets/general_widgets/common_scaffold.dart';
-
-import 'beneficiary_details_education_screen.dart';
 
 class BeneficiariesEducationScreen extends StatefulWidget {
   const BeneficiariesEducationScreen({super.key});
@@ -29,7 +29,7 @@ class _BeneficiariesEducationScreenState extends State<BeneficiariesEducationScr
   @override
   Widget build(BuildContext context) {
     return CommonScaffold(
-      title: 'Beneficiary Education',
+      title: AppLocalizations.of(context).translate('beneficiary_education'),
       scaffoldKey: GlobalKey<ScaffoldState>(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -44,21 +44,20 @@ class _BeneficiariesEducationScreenState extends State<BeneficiariesEducationScr
               child: Row(
                 children: [
                   Expanded(
-                      child: Text('ID',
-                          style: TextStyle(fontWeight: FontWeight.bold, color: ColorManager.bc5))),
+                    child: Text(AppLocalizations.of(context).translate('ID'), style: TextStyle(fontWeight: FontWeight.bold, color: ColorManager.bc5)),
+                  ),
                   Expanded(
-                      flex: 3,
-                      child: Text('Name',
-                          style: TextStyle(fontWeight: FontWeight.bold, color: ColorManager.bc5))),
+                    flex: 3,
+                    child: Text(AppLocalizations.of(context).translate('name'), style: TextStyle(fontWeight: FontWeight.bold, color: ColorManager.bc5)),
+                  ),
                   Expanded(
-                      flex: 4,
-                      child: Text('Email',
-                          style: TextStyle(fontWeight: FontWeight.bold, color: ColorManager.bc5))),
+                    flex: 4,
+                    child: Text(AppLocalizations.of(context).translate('email'), style: TextStyle(fontWeight: FontWeight.bold, color: ColorManager.bc5)),
+                  ),
                   Expanded(
-                      flex: 4,
-                      child: Text('Phone',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(fontWeight: FontWeight.bold, color: ColorManager.bc5))),
+                    flex: 4,
+                    child: Text(AppLocalizations.of(context).translate('phone'), textAlign: TextAlign.start, style: TextStyle(fontWeight: FontWeight.bold, color: ColorManager.bc5)),
+                  ),
                 ],
               ),
             ),
@@ -85,34 +84,37 @@ class _BeneficiariesEducationScreenState extends State<BeneficiariesEducationScr
                             title: Row(
                               children: [
                                 Expanded(
-                                    child: Text(beneficiary.id?.toString() ?? '',
-                                        style: TextStyle(color: ColorManager.bc5, fontWeight: FontWeight.w500))),
+                                  child: Text(
+                                    beneficiary.id?.toString() ?? '',
+                                    style: TextStyle(color: ColorManager.bc5, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
                                 Expanded(
-                                    flex: 3,
-                                    child: Text(beneficiary.name ?? '',
-                                        style: TextStyle(color: ColorManager.bc5, fontWeight: FontWeight.w500))),
+                                  flex: 3,
+                                  child: Text(
+                                    beneficiary.name ?? '',
+                                    style: TextStyle(color: ColorManager.bc5, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
                                 Expanded(
-                                    flex: 4,
-                                    child: Text(beneficiary.email ?? '',
-                                        style: TextStyle(color: ColorManager.bc5, fontWeight: FontWeight.w500))),
+                                  flex: 4,
+                                  child: Text(
+                                    beneficiary.email ?? '',
+                                    style: TextStyle(color: ColorManager.bc5, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
                                 Expanded(
-                                    flex: 3,
-                                    child: Text(beneficiary.numberPhone ?? '',
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(color: ColorManager.bc5, fontWeight: FontWeight.w500))),
+                                  flex: 3,
+                                  child: Text(
+                                    beneficiary.numberPhone ?? '',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(color: ColorManager.bc5, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
                               ],
                             ),
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => BeneficiaryDetailsEducationScreen(
-                                    beneficiaryId: beneficiary.id!,
-                                  ),
-                                ),
-                              ).then((_) {
-                                _fetchBeneficiaries();
-                              });
+                              context.go('/beneficiary_detail_education/${beneficiary.id}');
                             },
                           ),
                         );
